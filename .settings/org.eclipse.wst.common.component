@@ -5,6 +5,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources/configs"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources/mapping"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources/jsonmap"/>
         <property name="context-root" value="ios-server-web"/>
         <property name="java-output-path" value="/ios-server-web/target/classes"/>
     </wb-module>
