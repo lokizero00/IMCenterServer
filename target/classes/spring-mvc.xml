@@ -24,7 +24,7 @@
 	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"
 		p:order="10" />
 		
-	<!-- 上传文件  依赖common -io等jar-->
+	<!-- 上传文件  依赖common-io等jar-->
 	<bean id="multipartResolver"
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
         p:defaultEncoding="UTF-8"
