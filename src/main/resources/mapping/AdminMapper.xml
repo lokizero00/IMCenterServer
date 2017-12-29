@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.AdminDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="adminDao" type="com.loki.server.model.Admin">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
+    <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="login_count" jdbcType="INTEGER" property="loginCount" />
+    <result column="super_admin" jdbcType="BIT" property="superAdmin" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,create_time,update_time,admin_creator_id,admin_updater_id,user_name,password,login_time,login_count,super_admin,status
+  </sql>
+  
+  <insert id="insert" parameterType="com.loki.server.model.Admin">
+		insert into admin(create_time,admin_creator_id,user_name,password,super_admin,status) values(now(),#{adminCreatorId},#{userName},#{password},#{superAdmin},#{status})
+	</insert>
+  
+  <select id="findById" parameterType="int" resultMap="adminDao">
+		select <include refid="Base_Column_List" /> 
+		from admin
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="adminDao">
+		select <include refid="Base_Column_List" /> 
+		from admin
+  </select>
+  
+  <update id="update" parameterType="com.loki.server.model.Admin">
+  	update admin SET update_time=now(),admin_updater_id=${adminUpdaterId},user_name=#{userName},password=#{password},super_admin=#{superAdmin},status=#{status} where id=#{id}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+		delete from admin where id=#{_parameter}
+	</delete>
+	
+  <!-- 登录查询 -->
+  <select id="loginCheck" resultMap="adminDao">
+		select <include refid="Base_Column_List" /> 
+		from admin
+		where user_name=#{userName} and password=#{password} and status='on'
+  </select>
+</mapper>

@@ -63,4 +63,12 @@
         </property>
     </bean>
     
+        <!-- 配置拦截器 -->
+	    <mvc:interceptors>
+	         <!-- 配置登陆拦截器 -->
+	         <mvc:interceptor>
+	             <mvc:mapping path="/**"/>
+	             <bean class="com.loki.server.filter.LoginHandlerIntercepter"></bean>
+	         </mvc:interceptor>
+	    </mvc:interceptors>
 </beans> 
