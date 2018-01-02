@@ -127,7 +127,7 @@ public class RedisCache implements Cache
     @Override
     public void putObject(Object key, Object value)
     {
-    		if (value.toString().equals("[]")) {
+    		if (value==null || value.toString().equals("[]")) {
 			logger.info("key:="+key+"--- value 为空 :" + value);
 			return;
 		}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.IntentionDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="intentionDao" type="com.loki.server.model.Intention">
+  
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="available" jdbcType="DECIMAL" property="available" />
+    <result column="freeze" jdbcType="DECIMAL" property="freeze" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,total,available,freeze,user_id
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.model.Intention">
+		insert into intention(total,available,freeze,user_id) 
+		values(#{total},#{available},#{freeze},#{user_id})
+	</insert>
+  
+  <select id="findById" parameterType="int" resultMap="intentionDao">
+		select <include refid="Base_Column_List" /> 
+		from intention
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findByUserId" parameterType="int" resultMap="intentionDao">
+		select <include refid="Base_Column_List" /> 
+		from intention
+		where user_id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="intentionDao">
+		select <include refid="Base_Column_List" /> 
+		from intention
+  </select>
+  
+  <update id="update" parameterType="com.loki.server.model.Intention">
+  	update intention SET total=#{total},available=#{available},freeze=#{freeze},user_id=#{userId} where id=#{id}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+		delete from intention where id=#{_parameter}
+	</delete>
+</mapper>

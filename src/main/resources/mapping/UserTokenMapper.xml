@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.UserTokenDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="userTokenDao" type="com.loki.server.model.UserToken">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+    <result column="client_type" jdbcType="VARCHAR" property="loginType" />
+    <result column="expired" jdbcType="BIT" property="expired" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,user_id,token,login_time,login_ip,client_type,expired
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.UserToken">
+		insert into user_token(user_id,token,login_time,login_ip,client_type,expired) values(#{userId},#{token},now(),#{loginIp},#{clientType},#{expired})
+	</insert>
+  
+  <select id="findByUserId" parameterType="int" resultMap="userTokenDao">
+		select <include refid="Base_Column_List" /> 
+		from user_token
+		where user_id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="userTokenDao">
+		select <include refid="Base_Column_List" /> 
+		from user_token
+  </select>
+  
+  <update id="expireByUserId" parameterType="int">
+  	update user_token SET expired=1 where user_id=#{_parameter}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+		delete from user_token where id=#{_parameter}
+	</delete>
+	
+  <select id="tokenCheck" parameterType="String" resultType="int">
+		select count(id) 
+		from user_token
+		where token=#{_parameter} and expired=0
+  </select>
+  <select id="findByToken" parameterType="String" resultMap="userTokenDao">
+  		select <include refid="Base_Column_List" /> 
+		from user_token where token=#{_parameter}
+  </select>
+</mapper>

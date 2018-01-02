@@ -11,5 +11,5 @@ public interface AdminService {
 	boolean delete(int id);
 	Admin findById(int id);
 	List<Admin> findAll();
-	Admin loginCheck(String userName,String password);
+	Admin login(String userName,String password,String clientIP);
 }

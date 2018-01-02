@@ -7,6 +7,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources/mapping"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources/jsonmap"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <property name="java-output-path" value="/IMCenterServer/target/classes"/>
         <property name="context-root" value="ios-server-web"/>
     </wb-module>

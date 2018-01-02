@@ -1,5 +1,6 @@
 package com.loki.server.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,19 +9,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.loki.server.model.Admin;
 import com.loki.server.service.AdminService;
+import com.loki.server.service.UserLoginService;
+import com.loki.server.utils.IpUtil;
 import com.loki.server.utils.MD5;
 
 @Controller
 @RequestMapping("/login")
 public class LoginController {
 	@Autowired AdminService adminService;
+	@Autowired UserLoginService userService;
 	
 	//后台登录方法
 	@RequestMapping("/adminLogin")
-	public String adminLogin(HttpSession httpSession,String userName,String password) {
+	public String adminLogin(HttpServletRequest request,HttpSession httpSession,String userName,String password) {
 		if(userName!=null&&password!=null) {
 			String md5_password=MD5.getMD5Str(password);
-			Admin admin=adminService.loginCheck(userName, md5_password);
+			String ip=IpUtil.getIpFromRequest(request);
+			Admin admin=adminService.login(userName, md5_password,ip);
 			if(admin != null) {
 				//登录成功，保存登录信息
 				httpSession.setAttribute("admin_id", admin.getId());

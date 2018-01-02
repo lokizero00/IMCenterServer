@@ -4,10 +4,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.loki.server.utils.SessionContext;
+import com.loki.server.dao.UserTokenDao;
 
 /** 
  * 登陆拦截器 
@@ -19,6 +20,7 @@ import com.loki.server.utils.SessionContext;
  * 工程：IMCenterServer 
  */
 public class LoginHandlerIntercepter implements HandlerInterceptor{
+	@Autowired UserTokenDao userTokenDao;
 
 	@Override
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
@@ -37,7 +39,19 @@ public class LoginHandlerIntercepter implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse arg1, Object arg2) throws Exception {
 		String requestURI=request.getRequestURI();
+		
 		//TODO 编写拦截器
+		if(requestURI.indexOf("Mobile/")>0) {
+			//客户端登录验证，使用token令牌
+			String token = request.getParameter("token");
+			int tokenCount=userTokenDao.tokenCheck(token);
+			if (tokenCount>0) {
+				return true;
+			}else {
+				return false;
+			}
+		}
+		
 		if(requestURI.indexOf("login/adminLogin")>0) {
 			return true;
 		}else {

@@ -18,17 +18,17 @@
    
    	<!-- XMl及JSON视图解析器配置 -->
    	<!-- 如果仅仅返回一个对象的json数据，可以使用简写配置 -->
-	<!-- <bean id="userListJson"
+	<!-- <bean id="resultJson"
 		class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"
 		p:renderedAttributes="userList" /> -->
 	<!-- 如果返回多个对象的复杂json数据，可以使用下面的配置 -->
-   	<bean id="userListJson"
+   	<bean id="mobileResultJson"
 		class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
 		<property name="renderedAttributes">
 			<set>
-				<value>userList</value>
-				<value>School</value>
-				<value>Work</value>
+				<value>resultCode</value>
+				<value>msg</value>
+				<value>resultObj</value>
 			</set>
 		</property>
 	</bean>

@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alibaba.fastjson.JSON;
 import com.loki.server.model.User;
-import com.loki.server.service.UserService;
+import com.loki.server.service.UserLoginService;
 
 @RunWith(SpringJUnit4ClassRunner.class)     //表示继承了SpringJUnit4ClassRunner类
 @ContextConfiguration(locations = {"classpath:/configs/spring-mybatis.xml"})
@@ -20,7 +20,7 @@ public class TestMyBatis {
 	private static Logger logger = Logger.getLogger(TestMyBatis.class);
 	
     @Resource
-    private UserService userService;
+    private UserLoginService userService;
 
 
     @Test

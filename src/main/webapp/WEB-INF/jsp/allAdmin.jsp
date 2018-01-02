@@ -27,6 +27,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
     <h6><a href="<%=basePath%>admin/toAddAdmin">添加管理员</a></h6>
+    <h6><a href="<%=basePath%>login/adminLoginOut">注销</a></h6>
 	<table border="1">
 		<tbody>
 			<tr>

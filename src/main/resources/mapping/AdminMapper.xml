@@ -21,7 +21,7 @@
     id,create_time,update_time,admin_creator_id,admin_updater_id,user_name,password,login_time,login_count,super_admin,status
   </sql>
   
-  <insert id="insert" parameterType="com.loki.server.model.Admin">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.model.Admin">
 		insert into admin(create_time,admin_creator_id,user_name,password,super_admin,status) values(now(),#{adminCreatorId},#{userName},#{password},#{superAdmin},#{status})
 	</insert>
   
@@ -37,7 +37,7 @@
   </select>
   
   <update id="update" parameterType="com.loki.server.model.Admin">
-  	update admin SET update_time=now(),admin_updater_id=${adminUpdaterId},user_name=#{userName},password=#{password},super_admin=#{superAdmin},status=#{status} where id=#{id}
+  	update admin SET update_time=now(),admin_updater_id=${adminUpdaterId},user_name=#{userName},password=#{password},login_time=#{loginTime},login_count=#{loginCount},super_admin=#{superAdmin},status=#{status} where id=#{id}
   </update>
   
   <delete id="delete" parameterType="int">
