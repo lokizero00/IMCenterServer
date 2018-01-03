@@ -55,15 +55,14 @@ public class UserLoginServiceImpl implements UserLoginService {
 				
 				returnValue.setResultCode(1);
 				returnValue.setResultObj(userComplex);
-				return returnValue;
 			}else {
 				returnValue.setResultCode(2);
 				returnValue.setMsg("用户不存在");
-				return returnValue;
 			}
+		}else {
+			returnValue.setResultCode(3);
+			returnValue.setMsg("参数错误");
 		}
-		returnValue.setResultCode(3);
-		returnValue.setMsg("参数错误");
 		return returnValue;
 	}
 
@@ -84,15 +83,14 @@ public class UserLoginServiceImpl implements UserLoginService {
 				
 				returnValue.setResultCode(1);
 				returnValue.setResultObj(userComplex);
-				return returnValue;
 			}else {
 				returnValue.setResultCode(4);
 				returnValue.setMsg("登录令牌已失效");
-				return returnValue;
 			}
+		}else {
+			returnValue.setResultCode(3);
+			returnValue.setMsg("参数错误");
 		}
-		returnValue.setResultCode(3);
-		returnValue.setMsg("参数错误");
 		return returnValue;
 	}
 
@@ -104,52 +102,52 @@ public class UserLoginServiceImpl implements UserLoginService {
 			if (uCount>0) {
 				returnValue.setResultCode(5);
 				returnValue.setMsg("手机号已存在");
-				return returnValue;
+			}else {
+				//注册用户
+				User user=new User();
+				String md5Password=MD5.getMD5Str(password);
+				String userName="imade_"+phone;
+				user.setUserName(userName);
+				user.setPassword(md5Password);
+				user.setNickName(phone);
+				user.setPhone(phone);
+				user.setPhoneBind(true);
+				user.setRegistIp(clientIP);
+				user.setEaseId(user.getUserName());
+				user.setEasePwd(md5Password);
+				userDao.insert(user);
+				
+				//写入登录令牌
+				String token=user.getUserName()+System.currentTimeMillis();
+				token=MD5.getMD5Str(token);
+				UserToken userToken=new UserToken();
+				userToken.setUserId(user.getId());
+				userToken.setToken(token);
+				userToken.setLoginIp(clientIP);
+				userToken.setClientType(clientType);
+				userToken.setExpired(false);
+				userTokenDao.insert(userToken);
+				
+				//创建意向金账户
+				Intention intention=new Intention();
+				intention.setTotal(BigDecimal.ZERO);
+				intention.setAvailable(BigDecimal.ZERO);
+				intention.setFreeze(BigDecimal.ZERO);
+				intention.setUserId(user.getId());
+				intentionDao.insert(intention);
+				
+				//返回登录信息
+				UserComplex userComplex=new UserComplex();
+				userComplex.setUser(user);
+				userComplex.setUserToken(userToken);
+				
+				returnValue.setResultCode(1);
+				returnValue.setResultObj(userComplex);
 			}
-			//注册用户
-			User user=new User();
-			String md5Password=MD5.getMD5Str(password);
-			String userName="imade_"+phone;
-			user.setUserName(userName);
-			user.setPassword(md5Password);
-			user.setNickName(phone);
-			user.setPhone(phone);
-			user.setPhoneBind(true);
-			user.setRegistIp(clientIP);
-			user.setEaseId(user.getUserName());
-			user.setEasePwd(md5Password);
-			userDao.insert(user);
-			
-			//写入登录令牌
-			String token=user.getUserName()+System.currentTimeMillis();
-			token=MD5.getMD5Str(token);
-			UserToken userToken=new UserToken();
-			userToken.setUserId(user.getId());
-			userToken.setToken(token);
-			userToken.setLoginIp(clientIP);
-			userToken.setClientType(clientType);
-			userToken.setExpired(false);
-			userTokenDao.insert(userToken);
-			
-			//创建意向金账户
-			Intention intention=new Intention();
-			intention.setTotal(BigDecimal.ZERO);
-			intention.setAvailable(BigDecimal.ZERO);
-			intention.setFreeze(BigDecimal.ZERO);
-			intention.setUserId(user.getId());
-			intentionDao.insert(intention);
-			
-			//返回登录信息
-			UserComplex userComplex=new UserComplex();
-			userComplex.setUser(user);
-			userComplex.setUserToken(userToken);
-			
-			returnValue.setResultCode(1);
-			returnValue.setResultObj(userComplex);
-			return returnValue;
+		}else {
+			returnValue.setResultCode(3);
+			returnValue.setMsg("参数错误");
 		}
-		returnValue.setResultCode(3);
-		returnValue.setMsg("参数错误");
 		return returnValue;
 	}
 

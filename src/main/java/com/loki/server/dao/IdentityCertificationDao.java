@@ -10,4 +10,5 @@ public interface IdentityCertificationDao {
 	boolean delete(int id);
 	List<IdentityCertification> findAll();
 	IdentityCertification findById(int id);
+	int existByUserId(int userId);
 }

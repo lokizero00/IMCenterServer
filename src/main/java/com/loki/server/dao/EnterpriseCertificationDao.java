@@ -10,6 +10,8 @@ public interface EnterpriseCertificationDao {
 	boolean delete(int id);
 	List<EnterpriseCertification> findAll();
 	EnterpriseCertification findById(int id);
-	EnterpriseCertification findByUserId(int id);
+	EnterpriseCertification findAllByUserId(int userId);
+	EnterpriseCertification findCurrentByUserId(int userId);
 	boolean nullifyByUserId(int userId);
+	int existByUserId(int userId);
 }

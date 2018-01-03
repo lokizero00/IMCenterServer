@@ -34,8 +34,20 @@
 		where id=#{_parameter}
   </select>
   
-  <select id="findByUserId" parameterType="int" resultMap="enterpriseCertificationDao">
+  <select id="findCurrentByUserId" parameterType="int" resultMap="enterpriseCertificationDao">
 		select <include refid="Base_Column_List" /> 
+		from enterprise_certification
+		where user_id=#{_parameter} and deleted=0
+  </select>
+  
+  <select id="findAllByUserId" parameterType="int" resultMap="enterpriseCertificationDao">
+		select <include refid="Base_Column_List" /> 
+		from enterprise_certification
+		where user_id=#{_parameter}
+  </select>
+  
+  <select id="existByUserId" parameterType="int" resultType="int">
+		select count(id)
 		from enterprise_certification
 		where user_id=#{_parameter} and deleted=0
   </select>
@@ -46,7 +58,7 @@
   </select>
   
   <update id="nullifyByUserId" parameterType="int">
-  	update enterprise_certification set deleted=1 where user_id=#{_parameter}
+  	update enterprise_certification set deleted=1 where user_id=#{_parameter} and deleted=0
   </update>
   
   <update id="update" parameterType="com.loki.server.model.EnterpriseCertification">
