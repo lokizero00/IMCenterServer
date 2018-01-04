@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.TradeDockingDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="tradeDockingDao" type="com.loki.server.model.TradeDocking">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+    <result column="updater_id" jdbcType="INTEGER" property="updaterId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
+    <result column="identity_id" jdbcType="INTEGER" property="identityId" />
+    <result column="enterprise_id" jdbcType="INTEGER" property="enterpriseId" />
+    <result column="offer" jdbcType="DECIMAL" property="offer" />
+    <result column="intention" jdbcType="DECIMAL" property="intention" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,create_time,update_time,creator_id,updater_id,user_id,trade_id,identity_id,enterprise_id,offer,intention,message
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.TradeDocking">
+		insert into trade_docking(create_time,creator_id,user_id,trade_id,identity_id,enterprise_id,offer,intention,message) 
+		values(now(),#{creatorId},#{userId},#{tradeId},#{identityId},#{enterpriseId},#{offer},#{intention},#{message})
+	</insert>
+	
+  <update id="update" parameterType="com.loki.server.model.User">
+  	update trade_docking SET update_time=now(),updater_id=#{updaterId},user_id=#{userId},trade_id=#{tradeId},identity_id=#{identityId},enterprise_id=#{enterpriseId},offer=#{offer},intention=#{intention},message=#{message} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="tradeDockingDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_docking
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findByTradeId" parameterType="int" resultMap="tradeDockingDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_docking
+		where trade_id=#{_parameter}
+  </select>
+  
+  <select id="findByUserId" parameterType="int" resultMap="tradeDockingDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_docking
+		where user_id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="tradeDockingDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_docking
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from trade_docking where id=#{_parameter}
+	</delete>
+</mapper>
