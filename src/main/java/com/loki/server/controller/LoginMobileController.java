@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.loki.server.service.UserBindCodeService;
 import com.loki.server.service.UserLoginService;
 import com.loki.server.utils.IpUtil;
-import com.loki.server.utils.SendSmsUtil;
 
 @Controller
 @RequestMapping("/loginMobile")
@@ -54,7 +53,7 @@ public class LoginMobileController {
 	}
 	
 	//用户注册
-	@RequestMapping(value="/userRegist",method=RequestMethod.GET)
+	@RequestMapping(value="/userRegist",method=RequestMethod.POST)
 	public String userLoginByToken(HttpServletRequest request,String phone,String password,String authCode,int authCodeId,String clientType,ModelMap mm) {
 		String clientIp=IpUtil.getIpFromRequest(request);
 		HashMap<String,Object> returnValue=userService.regist(phone, password, authCode, authCodeId, clientIp, clientType);
@@ -71,7 +70,7 @@ public class LoginMobileController {
 	}
 	
 	//发送短信验证码
-	@RequestMapping(value="/sendSmsAuthCode",method=RequestMethod.GET)
+	@RequestMapping(value="/sendSmsAuthCode",method=RequestMethod.POST)
 	public String sendSmsAuthCode(HttpServletRequest request,String phone,ModelMap mm) {
 		HashMap<String,Object> returnValue=userBindCodeService.sendSmsAuthCode(phone);
 		if (returnValue!=null) {

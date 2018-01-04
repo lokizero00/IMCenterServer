@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.loki.server.model.Admin;
 import com.loki.server.service.AdminService;
 import com.loki.server.utils.MD5;
-import com.loki.server.utils.SessionContext;
 
 @Controller
 @RequestMapping("/admin")
