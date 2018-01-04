@@ -1,10 +1,10 @@
 package com.loki.server.service;
 
 
-import com.loki.server.complexModel.ServiceReturnModel;
+import java.util.HashMap;
 
 public interface UserLoginService {
-	ServiceReturnModel loginCheck(String userName,String password,String clientIP,String clientType);
-	ServiceReturnModel loginCheckByToken(String userToken);
-	ServiceReturnModel regist(String phone,String password,String clientIP,String clientType);
+	HashMap<String,Object> loginCheck(String userName,String password,String clientIP,String clientType);
+	HashMap<String,Object> loginCheckByToken(String userToken);
+	HashMap<String,Object> regist(String phone,String password,String clientIP,String clientType);
 }

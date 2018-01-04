@@ -41,36 +41,41 @@ public class LoginHandlerIntercepter implements HandlerInterceptor{
 		String requestURI=request.getRequestURI();
 		
 		//TODO 编写拦截器
+		//手机端
 		if(requestURI.indexOf("Mobile/")>0) {
-			//客户端登录验证，使用token令牌
-			String token = request.getParameter("token");
-			int tokenCount=userTokenDao.tokenCheck(token);
-			if (tokenCount>0) {
+			if(requestURI.indexOf("/userRegist")>0 || requestURI.indexOf("/userLogin")>0) {
 				return true;
 			}else {
-				return false;
-			}
-		}
-		
-		if(requestURI.indexOf("login/adminLogin")>0) {
-			return true;
-		}else {
-			//编辑页面下
-//			if(requestURI.indexOf("editClientIfo")>0) {
-				HttpSession session=request.getSession();
-				String userName=(String) session.getAttribute("userName");
-				if(userName != null) {
-					//成功登陆的用户
-					
+				//客户端登录验证，使用token令牌
+				String token = request.getParameter("token");
+				int tokenCount=userTokenDao.tokenCheck(token);
+				if (tokenCount>0) {
 					return true;
-				}else{
-					//没有登录，跳转到登录页
-					request.getRequestDispatcher("/login.jsp").forward(request, arg1);
+				}else {
 					return false;
 				}
-//			}else {
-//				return true;
-//			}
+			}
+		}else {
+			if(requestURI.indexOf("login/adminLogin")>0) {
+				return true;
+			}else {
+				//编辑页面下
+//				if(requestURI.indexOf("editClientIfo")>0) {
+					HttpSession session=request.getSession();
+					String userName=(String) session.getAttribute("userName");
+					if(userName != null) {
+						//成功登陆的用户
+						
+						return true;
+					}else{
+						//没有登录，跳转到登录页
+						request.getRequestDispatcher("/login.jsp").forward(request, arg1);
+						return false;
+					}
+//				}else {
+//					return true;
+//				}
+			}
 		}
 	}
 	

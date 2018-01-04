@@ -1,14 +1,13 @@
 package com.loki.server.service.impl;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.loki.server.complexModel.ServiceReturnModel;
-import com.loki.server.complexModel.UserComplex;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserDao;
 import com.loki.server.dao.UserTokenDao;
@@ -28,8 +27,8 @@ public class UserLoginServiceImpl implements UserLoginService {
 	
 
 	@Override
-	public ServiceReturnModel loginCheck(String userName, String password,String clientIP,String clientType) {
-		ServiceReturnModel returnValue=new ServiceReturnModel();
+	public HashMap<String,Object> loginCheck(String userName, String password,String clientIP,String clientType) {
+		HashMap<String,Object> returnValue=new HashMap<String,Object>();
 		if(userName!=null && userName!="" && password!=null && password!="") {
 			//用户登录验证
 			User user=userDao.loginCheck(userName, password);
@@ -49,26 +48,26 @@ public class UserLoginServiceImpl implements UserLoginService {
 				userTokenDao.insert(userToken);
 				
 				//返回登录信息
-				UserComplex userComplex=new UserComplex();
-				userComplex.setUser(user);
-				userComplex.setUserToken(userToken);
+				HashMap<String,Object> userMap=new HashMap<String,Object>();
+				userMap.put("user",user);
+				userMap.put("userToken",userToken);
 				
-				returnValue.setResultCode(1);
-				returnValue.setResultObj(userComplex);
+				returnValue.put("resultCode", 1);
+				returnValue.put("resultObj",userMap);
 			}else {
-				returnValue.setResultCode(2);
-				returnValue.setMsg("用户不存在");
+				returnValue.put("resultCode", 2);
+				returnValue.put("msg","用户不存在");
 			}
 		}else {
-			returnValue.setResultCode(3);
-			returnValue.setMsg("参数错误");
+			returnValue.put("resultCode", 3);
+			returnValue.put("msg","参数错误");
 		}
 		return returnValue;
 	}
 
 	@Override
-	public ServiceReturnModel loginCheckByToken(String token) {
-		ServiceReturnModel returnValue=new ServiceReturnModel();
+	public HashMap<String,Object> loginCheckByToken(String token) {
+		HashMap<String,Object> returnValue=new HashMap<String,Object>();
 		if (token!=null && token!="") {
 			//用户令牌验证
 			UserToken userToken=userTokenDao.findByToken(token);
@@ -77,31 +76,31 @@ public class UserLoginServiceImpl implements UserLoginService {
 				User user=userDao.findById(userToken.getUserId());
 				
 				//返回登录信息
-				UserComplex userComplex=new UserComplex();
-				userComplex.setUser(user);
-				userComplex.setUserToken(userToken);
+				HashMap<String,Object> userMap=new HashMap<String,Object>();
+				userMap.put("user",user);
+				userMap.put("userToken",userToken);
 				
-				returnValue.setResultCode(1);
-				returnValue.setResultObj(userComplex);
+				returnValue.put("resultCode", 1);
+				returnValue.put("resultObj",userMap);
 			}else {
-				returnValue.setResultCode(4);
-				returnValue.setMsg("登录令牌已失效");
+				returnValue.put("resultCode", 4);
+				returnValue.put("msg","登录令牌已失效");
 			}
 		}else {
-			returnValue.setResultCode(3);
-			returnValue.setMsg("参数错误");
+			returnValue.put("resultCode", 3);
+			returnValue.put("msg","参数错误");
 		}
 		return returnValue;
 	}
 
 	@Override
-	public ServiceReturnModel regist(String phone,String password,String clientIP,String clientType) {
-		ServiceReturnModel returnValue=new ServiceReturnModel();
+	public HashMap<String,Object> regist(String phone,String password,String clientIP,String clientType) {
+		HashMap<String,Object> returnValue=new HashMap<String,Object>();
 		if (phone!=null && phone!="" && password!=null && password!="") {
 			int uCount=userDao.userExistCheck(phone);
 			if (uCount>0) {
-				returnValue.setResultCode(5);
-				returnValue.setMsg("手机号已存在");
+				returnValue.put("resultCode", 5);
+				returnValue.put("msg","手机号已存在");;
 			}else {
 				//注册用户
 				User user=new User();
@@ -137,16 +136,16 @@ public class UserLoginServiceImpl implements UserLoginService {
 				intentionDao.insert(intention);
 				
 				//返回登录信息
-				UserComplex userComplex=new UserComplex();
-				userComplex.setUser(user);
-				userComplex.setUserToken(userToken);
+				HashMap<String,Object> userMap=new HashMap<String,Object>();
+				userMap.put("user",user);
+				userMap.put("userToken",userToken);
 				
-				returnValue.setResultCode(1);
-				returnValue.setResultObj(userComplex);
+				returnValue.put("resultCode", 1);
+				returnValue.put("resultObj", userMap);
 			}
 		}else {
-			returnValue.setResultCode(3);
-			returnValue.setMsg("参数错误");
+			returnValue.put("resultCode", 3);
+			returnValue.put("msg","参数错误");
 		}
 		return returnValue;
 	}

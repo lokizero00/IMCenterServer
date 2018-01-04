@@ -1,12 +1,13 @@
 package com.loki.server.service;
 
-import com.loki.server.complexModel.ServiceReturnModel;
+import java.util.HashMap;
+
 import com.loki.server.model.EnterpriseCertification;
 import com.loki.server.model.IdentityCertification;
 
 public interface PersonalCenterService {
-	ServiceReturnModel getPersonalCenter(int userId);
-	ServiceReturnModel getUser(int userId);
-	ServiceReturnModel updateIdentityCertification(IdentityCertification identityCertification);
-	ServiceReturnModel updateEnterpriseCertification(EnterpriseCertification enterpriseCertification);
+	HashMap<String,Object> getPersonalCenter(int userId);
+	HashMap<String,Object> getUser(int userId);
+	HashMap<String,Object> updateIdentityCertification(IdentityCertification identityCertification);
+	HashMap<String,Object> updateEnterpriseCertification(EnterpriseCertification enterpriseCertification);
 }

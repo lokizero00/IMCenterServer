@@ -1,5 +1,7 @@
 package com.loki.server.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.loki.server.complexModel.ServiceReturnModel;
 import com.loki.server.service.UserLoginService;
 import com.loki.server.utils.IpUtil;
 
@@ -21,11 +22,11 @@ public class LoginMobileController {
 	@RequestMapping(value="/userLogin",method=RequestMethod.POST)
 	public String userLogin(HttpServletRequest request,String userName,String password,String clientType,ModelMap mm) {
 		String clientIp=IpUtil.getIpFromRequest(request);
-		ServiceReturnModel serviceReturnValue=userService.loginCheck(userName, password,clientIp,clientType);
-		if (serviceReturnValue!=null) {
-			mm.addAttribute("resultCode", serviceReturnValue.getResultCode());
-			mm.addAttribute("msg", serviceReturnValue.getMsg());
-			mm.addAttribute("resultObj", serviceReturnValue.getResultObj());
+		HashMap<String,Object> returnValue=userService.loginCheck(userName, password,clientIp,clientType);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.get("resultCode"));
+			mm.addAttribute("msg", returnValue.get("msg"));
+			mm.addAttribute("resultObj", returnValue.get("resultObj"));
 		}else {
 			mm.addAttribute("resultCode", "-3");
 			mm.addAttribute("msg", "未知错误");
@@ -35,12 +36,12 @@ public class LoginMobileController {
 	
 	//使用令牌登录
 	@RequestMapping(value="/userLoginByToken",method=RequestMethod.POST)
-	public String userLoginByToken(String userToken,ModelMap mm) {
-		ServiceReturnModel serviceReturnValue=userService.loginCheckByToken(userToken);
-		if (serviceReturnValue!=null) {
-			mm.addAttribute("resultCode", serviceReturnValue.getResultCode());
-			mm.addAttribute("msg", serviceReturnValue.getMsg());
-			mm.addAttribute("resultObj", serviceReturnValue.getResultObj());
+	public String userLoginByToken(String token,ModelMap mm) {
+		HashMap<String,Object> returnValue=userService.loginCheckByToken(token);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.get("resultCode"));
+			mm.addAttribute("msg", returnValue.get("msg"));
+			mm.addAttribute("resultObj", returnValue.get("resultObj"));
 		}
 		else {
 			mm.addAttribute("resultCode", "-3");
@@ -53,11 +54,11 @@ public class LoginMobileController {
 	@RequestMapping(value="/userRegist",method=RequestMethod.POST)
 	public String userLoginByToken(HttpServletRequest request,String phone,String password,String clientType,ModelMap mm) {
 		String clientIp=IpUtil.getIpFromRequest(request);
-		ServiceReturnModel serviceReturnValue=userService.regist(phone, password, clientIp, clientType);
-		if (serviceReturnValue!=null) {
-			mm.addAttribute("resultCode", serviceReturnValue.getResultCode());
-			mm.addAttribute("msg", serviceReturnValue.getMsg());
-			mm.addAttribute("resultObj", serviceReturnValue.getResultObj());
+		HashMap<String,Object> returnValue=userService.regist(phone, password, clientIp, clientType);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.get("resultCode"));
+			mm.addAttribute("msg", returnValue.get("msg"));
+			mm.addAttribute("resultObj", returnValue.get("resultObj"));
 		}
 		else {
 			mm.addAttribute("resultCode", "-3");

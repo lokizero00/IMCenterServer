@@ -18,7 +18,7 @@
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.model.Intention">
 		insert into intention(total,available,freeze,user_id) 
-		values(#{total},#{available},#{freeze},#{user_id})
+		values(#{total},#{available},#{freeze},#{userId})
 	</insert>
   
   <select id="findById" parameterType="int" resultMap="intentionDao">
