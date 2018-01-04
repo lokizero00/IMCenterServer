@@ -97,6 +97,8 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 					returnValue.put("msg","禁止修改");
 				}
 			}else {
+				identityCertification.setStatus("ic_verify");
+				identityCertification.setCreatorId(identityCertification.getUserId());
 				identityCertificationDao.insert(identityCertification);
 				if(identityCertification.getId()>0) {
 					returnValue.put("resultCode",1);

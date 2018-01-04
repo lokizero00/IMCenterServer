@@ -15,7 +15,7 @@ import com.loki.server.model.IdentityCertification;
 import com.loki.server.service.PersonalCenterService;
 
 @Controller
-@RequestMapping("/api/personCenter")
+@RequestMapping("/api/personalCenter")
 public class PersonalCenterMobileController {
 	@Autowired PersonalCenterService personalCenterService;
 	
