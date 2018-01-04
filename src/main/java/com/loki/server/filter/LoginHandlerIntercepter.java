@@ -42,8 +42,8 @@ public class LoginHandlerIntercepter implements HandlerInterceptor{
 		
 		//TODO 编写拦截器
 		//手机端
-		if(requestURI.indexOf("Mobile/")>0) {
-			if(requestURI.indexOf("loginMobile")>0) {
+		if(requestURI.indexOf("api")>0) {
+			if(requestURI.indexOf("api/login")>0) {
 				return true;
 			}else {
 				//客户端登录验证，使用token令牌

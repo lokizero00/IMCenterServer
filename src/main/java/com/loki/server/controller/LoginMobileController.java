@@ -15,16 +15,16 @@ import com.loki.server.service.UserLoginService;
 import com.loki.server.utils.IpUtil;
 
 @Controller
-@RequestMapping("/loginMobile")
+@RequestMapping("/api/login")
 public class LoginMobileController {
 	@Autowired UserLoginService userService;
 	@Autowired UserBindCodeService userBindCodeService;
 	
 	//使用用户名密码登录
 	@RequestMapping(value="/userLogin",method=RequestMethod.POST)
-	public String userLogin(HttpServletRequest request,String userName,String password,String clientType,ModelMap mm) {
+	public String userLogin(HttpServletRequest request,String phone,String password,String clientType,ModelMap mm) {
 		String clientIp=IpUtil.getIpFromRequest(request);
-		HashMap<String,Object> returnValue=userService.loginCheck(userName, password,clientIp,clientType);
+		HashMap<String,Object> returnValue=userService.loginCheck(phone, password,clientIp,clientType);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.get("resultCode"));
 			mm.addAttribute("msg", returnValue.get("msg"));

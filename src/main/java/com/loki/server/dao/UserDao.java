@@ -12,6 +12,6 @@ public interface UserDao {
 	boolean delete(int id);
 	User findById(int id);
 	List<User> findAll();
-	User loginCheck(@Param("userName") String userName,@Param("password") String password);
+	User loginCheck(@Param("phone") String phone,@Param("password") String password);
 	int userExistCheck(String phone);
 }

@@ -57,7 +57,7 @@
   <select id="loginCheck" resultMap="userDao">
 		select <include refid="Base_Column_List" /> 
 		from user
-		where user_name=#{userName} and password=#{password}
+		where phone=#{phone} and password=#{password}
   </select>
   
   <select id="userExistCheck" parameterType="String" resultType="int">

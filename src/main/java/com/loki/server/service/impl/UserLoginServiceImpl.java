@@ -30,11 +30,11 @@ public class UserLoginServiceImpl implements UserLoginService {
 	
 
 	@Override
-	public HashMap<String,Object> loginCheck(String userName, String password,String clientIp,String clientType) {
+	public HashMap<String,Object> loginCheck(String phone, String password,String clientIp,String clientType) {
 		HashMap<String,Object> returnValue=new HashMap<String,Object>();
-		if(userName!=null && userName!="" && password!=null && password!="") {
+		if(phone!=null && phone!="" && password!=null && password!="") {
 			//用户登录验证
-			User user=userDao.loginCheck(userName, password);
+			User user=userDao.loginCheck(phone, password);
 			if (user!=null) {
 				//使旧的令牌过期
 				userTokenDao.expireByUserId(user.getId());
