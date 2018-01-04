@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   
   <groupId>com.loki.zero</groupId>
-  <artifactId>ios-server-web</artifactId>
+  <artifactId>IMCenterServer</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
   
-  <name>ios-server-web Maven Webapp</name>
+  <name>IMCenterServer Maven Webapp</name>
   <url>http://maven.apache.org</url>
   
   <properties>
@@ -195,7 +195,7 @@
 		</dependency>
   </dependencies>
   <build>
-    <finalName>ios-server-web</finalName>
+    <finalName>IMCenterServer</finalName>
     
     <plugins>  
     <plugin>  

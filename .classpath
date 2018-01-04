@@ -9,7 +9,7 @@
 	<classpathentry kind="src" path="src/main/resources/mapping"/>
 	<classpathentry kind="src" path="src/main/resources/jsonmap"/>
 	<classpathentry kind="src" path="src/main/resources/configs"/>
-	<classpathentry excluding="com/loki/server/test/TestMyBatis.java" kind="src" output="target/test-classes" path="src/test/java">
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
@@ -37,5 +37,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/aliyun-java-sdk-core-3.3.1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/aliyun-java-sdk-dysmsapi-1.0.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

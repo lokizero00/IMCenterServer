@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.UserBindCodeDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="userBindCodeDao" type="com.loki.server.model.UserBindCode">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="auth_code" jdbcType="CHAR" property="authCode" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,user_id,auth_code,send_time
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.UserBindCode">
+		insert into user_bind_code(user_id,auth_code,send_time) 
+		values(#{userId},#{authCode},now())
+	</insert>
+  
+  <select id="findById" parameterType="int" resultMap="userBindCodeDao">
+		select <include refid="Base_Column_List" /> 
+		from user_bind_code
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="userBindCodeDao">
+		select <include refid="Base_Column_List" /> 
+		from user_bind_code
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from user_bind_code where id=#{_parameter}
+	</delete>
+</mapper>

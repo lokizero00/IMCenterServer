@@ -43,7 +43,7 @@ public class LoginHandlerIntercepter implements HandlerInterceptor{
 		//TODO 编写拦截器
 		//手机端
 		if(requestURI.indexOf("Mobile/")>0) {
-			if(requestURI.indexOf("/userRegist")>0 || requestURI.indexOf("/userLogin")>0) {
+			if(requestURI.indexOf("loginMobile")>0) {
 				return true;
 			}else {
 				//客户端登录验证，使用token令牌

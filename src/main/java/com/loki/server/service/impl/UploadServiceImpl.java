@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.loki.server.service.UploadService;
-import com.loki.server.utils.CommonUtil;
+import com.loki.server.utils.PropertyUtil;
 import com.loki.server.utils.ServiceException;
 import com.loki.server.utils.ServiceExceptionEnums;
 
@@ -22,7 +22,7 @@ public class UploadServiceImpl implements UploadService {
 	public boolean uploadFile(HttpServletRequest request,MultipartFile file) throws ServiceException,IOException{
 		if(!file.isEmpty()) {
 			try {
-				String savePath = request.getSession().getServletContext().getRealPath("/")+CommonUtil.getFileUploadPath();
+				String savePath = request.getSession().getServletContext().getRealPath("/")+PropertyUtil.getInstance().getPropertyValue("Common", "fileUploadPath");
 				String filePath=savePath+file.getOriginalFilename();
 				file.transferTo(new File(filePath));
 				return true;
