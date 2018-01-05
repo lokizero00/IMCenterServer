@@ -84,4 +84,12 @@ public class LoginMobileController {
 		}
 		return "mobileResultJson";
 	}
+	
+	//token校验错误
+	@RequestMapping(value="/tokenInvalid")
+	public String tokenInvalid(HttpServletRequest request,ModelMap mm) {
+		mm.addAttribute("resultCode", "13");
+		mm.addAttribute("msg", "令牌校验错误");
+		return "mobileResultJson";
+	}
 }

@@ -1,6 +1,7 @@
 package com.loki.server.utils;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class CommonUtil {
 	private static CommonUtil instance;
@@ -56,5 +57,13 @@ public class CommonUtil {
         }
         return str;
     }
+    
+    /**  
+     * 自动生成32位的UUid，对应数据库的主键id进行插入用。  
+     * @return  
+     */  
+    public String getUUID() {  
+        return UUID.randomUUID().toString().replace("-", "");  
+    }  
 
 }

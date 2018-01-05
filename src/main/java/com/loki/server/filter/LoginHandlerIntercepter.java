@@ -37,25 +37,28 @@ public class LoginHandlerIntercepter implements HandlerInterceptor{
 	}
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse arg1, Object arg2) throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
 		String requestURI=request.getRequestURI();
 		
 		//TODO 编写拦截器
 		//手机端
 		if(requestURI.indexOf("api")>0) {
-			if(requestURI.indexOf("api/login")>0) {
+			if(requestURI.indexOf("api/login")>0 || requestURI.indexOf("api/public")>0) {
 				return true;
 			}else {
 				//客户端登录验证，使用token令牌
 				String token = request.getParameter("token");
-				int tokenCount=userTokenDao.tokenCheck(token);
-				if (tokenCount>0) {
-					return true;
-				}else {
-					return false;
+				if(null!=token && ""!=token) {
+					int tokenCount=userTokenDao.tokenCheck(token);
+					if (tokenCount>0) {
+						return true;
+					}
 				}
+				request.getRequestDispatcher("/api/login/tokenInvalid").forward(request, response);
+				return false;
 			}
 		}else {
+			//web端
 			if(requestURI.indexOf("login/adminLogin")>0) {
 				return true;
 			}else {
@@ -69,7 +72,7 @@ public class LoginHandlerIntercepter implements HandlerInterceptor{
 						return true;
 					}else{
 						//没有登录，跳转到登录页
-						request.getRequestDispatcher("/login.jsp").forward(request, arg1);
+						request.getRequestDispatcher("/login.jsp").forward(request, response);
 						return false;
 					}
 //				}else {
