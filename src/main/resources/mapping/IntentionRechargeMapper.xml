@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.IntentionRechargeDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="intentionRechargeDao" type="com.loki.server.model.IntentionRecharge">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+    <result column="updater_id" jdbcType="INTEGER" property="updaterId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="intention_id" jdbcType="INTEGER" property="intentionId" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="pay_code" jdbcType="VARCHAR" property="payCode" />
+    <result column="pay_name" jdbcType="VARCHAR" property="payName" />
+    <result column="trade_sn" jdbcType="BIGINT" property="tradeSn" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
+    <result column="is_admin" jdbcType="BIT" property="isAdmin" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,create_time,update_time,creator_id,updater_id,user_id,sn,intention_id,amount,pay_code,pay_name,trade_sn,status,pay_time,admin_updater_id,is_admin
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.IntentionRecharge">
+		insert into intention_recharge(create_time,creator_id,user_id,sn,intention_id,amount,pay_code,pay_name,trade_sn,status,pay_time) 
+		values(now(),#{creatorId},#{userId},#{sn},#{intentionId},#{amount},#{payCode},#{payName},#{tradeSn},#{status},#{payTime})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.model.IntentionRecharge">
+  	update intention_recharge SET update_time=now(),updater_id=#{updaterId},user_id=#{userId},sn=#{sn},intention_id=#{intentionId},amount=#{amount},pay_code=#{payCode},pay_name=#{payName},trade_sn=#{tradeSn},status=#{status},pay_time=#{payTime},admin_updater_id=#{adminUpdaterId},is_admin=#{isAdmin} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="intentionRechargeDao">
+		select <include refid="Base_Column_List" /> 
+		from intention_recharge
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="intentionRechargeDao">
+		select <include refid="Base_Column_List" /> 
+		from intention_recharge
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from intention_recharge where id=#{_parameter}
+	</delete>
+</mapper>

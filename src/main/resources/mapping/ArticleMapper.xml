@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.ArticleDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="articleDao" type="com.loki.server.model.Article">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
+    <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="TEXT" property="content" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="is_show" jdbcType="BIT" property="isShow" />
+    <result column="read_count" jdbcType="INTEGER" property="readCount" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,create_time,update_time,admin_creator_id,admin_updater_id,title,content,sort,is_show,read_count
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.Article">
+		insert into article(create_time,admin_creator_id,title,content,sort,is_show,read_count) 
+		values(now(),#{adminCreatorId},#{title},#{content},#{sort},#{isShow},#{readCount})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.model.Article">
+  	update article SET update_time=now(),admin_updater_id=#{adminUpdaterId},title=#{title},content=#{content},sort=#{sort},is_show=#{isShow},read_count=#{readCount} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="articleDao">
+		select <include refid="Base_Column_List" /> 
+		from article
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="articleDao">
+		select <include refid="Base_Column_List" /> 
+		from article
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from article where id=#{_parameter}
+	</delete>
+</mapper>

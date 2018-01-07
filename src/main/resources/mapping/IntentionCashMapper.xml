@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.IntentionCashDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="intentionCashDao" type="com.loki.server.model.IntentionCash">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="intention_id" jdbcType="INTEGER" property="intentionId" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="pay_code" jdbcType="VARCHAR" property="payCode" />
+    <result column="pay_name" jdbcType="VARCHAR" property="payName" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="admin_payer_id" jdbcType="INTEGER" property="adminPayerId" />
+    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,create_time,update_time,creator_id,user_id,sn,intention_id,amount,pay_code,pay_name,status,admin_updater_id,pay_time,admin_payer_id,refuse_reason
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.IntentionCash">
+		insert into intention_cash(create_time,creator_id,user_id,sn,intention_id,amount,pay_code,pay_name,status) 
+		values(now(),#{creatorId},#{userId},#{sn},#{intentionId},#{amount},#{payCode},#{payName},#{status})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.model.IntentionCash">
+  	update intention_cash SET update_time=now(),user_id=#{userId},sn=#{sn},intention_id=#{intentionId},amount#{amount},pay_code=#{payCode},pay_name=#{payName},status=#{status},admin_updater_id=#{adminUpdaterId},pay_time=#{payTime},admin_payer_id=#{adminPayerId},refuse_reason=#{refuseReason} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="intentionCashDao">
+		select <include refid="Base_Column_List" /> 
+		from intention_cash
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="intentionCashDao">
+		select <include refid="Base_Column_List" /> 
+		from intention_cash
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from intention_cash where id=#{_parameter}
+	</delete>
+</mapper>

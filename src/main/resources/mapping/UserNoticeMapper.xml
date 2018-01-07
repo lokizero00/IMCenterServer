@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.UserNoticeDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="userNoticeDao" type="com.loki.server.model.UserNotice">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="notice_id" jdbcType="INTEGER" property="noticeId" />
+    <result column="is_read" jdbcType="BIT" property="isRead" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,user_id,notice_id,is_read
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.UserNotice">
+		insert into user_notice(user_id,notice_id,is_read) 
+		values(#{userId},#{noticeId},#{isRead})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.model.UserNotice">
+  	update user_notice SET user_id=#{userId},notice_id=#{noticeId},is_read=#{isRead} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="userNoticeDao">
+		select <include refid="Base_Column_List" /> 
+		from user_notice
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="userNoticeDao">
+		select <include refid="Base_Column_List" /> 
+		from user_notice
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from user_notice where id=#{_parameter}
+	</delete>
+</mapper>
