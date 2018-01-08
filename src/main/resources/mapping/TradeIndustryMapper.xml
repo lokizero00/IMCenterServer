@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.TradeIndustryDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="tradeIndustryDao" type="com.loki.server.model.TradeIndustry">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
+    <result column="industry_id" jdbcType="INTEGER" property="industryId" />
+    <result column="industry_name" jdbcType="VARCHAR" property="industryName" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,trade_id,industry_id,industry_name
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.TradeIndustry">
+		insert into trade_industry(trade_id,industry_id,industry_name) 
+		values(#{tradeId},#{industryId},#{industryName})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.model.TradeIndustry">
+  	update trade_industry SET trade_id=#{tradeId},industry_id=#{industryId},industry_name=#{industryName} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="tradeIndustryDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_industry
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="tradeIndustryDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_industry
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from trade_industry where id=#{_parameter}
+	</delete>
+</mapper>

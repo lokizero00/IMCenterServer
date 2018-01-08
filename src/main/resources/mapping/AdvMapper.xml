@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.AdvDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="advDao" type="com.loki.server.model.Adv">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
+    <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="preview_url" jdbcType="VARCHAR" property="previewUrl" />
+    <result column="content" jdbcType="TEXT" property="content" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="click_count" jdbcType="INTEGER" property="clickCount" />
+    <result column="is_show" jdbcType="BIT" property="isShow" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,create_time,update_time,admin_creator_id,admin_updater_id,position,title,preview_url,content,start_time,end_time,sort,click_count,is_show
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.Adv">
+		insert into adv(create_time,admin_creator_id,position,title,preview_url,content,start_time,end_time,sort,click_count,is_show) 
+		values(now(),#{adminCreatorId},#{position},#{title},#{previewUrl},#{content},#{startTime},#{endTime},#{sort},#{clickCount},#{isShow})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.model.Adv">
+  	update adv SET update_time=now(),admin_updater_id=#{adminUpdaterId},position=#{position},title=#{title},preview_url=#{previewUrl},content=#{content},start_time=#{startTime},end_time=#{endTime},sort=#{sort},click_count=#{clickCount},is_show=#{isShow} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="advDao">
+		select <include refid="Base_Column_List" /> 
+		from adv
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="advDao">
+		select <include refid="Base_Column_List" /> 
+		from adv
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from adv where id=#{_parameter}
+	</delete>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.TradeInvoiceDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="tradeInvoiceDao" type="com.loki.server.model.TradeInvoice">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
+    <result column="invoice_id" jdbcType="INTEGER" property="invoiceId" />
+    <result column="invoice_name" jdbcType="VARCHAR" property="invoiceName" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,trade_id,invoice_id,invoice_name
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.TradeInvoice">
+		insert into trade_invoice(trade_id,invoice_id,invoice_name) 
+		values(#{tradeId},#{invoiceId},#{invoiceName})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.model.TradeInvoice">
+  	update trade_invoice SET trade_id=#{tradeId},invoice_id=#{invoiceId},invoice_name=#{invoiceName} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="tradeInvoiceDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_invoice
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="tradeInvoiceDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_invoice
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from trade_invoice where id=#{_parameter}
+	</delete>
+</mapper>

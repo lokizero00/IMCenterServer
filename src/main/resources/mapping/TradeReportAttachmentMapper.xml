@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.TradeReportAttachmentDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="tradeReportAttachmentDao" type="com.loki.server.model.TradeReportAttachment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="trade_report_information_id" jdbcType="INTEGER" property="tradeReportInformationId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,trade_report_information_id,url
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.TradeReportAttachment">
+		insert into trade_report_attachment(trade_report_information_id,url) 
+		values(#{tradeReportInformationId},#{url})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.model.TradeReportAttachment">
+  	update trade_report_attachment SET trade_report_information_id=#{tradeReportInformationId},url=#{url} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="tradeReportAttachmentDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_report_attachment
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="tradeReportAttachmentDao">
+		select <include refid="Base_Column_List" /> 
+		from trade_report_attachment
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from trade_report_attachment where id=#{_parameter}
+	</delete>
+</mapper>
