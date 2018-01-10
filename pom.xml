@@ -61,7 +61,7 @@
 		    <version>${spring.version}</version>
 		    <scope>test</scope>
 		</dependency>
-        
+         
         <!-- redis 依赖 -->
         <dependency>
 		    <groupId>redis.clients</groupId>

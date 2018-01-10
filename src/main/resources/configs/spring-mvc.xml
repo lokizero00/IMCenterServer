@@ -67,7 +67,7 @@
 	    <mvc:interceptors>
 	         <!-- 配置登陆拦截器 -->
 	         <mvc:interceptor>
-	             <mvc:mapping path="/**"/>
+	             <mvc:mapping path="/s/**"/>
 	             <bean class="com.loki.server.filter.LoginHandlerIntercepter"></bean>
 	         </mvc:interceptor>
 	    </mvc:interceptors>

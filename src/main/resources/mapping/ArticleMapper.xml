@@ -10,7 +10,7 @@
     <result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
     <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="content" jdbcType="TEXT" property="content" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="is_show" jdbcType="BIT" property="isShow" />
     <result column="read_count" jdbcType="INTEGER" property="readCount" />

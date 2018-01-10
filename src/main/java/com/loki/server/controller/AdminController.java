@@ -17,7 +17,7 @@ import com.loki.server.service.AdminService;
 import com.loki.server.utils.MD5;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/s/admin")
 public class AdminController {
 	@Autowired AdminService adminService;
 	
@@ -56,7 +56,7 @@ public class AdminController {
 		//md5加密
 		admin.setPassword(MD5.getMD5Str(admin.getPassword()));
 		adminService.insert(admin);
-		return "redirect:/admin/getAllAdmin";
+		return "redirect:/s/admin/getAllAdmin";
 	}
 	
 	/**
@@ -85,7 +85,7 @@ public class AdminController {
 		if(adminService.update(admin)){
 			admin = adminService.findById(admin.getId());
 			request.setAttribute("admin", admin);
-			return "redirect:/admin/getAllAdmin";
+			return "redirect:/s/admin/getAllAdmin";
 		}else{
 			return "/error";
 		}

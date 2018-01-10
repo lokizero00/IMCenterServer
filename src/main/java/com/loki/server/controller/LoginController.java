@@ -35,7 +35,7 @@ public class LoginController {
 				
 				//保存资源信息
 				
-				return "redirect:/admin/getAllAdmin";
+				return "redirect:/s/admin/getAllAdmin";
 			}else {
 				//登录失败
 				return "redirect:/login.jsp";

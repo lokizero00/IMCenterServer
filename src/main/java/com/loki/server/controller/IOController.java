@@ -19,7 +19,7 @@ import com.loki.server.service.IOService;
 import com.loki.server.utils.ServiceException;
 
 @Controller
-@RequestMapping("/api/io")
+@RequestMapping("/s/api/io")
 public class IOController {
 	
 	@Autowired

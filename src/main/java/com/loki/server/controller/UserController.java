@@ -15,15 +15,15 @@ import com.loki.server.service.UserService;
 @RequestMapping("/user")
 public class UserController {
 	
-	@Autowired
-	private UserService userService;
-	
-	//返回单个json对象
-	@RequestMapping(value="/getUserInJson",method=RequestMethod.GET)
-	public @ResponseBody User getUserInJSON(int id) {
-		User user=userService.findById(id);
-		return user;
-	}
+//	@Autowired
+//	private UserService userService;
+//	
+//	//返回单个json对象
+//	@RequestMapping(value="/getUserInJson",method=RequestMethod.GET)
+//	public @ResponseBody User getUserInJSON(int id) {
+//		User user=userService.findById(id);
+//		return user;
+//	}
 	
 //	//返回复杂json对象集合
 //	@RequestMapping(value="/getUserListByJson",method=RequestMethod.GET)

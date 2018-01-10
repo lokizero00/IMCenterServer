@@ -14,7 +14,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 	function updateAdmin(){
 		var form = document.forms[0];
-		form.action = "<%=basePath%>admin/updateAdmin";
+		form.action = "<%=basePath%>s/admin/updateAdmin";
 		form.method="post";
 		form.submit();
 	}

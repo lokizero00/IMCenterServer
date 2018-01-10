@@ -40,45 +40,37 @@ public class LoginHandlerIntercepter implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
 		String requestURI=request.getRequestURI();
 		
-		//TODO 编写拦截器
 		//手机端
 		if(requestURI.indexOf("api")>0) {
-			if(requestURI.indexOf("api/login")>0 || requestURI.indexOf("api/public")>0) {
-				return true;
-			}else {
-				//客户端登录验证，使用token令牌
-				String token = request.getParameter("token");
-				if(null!=token && ""!=token) {
-					int tokenCount=userTokenDao.tokenCheck(token);
-					if (tokenCount>0) {
-						return true;
-					}
+			//客户端登录验证，使用token令牌
+			String token = request.getParameter("token");
+			if(null!=token && ""!=token) {
+				int tokenCount=userTokenDao.tokenCheck(token);
+				if (tokenCount>0) {
+					return true;
 				}
-				request.getRequestDispatcher("/api/login/tokenInvalid").forward(request, response);
-				return false;
 			}
+			request.getRequestDispatcher("/api/login/tokenInvalid").forward(request, response);
+			return false;
 		}else {
 			//web端
-			if(requestURI.indexOf("login/adminLogin")>0) {
-				return true;
-			}else {
-				//编辑页面下
-//				if(requestURI.indexOf("editClientIfo")>0) {
-					HttpSession session=request.getSession();
-					String userName=(String) session.getAttribute("userName");
-					if(userName != null) {
-						//成功登陆的用户
-						
-						return true;
-					}else{
-						//没有登录，跳转到登录页
-						request.getRequestDispatcher("/login.jsp").forward(request, response);
-						return false;
-					}
-//				}else {
-//					return true;
-//				}
-			}
+			//编辑页面下
+//			if(requestURI.indexOf("editClientIfo")>0) {
+				HttpSession session=request.getSession();
+				String userName=(String) session.getAttribute("userName");
+				if(userName != null) {
+					//成功登陆的用户
+					
+					return true;
+				}else{
+					//没有登录，跳转到登录页
+					request.getRequestDispatcher("/login.jsp").forward(request, response);
+					return false;
+				}
+//			}else {
+//				return true;
+//			}
+			
 		}
 	}
 	

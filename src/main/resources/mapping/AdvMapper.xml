@@ -12,7 +12,7 @@
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="preview_url" jdbcType="VARCHAR" property="previewUrl" />
-    <result column="content" jdbcType="TEXT" property="content" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="sort" jdbcType="INTEGER" property="sort" />

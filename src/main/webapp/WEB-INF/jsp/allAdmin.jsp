@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
 <script type="text/javascript">
 	function del(id){
-		$.get("<%=basePath%>admin/delAdmin?id=" + id,function(data){
+		$.get("<%=basePath%>s/admin/delAdmin?id=" + id,function(data){
 			if("success" == data.result){
 				alert("删除成功");
 				window.location.reload();
@@ -26,7 +26,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <h6><a href="<%=basePath%>admin/toAddAdmin">添加管理员</a></h6>
+    <h6><a href="<%=basePath%>s/admin/toAddAdmin">添加管理员</a></h6>
     <h6><a href="<%=basePath%>login/adminLoginOut">注销</a></h6>
 	<table border="1">
 		<tbody>
@@ -58,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td>${admin.superAdmin }</td>
 						<td>${admin.status }</td>
 						<td>
-							<a href="<%=basePath%>admin/getAdmin?id=${admin.id}">编辑</a>
+							<a href="<%=basePath%>s/admin/getAdmin?id=${admin.id}">编辑</a>
 							<a href="javascript:del('${admin.id }')">删除</a>
 						</td>
 					</tr>				
