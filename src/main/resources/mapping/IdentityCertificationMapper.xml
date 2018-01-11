@@ -34,10 +34,10 @@
 		where id=#{_parameter}
   </select>
   
-  <select id="existByUserId" parameterType="int" resultType="int">
-		select count(id)
+  <select id="findByUserId" parameterType="int" resultType="int">
+		select <include refid="Base_Column_List" />
 		from identity_certification
-		where user_id=#{_parameter}
+		where user_id=#{_parameter} limit 1
   </select>
   
   <select id="findAll" resultMap="identityCertificationDao">

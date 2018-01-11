@@ -1,13 +1,9 @@
 package com.loki.server.service;
 
-import java.util.List;
-
-import com.loki.server.model.IdentityCertification;
+import java.util.HashMap;
 
 public interface IdentityCertificationService {
-	void insert(IdentityCertification identityCertification);
-	boolean update(IdentityCertification identityCertification);
-	boolean delete(int id);
-	List<IdentityCertification> findAll();
-	IdentityCertification findById(int id);
+	HashMap<String,Object> updateIdentityCertification(int userId,String trueName,String identityNumber,String identityFront,String identityBack);
+	HashMap<String,Object> getIdentityCertification(int userId);
+	HashMap<String, Object> getIdentityCertificationStatus(int userId);
 }

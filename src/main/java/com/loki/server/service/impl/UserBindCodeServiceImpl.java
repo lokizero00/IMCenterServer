@@ -46,4 +46,31 @@ public class UserBindCodeServiceImpl implements UserBindCodeService {
 		return returnValue;
 	}
 
+	@Override
+	public HashMap<String, Object> checkAuthCode(int authCodeId, String authCode) {
+		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+		if (authCodeId>0 && null!=authCode && ""!=authCode) {
+			UserBindCode userBindCode=userBindCodeDao.findById(authCodeId);
+			if(null!=userBindCode && authCode.equals(userBindCode.getAuthCode())) {
+				//判断是否超过5分钟
+				long codeTime=userBindCode.getSendTime().getTime();
+				long nowTime=System.currentTimeMillis();
+				if((nowTime-codeTime)<=300000) {
+					returnValue.put("resultCode", 1);
+					returnValue.put("msg","验证码正确");
+				}else {
+					returnValue.put("resultCode", 12);
+					returnValue.put("msg","验证码超时");
+				}
+			}else {
+				returnValue.put("resultCode", 11);
+				returnValue.put("msg","验证码错误");
+			}
+		}else {
+			returnValue.put("resultCode",3);
+			returnValue.put("msg","参数错误");
+		}
+		return returnValue;
+	}
+
 }

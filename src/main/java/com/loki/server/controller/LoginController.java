@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.loki.server.model.Admin;
 import com.loki.server.service.AdminService;
-import com.loki.server.service.UserLoginService;
 import com.loki.server.utils.IpUtil;
 import com.loki.server.utils.MD5;
 
@@ -17,7 +16,6 @@ import com.loki.server.utils.MD5;
 @RequestMapping("/login")
 public class LoginController {
 	@Autowired AdminService adminService;
-	@Autowired UserLoginService userService;
 	
 	//后台登录方法
 	@RequestMapping("/adminLogin")

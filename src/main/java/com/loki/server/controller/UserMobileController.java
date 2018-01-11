@@ -1,5 +1,7 @@
 package com.loki.server.controller;
 
+
+
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,19 +14,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.loki.server.service.UserBindCodeService;
 import com.loki.server.service.UserService;
-import com.loki.server.utils.IpUtil;
 
 @Controller
-@RequestMapping("/api/login")
-public class LoginMobileController {
+@RequestMapping("/s/api/user")
+public class UserMobileController {
 	@Autowired UserService userService;
 	@Autowired UserBindCodeService userBindCodeService;
 	
-	//使用用户名密码登录
-	@RequestMapping(value="/userLogin",method=RequestMethod.POST)
-	public String userLogin(HttpServletRequest request,String phone,String password,String clientType,ModelMap mm) {
-		String clientIp=IpUtil.getIpFromRequest(request);
-		HashMap<String,Object> returnValue=userService.loginCheck(phone, password,clientIp,clientType);
+	//获取用户信息
+	@RequestMapping(value="/getUser",method=RequestMethod.GET)
+	public String getUser(HttpServletRequest request,int userId,ModelMap mm) {
+		HashMap<String,Object> returnValue=userService.getUser(userId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.get("resultCode"));
 			mm.addAttribute("msg", returnValue.get("msg"));
@@ -36,60 +36,48 @@ public class LoginMobileController {
 		return "mobileResultJson";
 	}
 	
-	//使用令牌登录
-	@RequestMapping(value="/userLoginByToken",method=RequestMethod.POST)
-	public String userLoginByToken(String token,ModelMap mm) {
-		HashMap<String,Object> returnValue=userService.loginCheckByToken(token);
+	//更新昵称
+	@RequestMapping(value="/updateNickName",method=RequestMethod.POST)
+	public String updateNickName(HttpServletRequest request,int userId,String nickName,ModelMap mm) {
+		HashMap<String,Object> returnValue=userService.updateNickName(userId, nickName);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.get("resultCode"));
 			mm.addAttribute("msg", returnValue.get("msg"));
 			mm.addAttribute("resultObj", returnValue.get("resultObj"));
-		}
-		else {
+		}else {
 			mm.addAttribute("resultCode", "-3");
 			mm.addAttribute("msg", "未知错误");
 		}
 		return "mobileResultJson";
 	}
 	
-	//用户注册
-	@RequestMapping(value="/userRegist",method=RequestMethod.POST)
-	public String userLoginByToken(HttpServletRequest request,String phone,String password,String authCode,int authCodeId,String clientType,ModelMap mm) {
-		String clientIp=IpUtil.getIpFromRequest(request);
-		HashMap<String,Object> returnValue=userService.regist(phone, password, authCode, authCodeId, clientIp, clientType);
+	//验证码校验，绑定手机时使用
+	@RequestMapping(value="/checkAuthCode",method=RequestMethod.GET)
+	public String checkAuthCode(HttpServletRequest request,int authCodeId, String authCode,ModelMap mm) {
+		HashMap<String,Object> returnValue=userBindCodeService.checkAuthCode(authCodeId, authCode);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.get("resultCode"));
 			mm.addAttribute("msg", returnValue.get("msg"));
 			mm.addAttribute("resultObj", returnValue.get("resultObj"));
-		}
-		else {
+		}else {
 			mm.addAttribute("resultCode", "-3");
 			mm.addAttribute("msg", "未知错误");
 		}
 		return "mobileResultJson";
 	}
 	
-	//发送短信验证码
-	@RequestMapping(value="/sendSmsAuthCode",method=RequestMethod.POST)
-	public String sendSmsAuthCode(HttpServletRequest request,String phone,ModelMap mm) {
-		HashMap<String,Object> returnValue=userBindCodeService.sendSmsAuthCode(phone);
+	//绑定新手机号
+	@RequestMapping(value="/rebindPhone",method=RequestMethod.POST)
+	public String rebindPhone(HttpServletRequest request,int userId, String phone, String authCode, int authCodeId,ModelMap mm) {
+		HashMap<String,Object> returnValue=userService.updatePhone(userId, phone, authCode, authCodeId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.get("resultCode"));
 			mm.addAttribute("msg", returnValue.get("msg"));
 			mm.addAttribute("resultObj", returnValue.get("resultObj"));
-		}
-		else {
+		}else {
 			mm.addAttribute("resultCode", "-3");
 			mm.addAttribute("msg", "未知错误");
 		}
-		return "mobileResultJson";
-	}
-	
-	//token校验错误
-	@RequestMapping(value="/tokenInvalid")
-	public String tokenInvalid(HttpServletRequest request,ModelMap mm) {
-		mm.addAttribute("resultCode", "13");
-		mm.addAttribute("msg", "令牌校验错误");
 		return "mobileResultJson";
 	}
 }

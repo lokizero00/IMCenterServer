@@ -13,5 +13,4 @@ public interface EnterpriseCertificationDao {
 	EnterpriseCertification findAllByUserId(int userId);
 	EnterpriseCertification findCurrentByUserId(int userId);
 	boolean nullifyByUserId(int userId);
-	int existByUserId(int userId);
 }

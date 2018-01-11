@@ -37,19 +37,13 @@
   <select id="findCurrentByUserId" parameterType="int" resultMap="enterpriseCertificationDao">
 		select <include refid="Base_Column_List" /> 
 		from enterprise_certification
-		where user_id=#{_parameter} and deleted=0
+		where user_id=#{_parameter} and deleted=0 limit 1
   </select>
   
   <select id="findAllByUserId" parameterType="int" resultMap="enterpriseCertificationDao">
 		select <include refid="Base_Column_List" /> 
 		from enterprise_certification
 		where user_id=#{_parameter}
-  </select>
-  
-  <select id="existByUserId" parameterType="int" resultType="int">
-		select count(id)
-		from enterprise_certification
-		where user_id=#{_parameter} and deleted=0
   </select>
   
   <select id="findAll" resultMap="enterpriseCertificationDao">
