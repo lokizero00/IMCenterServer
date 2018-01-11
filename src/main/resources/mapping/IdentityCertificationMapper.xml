@@ -34,7 +34,7 @@
 		where id=#{_parameter}
   </select>
   
-  <select id="findByUserId" parameterType="int" resultType="int">
+  <select id="findByUserId" parameterType="int" resultMap="identityCertificationDao">
 		select <include refid="Base_Column_List" />
 		from identity_certification
 		where user_id=#{_parameter} limit 1
