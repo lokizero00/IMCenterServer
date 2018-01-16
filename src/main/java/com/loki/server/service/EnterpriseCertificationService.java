@@ -1,8 +1,9 @@
 package com.loki.server.service;
 
-import java.util.HashMap;
+import com.loki.server.dto.ServiceResult;
+import com.loki.server.entity.EnterpriseCertification;
 
 public interface EnterpriseCertificationService {
-	HashMap<String,Object> updateEnterpriseCertification(int userId,String position,String enterpriseName,String licensePic);
-	HashMap<String, Object> getEnterpriseCertification(int userId);
+	ServiceResult<EnterpriseCertification> updateEnterpriseCertification(int userId,String position,String enterpriseName,String licensePic);
+	ServiceResult<EnterpriseCertification> getEnterpriseCertification(int userId);
 }

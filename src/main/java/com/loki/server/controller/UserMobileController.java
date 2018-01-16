@@ -1,9 +1,5 @@
 package com.loki.server.controller;
 
-
-
-import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,28 +8,30 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.loki.server.service.IntentionService;
+import com.loki.server.dto.ServiceResult;
+import com.loki.server.entity.User;
+import com.loki.server.entity.UserBindCode;
 import com.loki.server.service.UserBindCodeService;
 import com.loki.server.service.UserService;
+import com.loki.server.utils.ResultCodeEnums;
 
 @Controller
 @RequestMapping("/s/api/user")
 public class UserMobileController {
 	@Autowired UserService userService;
 	@Autowired UserBindCodeService userBindCodeService;
-	@Autowired IntentionService intentionService;
 	
 	//获取用户信息
 	@RequestMapping(value="/getUser",method=RequestMethod.GET)
 	public String getUser(HttpServletRequest request,int userId,ModelMap mm) {
-		HashMap<String,Object> returnValue=userService.getUser(userId);
+		ServiceResult<User> returnValue=userService.getUser(userId);
 		if (returnValue!=null) {
-			mm.addAttribute("resultCode", returnValue.get("resultCode"));
-			mm.addAttribute("msg", returnValue.get("msg"));
-			mm.addAttribute("resultObj", returnValue.get("resultObj"));
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
 		}else {
-			mm.addAttribute("resultCode", "-3");
-			mm.addAttribute("msg", "未知错误");
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
 		}
 		return "mobileResultJson";
 	}
@@ -41,14 +39,14 @@ public class UserMobileController {
 	//更新昵称
 	@RequestMapping(value="/updateNickName",method=RequestMethod.POST)
 	public String updateNickName(HttpServletRequest request,int userId,String nickName,ModelMap mm) {
-		HashMap<String,Object> returnValue=userService.updateNickName(userId, nickName);
+		ServiceResult<User> returnValue=userService.updateNickName(userId, nickName);
 		if (returnValue!=null) {
-			mm.addAttribute("resultCode", returnValue.get("resultCode"));
-			mm.addAttribute("msg", returnValue.get("msg"));
-			mm.addAttribute("resultObj", returnValue.get("resultObj"));
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
 		}else {
-			mm.addAttribute("resultCode", "-3");
-			mm.addAttribute("msg", "未知错误");
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
 		}
 		return "mobileResultJson";
 	}
@@ -56,14 +54,14 @@ public class UserMobileController {
 	//验证码校验，绑定手机时使用
 	@RequestMapping(value="/checkAuthCode",method=RequestMethod.GET)
 	public String checkAuthCode(HttpServletRequest request,int authCodeId, String authCode,ModelMap mm) {
-		HashMap<String,Object> returnValue=userBindCodeService.checkAuthCode(authCodeId, authCode);
+		ServiceResult<UserBindCode> returnValue=userBindCodeService.checkAuthCode(authCodeId, authCode);
 		if (returnValue!=null) {
-			mm.addAttribute("resultCode", returnValue.get("resultCode"));
-			mm.addAttribute("msg", returnValue.get("msg"));
-			mm.addAttribute("resultObj", returnValue.get("resultObj"));
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
 		}else {
-			mm.addAttribute("resultCode", "-3");
-			mm.addAttribute("msg", "未知错误");
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
 		}
 		return "mobileResultJson";
 	}
@@ -71,29 +69,14 @@ public class UserMobileController {
 	//绑定新手机号
 	@RequestMapping(value="/rebindPhone",method=RequestMethod.POST)
 	public String rebindPhone(HttpServletRequest request,int userId, String phone, String authCode, int authCodeId,ModelMap mm) {
-		HashMap<String,Object> returnValue=userService.updatePhone(userId, phone, authCode, authCodeId);
+		ServiceResult<User> returnValue=userService.updatePhone(userId, phone, authCode, authCodeId);
 		if (returnValue!=null) {
-			mm.addAttribute("resultCode", returnValue.get("resultCode"));
-			mm.addAttribute("msg", returnValue.get("msg"));
-			mm.addAttribute("resultObj", returnValue.get("resultObj"));
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
 		}else {
-			mm.addAttribute("resultCode", "-3");
-			mm.addAttribute("msg", "未知错误");
-		}
-		return "mobileResultJson";
-	}
-	
-	//获取意向金明细
-	@RequestMapping(value="/getIntentionLog",method=RequestMethod.GET)
-	public String getIntentionLog(HttpServletRequest request,int userId,int intentionId,int adminId,String type,Integer pageNo, Integer pageSize,ModelMap mm) {
-		HashMap<String,Object> returnValue=intentionService.getIntentionLog(userId,intentionId, adminId, type,pageNo,pageSize);
-		if (returnValue!=null) {
-			mm.addAttribute("resultCode", returnValue.get("resultCode"));
-			mm.addAttribute("msg", returnValue.get("msg"));
-			mm.addAttribute("resultObj", returnValue.get("resultObj"));
-		}else {
-			mm.addAttribute("resultCode", "-3");
-			mm.addAttribute("msg", "未知错误");
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
 		}
 		return "mobileResultJson";
 	}

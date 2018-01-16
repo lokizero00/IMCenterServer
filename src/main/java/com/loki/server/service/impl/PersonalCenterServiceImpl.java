@@ -1,7 +1,5 @@
 package com.loki.server.service.impl;
 
-import java.util.HashMap;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -11,11 +9,14 @@ import com.loki.server.dao.EnterpriseCertificationDao;
 import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserDao;
+import com.loki.server.dto.ServiceResult;
 import com.loki.server.entity.EnterpriseCertification;
 import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.Intention;
 import com.loki.server.entity.User;
 import com.loki.server.service.PersonalCenterService;
+import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.vo.PersonalCenterVO;
 
 @Service
 @Transactional
@@ -26,29 +27,27 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 	@Resource private IntentionDao intentionDao;
 
 	@Override
-	public HashMap<String,Object> getPersonalCenter(int userId) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<PersonalCenterVO> getPersonalCenter(int userId) {
+		ServiceResult<PersonalCenterVO> returnValue=new ServiceResult<PersonalCenterVO>();
 		if (userId>0) {
 			User user=userDao.findById(userId);
 			if(null==user) {
-				returnValue.put("resultCode", 2);
-				returnValue.put("msg","用户不存在");
+				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}else {
 				IdentityCertification identityCertification=identityCertificationDao.findById(user.getIdentityId());
 				EnterpriseCertification enterpriseCertification=enterpriseCertificationDao.findById(user.getEnterpriseId());
 				Intention intention=intentionDao.findByUserId(user.getId());
-				HashMap<String,Object> pcMap=new HashMap<String,Object>();
-				pcMap.put("user", user);
-				pcMap.put("identityCertification",identityCertification);
-				pcMap.put("enterpriseCertification",enterpriseCertification);
-				pcMap.put("intention",intention);
+				PersonalCenterVO personalCenterVO=new PersonalCenterVO();
+				personalCenterVO.setUser(user);
+				personalCenterVO.setIdentityCertification(identityCertification);
+				personalCenterVO.setEnterpriseCertification(enterpriseCertification);
+				personalCenterVO.setIntention(intention);
 				
-				returnValue.put("resultCode",1);
-				returnValue.put("resultObj",pcMap);
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(personalCenterVO);
 			}
 		}else {
-			returnValue.put("resultCode",3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}

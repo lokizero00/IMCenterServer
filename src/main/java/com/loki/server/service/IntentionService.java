@@ -1,9 +1,12 @@
 package com.loki.server.service;
 
-import java.util.HashMap;
+
+import com.loki.server.dto.PagedResult;
+import com.loki.server.dto.ServiceResult;
+import com.loki.server.entity.Intention;
+import com.loki.server.entity.IntentionLog;
 
 public interface IntentionService {
-//	HashMap<String,Object> recharge()
-	HashMap<String,Object> getIntention(int userId);
-	HashMap<String,Object> getIntentionLog(int userId,int intentionId,int adminId,String type,Integer pageNo,Integer pageSize);
+	ServiceResult<Intention> getIntention(int userId);
+	ServiceResult<PagedResult<IntentionLog>> getIntentionLog(int userId,int intentionId,int adminId,String type,Integer pageNo,Integer pageSize);
 }

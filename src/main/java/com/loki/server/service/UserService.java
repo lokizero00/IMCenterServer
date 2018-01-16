@@ -1,13 +1,15 @@
 package com.loki.server.service;
 
-import java.util.HashMap;
+import com.loki.server.dto.ServiceResult;
+import com.loki.server.entity.User;
+import com.loki.server.vo.UserLoginVO;
 
 public interface UserService {
-	HashMap<String,Object> loginCheck(String phone,String password,String clientIp,String clientType);
-	HashMap<String,Object> loginCheckByToken(String userToken);
-	HashMap<String,Object> regist(String phone,String password,String authCode,int authCodeId,String clientIp,String clientType);
-	HashMap<String,Object> getUser(int user);
-	HashMap<String,Object> updateNickName(int userId,String nickName);
-	HashMap<String,Object> updateAvatar(int userId,String avatar);
-	HashMap<String,Object> updatePhone(int userId,String phone,String authCode,int authCodeId);
+	ServiceResult<UserLoginVO> loginCheck(String phone,String password,String clientIp,String clientType);
+	ServiceResult<UserLoginVO> loginCheckByToken(String userToken);
+	ServiceResult<UserLoginVO> regist(String phone,String password,String authCode,int authCodeId,String clientIp,String clientType);
+	ServiceResult<User> getUser(int user);
+	ServiceResult<User> updateNickName(int userId,String nickName);
+	ServiceResult<User> updateAvatar(int userId,String avatar);
+	ServiceResult<User> updatePhone(int userId,String phone,String authCode,int authCodeId);
 }

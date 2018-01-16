@@ -1,8 +1,9 @@
 package com.loki.server.service;
 
-import java.util.HashMap;
+import com.loki.server.dto.ServiceResult;
+import com.loki.server.entity.UserBindCode;
 
 public interface UserBindCodeService {
-	HashMap<String,Object> sendSmsAuthCode(String phone);
-	HashMap<String,Object> checkAuthCode(int authCodeId,String authCode);
+	ServiceResult<UserBindCode> sendSmsAuthCode(String phone);
+	ServiceResult<UserBindCode> checkAuthCode(int authCodeId,String authCode);
 }

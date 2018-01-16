@@ -1,7 +1,8 @@
 package com.loki.server.service;
 
-import java.util.HashMap;
+import com.loki.server.dto.ServiceResult;
+import com.loki.server.vo.PersonalCenterVO;
 
 public interface PersonalCenterService {
-	HashMap<String,Object> getPersonalCenter(int userId);
+	ServiceResult<PersonalCenterVO> getPersonalCenter(int userId);
 }

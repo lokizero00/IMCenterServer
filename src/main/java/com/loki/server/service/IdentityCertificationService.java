@@ -1,9 +1,10 @@
 package com.loki.server.service;
 
-import java.util.HashMap;
+import com.loki.server.dto.ServiceResult;
+import com.loki.server.entity.IdentityCertification;
 
 public interface IdentityCertificationService {
-	HashMap<String,Object> updateIdentityCertification(int userId,String trueName,String identityNumber,String identityFront,String identityBack);
-	HashMap<String,Object> getIdentityCertification(int userId);
-	HashMap<String, Object> getIdentityCertificationStatus(int userId);
+	ServiceResult<IdentityCertification> updateIdentityCertification(int userId,String trueName,String identityNumber,String identityFront,String identityBack);
+	ServiceResult<IdentityCertification> getIdentityCertification(int userId);
+	ServiceResult<String> getIdentityCertificationStatus(int userId);
 }

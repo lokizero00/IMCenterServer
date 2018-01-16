@@ -1,16 +1,16 @@
 package com.loki.server.service.impl;
 
-import java.util.HashMap;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.loki.server.dao.UserBindCodeDao;
+import com.loki.server.dto.ServiceResult;
 import com.loki.server.entity.UserBindCode;
 import com.loki.server.service.UserBindCodeService;
 import com.loki.server.utils.CommonUtil;
+import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.SendSmsUtil;
 
 @Service
@@ -19,8 +19,8 @@ public class UserBindCodeServiceImpl implements UserBindCodeService {
 	@Resource UserBindCodeDao userBindCodeDao;
 
 	@Override
-	public HashMap<String,Object> sendSmsAuthCode(String phone) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<UserBindCode> sendSmsAuthCode(String phone) {
+		ServiceResult<UserBindCode> returnValue=new ServiceResult<UserBindCode>();
 		if(null != phone && "" != phone) {
 			String authCode=CommonUtil.getInstance().getRandomStr(6, 3);
 			UserBindCode ubc=new UserBindCode();
@@ -29,26 +29,23 @@ public class UserBindCodeServiceImpl implements UserBindCodeService {
 			if(ubc.getId()>0) {
 				if(SendSmsUtil.getInstance().sendAuthCode(phone, authCode, ubc.getId())) {
 					ubc.setAuthCode("");
-					returnValue.put("resultCode", 1);
-					returnValue.put("resultObj",ubc);
+					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+					returnValue.setResultObj(ubc);
 				}else {
-					returnValue.put("resultCode", 9);
-					returnValue.put("msg","验证码发送失败");
+					returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_SEND_FAIL);
 				}
 			}else {
-				returnValue.put("resultCode", 10);
-				returnValue.put("msg","验证码保存失败");
+				returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_SAVE_FAIL);
 			}
 		}else {
-			returnValue.put("resultCode", 3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}
 
 	@Override
-	public HashMap<String, Object> checkAuthCode(int authCodeId, String authCode) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<UserBindCode> checkAuthCode(int authCodeId, String authCode) {
+		ServiceResult<UserBindCode> returnValue=new ServiceResult<UserBindCode>();
 		if (authCodeId>0 && null!=authCode && ""!=authCode) {
 			UserBindCode userBindCode=userBindCodeDao.findById(authCodeId);
 			if(null!=userBindCode && authCode.equals(userBindCode.getAuthCode())) {
@@ -56,19 +53,15 @@ public class UserBindCodeServiceImpl implements UserBindCodeService {
 				long codeTime=userBindCode.getSendTime().getTime();
 				long nowTime=System.currentTimeMillis();
 				if((nowTime-codeTime)<=300000) {
-					returnValue.put("resultCode", 1);
-					returnValue.put("msg","验证码正确");
+					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				}else {
-					returnValue.put("resultCode", 12);
-					returnValue.put("msg","验证码超时");
+					returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_TIME_OUT);
 				}
 			}else {
-				returnValue.put("resultCode", 11);
-				returnValue.put("msg","验证码错误");
+				returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_WRONG);
 			}
 		}else {
-			returnValue.put("resultCode",3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}

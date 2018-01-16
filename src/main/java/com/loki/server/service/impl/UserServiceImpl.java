@@ -1,7 +1,6 @@
 package com.loki.server.service.impl;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -11,12 +10,15 @@ import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserBindCodeDao;
 import com.loki.server.dao.UserDao;
 import com.loki.server.dao.UserTokenDao;
+import com.loki.server.dto.ServiceResult;
 import com.loki.server.entity.Intention;
 import com.loki.server.entity.User;
 import com.loki.server.entity.UserBindCode;
 import com.loki.server.entity.UserToken;
 import com.loki.server.service.UserService;
 import com.loki.server.utils.MD5;
+import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.vo.UserLoginVO;
 
 @Service
 @Transactional
@@ -28,8 +30,8 @@ public class UserServiceImpl implements UserService{
 	@Resource private UserBindCodeDao userBindCodeDao;
 
 	@Override
-	public HashMap<String,Object> loginCheck(String phone, String password,String clientIp,String clientType) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<UserLoginVO> loginCheck(String phone, String password,String clientIp,String clientType) {
+		ServiceResult<UserLoginVO> returnValue=new ServiceResult<UserLoginVO>();
 		if(phone!=null && phone!="" && password!=null && password!="") {
 			//用户登录验证
 			User user=userDao.loginCheck(phone, password);
@@ -49,26 +51,24 @@ public class UserServiceImpl implements UserService{
 				userTokenDao.insert(userToken);
 				
 				//返回登录信息
-				HashMap<String,Object> userMap=new HashMap<String,Object>();
-				userMap.put("user",user);
-				userMap.put("userToken",userToken);
+				UserLoginVO userLoginVO=new UserLoginVO();
+				userLoginVO.setUser(user);
+				userLoginVO.setUserToken(userToken);
 				
-				returnValue.put("resultCode", 1);
-				returnValue.put("resultObj",userMap);
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(userLoginVO);
 			}else {
-				returnValue.put("resultCode", 2);
-				returnValue.put("msg","用户不存在");
+				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}
 		}else {
-			returnValue.put("resultCode", 3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}
 
 	@Override
-	public HashMap<String,Object> loginCheckByToken(String token) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<UserLoginVO> loginCheckByToken(String token) {
+		ServiceResult<UserLoginVO> returnValue=new ServiceResult<UserLoginVO>();
 		if (token!=null && token!="") {
 			//用户令牌验证
 			UserToken userToken=userTokenDao.findByToken(token);
@@ -77,26 +77,24 @@ public class UserServiceImpl implements UserService{
 				User user=userDao.findById(userToken.getUserId());
 				
 				//返回登录信息
-				HashMap<String,Object> userMap=new HashMap<String,Object>();
-				userMap.put("user",user);
-				userMap.put("userToken",userToken);
+				UserLoginVO userLoginVO=new UserLoginVO();
+				userLoginVO.setUser(user);
+				userLoginVO.setUserToken(userToken);
 				
-				returnValue.put("resultCode", 1);
-				returnValue.put("resultObj",userMap);
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(userLoginVO);
 			}else {
-				returnValue.put("resultCode", 4);
-				returnValue.put("msg","登录令牌已失效");
+				returnValue.setResultCode(ResultCodeEnums.TOKEN_EXPIRED);
 			}
 		}else {
-			returnValue.put("resultCode", 3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}
 
 	@Override
-	public HashMap<String,Object> regist(String phone,String password,String authCode,int authCodeId,String clientIp,String clientType) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<UserLoginVO> regist(String phone,String password,String authCode,int authCodeId,String clientIp,String clientType) {
+		ServiceResult<UserLoginVO> returnValue=new ServiceResult<UserLoginVO>();
 		if (null!=phone && ""!=phone && null!=password && ""!=password && authCodeId>0 && null!=authCode && ""!=authCode) {
 			UserBindCode userBindCode=userBindCodeDao.findById(authCodeId);
 			if(null!=userBindCode && authCode.equals(userBindCode.getAuthCode())) {
@@ -106,8 +104,7 @@ public class UserServiceImpl implements UserService{
 				if((nowTime-codeTime)<=300000) {
 					int uCount=userDao.userExistCheck(phone);
 					if (uCount>0) {
-						returnValue.put("resultCode", 5);
-						returnValue.put("msg","手机号已存在");;
+						returnValue.setResultCode(ResultCodeEnums.PHONE_EXISTS);
 					}else {
 						//注册用户
 						User user=new User();
@@ -143,102 +140,89 @@ public class UserServiceImpl implements UserService{
 						intentionDao.insert(intention);
 						
 						//返回登录信息
-						HashMap<String,Object> userMap=new HashMap<String,Object>();
-						userMap.put("user",user);
-						userMap.put("userToken",userToken);
+						UserLoginVO userLoginVO=new UserLoginVO();
+						userLoginVO.setUser(user);
+						userLoginVO.setUserToken(userToken);
 						
-						returnValue.put("resultCode", 1);
-						returnValue.put("resultObj", userMap);
+						returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+						returnValue.setResultObj(userLoginVO);
 					}
 				}else {
-					returnValue.put("resultCode", 12);
-					returnValue.put("msg","验证码超时");
+					returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_TIME_OUT);
 				}
 			}else {
-				returnValue.put("resultCode", 11);
-				returnValue.put("msg","验证码错误");
+				returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_WRONG);
 			}
 		}else {
-			returnValue.put("resultCode", 3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}
 	
 	@Override
-	public HashMap<String,Object> getUser(int userId) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<User> getUser(int userId) {
+		ServiceResult<User> returnValue=new ServiceResult<User>();
 		if (userId>0) {
 			User user=userDao.findById(userId);
 			if(null==user) {
-				returnValue.put("resultCode",2);
-				returnValue.put("msg","用户不存在");
+				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}else {
-				returnValue.put("resultCode",1);
-				returnValue.put("resultObj",user);
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(user);
 			}
 		}else {
-			returnValue.put("resultCode",3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}
 
 	@Override
-	public HashMap<String, Object> updateNickName(int userId,String nickName) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<User> updateNickName(int userId,String nickName) {
+		ServiceResult<User> returnValue=new ServiceResult<User>();
 		if (userId>0) {
 			User user=userDao.findById(userId);
 			if(null==user) {
-				returnValue.put("resultCode",2);
-				returnValue.put("msg","用户不存在");
+				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}else {
 				user.setNickName(nickName);
 				if(userDao.update(user)) {
-					returnValue.put("resultCode",1);
-					returnValue.put("msg", "更新成功");
-					returnValue.put("resultObj",user);
+					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+					returnValue.setResultObj(user);
 				}else {
-					returnValue.put("resultCode",7);
-					returnValue.put("msg", "更新失败");
+					returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
 				}
 			}
 		}else {
-			returnValue.put("resultCode",3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}
 
 	@Override
-	public HashMap<String, Object> updateAvatar(int userId, String avatar) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<User> updateAvatar(int userId, String avatar) {
+		ServiceResult<User> returnValue=new ServiceResult<User>();
 		if (userId>0) {
 			User user=userDao.findById(userId);
 			if(null==user) {
-				returnValue.put("resultCode",2);
-				returnValue.put("msg","用户不存在");
+				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}else {
 				user.setAvatar(avatar);
 				if(userDao.update(user)) {
-					returnValue.put("resultCode",1);
-					returnValue.put("msg", "更新成功");
-					returnValue.put("resultObj",user);
+					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+					returnValue.setResultObj(user);
 				}else {
-					returnValue.put("resultCode",7);
-					returnValue.put("msg", "更新失败");
+					returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
 				}
 			}
 		}else {
-			returnValue.put("resultCode",3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}
 
 	@Override
-	public HashMap<String, Object> updatePhone(int userId, String phone, String authCode, int authCodeId) {
-		HashMap<String,Object> returnValue=new HashMap<String,Object>();
+	public ServiceResult<User> updatePhone(int userId, String phone, String authCode, int authCodeId) {
+		ServiceResult<User> returnValue=new ServiceResult<User>();
 		if (userId>0 && authCodeId>0 && null!=phone && ""!=phone && null!=authCode && ""!=authCode) {
 			UserBindCode userBindCode=userBindCodeDao.findById(authCodeId);
 			if(null!=userBindCode && authCode.equals(userBindCode.getAuthCode())) {
@@ -248,32 +232,26 @@ public class UserServiceImpl implements UserService{
 				if((nowTime-codeTime)<=300000) {
 					User user=userDao.findById(userId);
 					if(null==user) {
-						returnValue.put("resultCode",2);
-						returnValue.put("msg","用户不存在");
+						returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 					}else {
 						user.setPhone(phone);
 						user.setPhoneBind(true);
 						if(userDao.update(user)) {
-							returnValue.put("resultCode", 1);
-							returnValue.put("msg","更新成功");
-							returnValue.put("resultObj", user);
+							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+							returnValue.setResultObj(user);
 						}
 						else {
-							returnValue.put("resultCode", 7);
-							returnValue.put("msg","更新失败");
+							returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
 						}
 					}
 				}else {
-					returnValue.put("resultCode", 12);
-					returnValue.put("msg","验证码超时");
+					returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_TIME_OUT);
 				}
 			}else {
-				returnValue.put("resultCode", 11);
-				returnValue.put("msg","验证码错误");
+				returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_WRONG);
 			}
 		}else {
-			returnValue.put("resultCode",3);
-			returnValue.put("msg","参数错误");
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}	
