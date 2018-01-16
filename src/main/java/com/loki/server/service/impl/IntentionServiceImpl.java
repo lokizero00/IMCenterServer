@@ -1,5 +1,7 @@
 package com.loki.server.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -8,10 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.IntentionLogDao;
+import com.loki.server.dao.UserBankcardDao;
 import com.loki.server.dto.PagedResult;
 import com.loki.server.dto.ServiceResult;
 import com.loki.server.entity.Intention;
 import com.loki.server.entity.IntentionLog;
+import com.loki.server.entity.UserBankcard;
 import com.loki.server.service.IntentionService;
 import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
@@ -21,6 +25,7 @@ import com.loki.server.utils.ResultCodeEnums;
 public class IntentionServiceImpl implements IntentionService {
 	@Resource IntentionDao intentionDao;
 	@Resource IntentionLogDao intentionLogDao;
+	@Resource UserBankcardDao userBankcardDao;
 	
 	@Override
 	public ServiceResult<Intention> getIntention(int userId) {
@@ -52,7 +57,24 @@ public class IntentionServiceImpl implements IntentionService {
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				returnValue.setResultObj(pageResult);
 			}else {
-				returnValue.setResultCode(ResultCodeEnums.INTENTION_NOT_EXIST);
+				returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
+			}
+		}else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
+
+	@Override
+	public ServiceResult<List<UserBankcard>> getUserBankcard(int userId) {
+		ServiceResult<List<UserBankcard>> returnValue=new ServiceResult<List<UserBankcard>>();
+		if(userId>0) {
+			List<UserBankcard> userBankcardList=userBankcardDao.findByParam(userId, null, null, null, null);
+			if(null!=userBankcardList) {
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(userBankcardList);
+			}else {
+				returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
 			}
 		}else {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
