@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.loki.server.service.IntentionService;
 import com.loki.server.service.UserBindCodeService;
 import com.loki.server.service.UserService;
 
@@ -20,6 +21,7 @@ import com.loki.server.service.UserService;
 public class UserMobileController {
 	@Autowired UserService userService;
 	@Autowired UserBindCodeService userBindCodeService;
+	@Autowired IntentionService intentionService;
 	
 	//获取用户信息
 	@RequestMapping(value="/getUser",method=RequestMethod.GET)
@@ -70,6 +72,21 @@ public class UserMobileController {
 	@RequestMapping(value="/rebindPhone",method=RequestMethod.POST)
 	public String rebindPhone(HttpServletRequest request,int userId, String phone, String authCode, int authCodeId,ModelMap mm) {
 		HashMap<String,Object> returnValue=userService.updatePhone(userId, phone, authCode, authCodeId);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.get("resultCode"));
+			mm.addAttribute("msg", returnValue.get("msg"));
+			mm.addAttribute("resultObj", returnValue.get("resultObj"));
+		}else {
+			mm.addAttribute("resultCode", "-3");
+			mm.addAttribute("msg", "未知错误");
+		}
+		return "mobileResultJson";
+	}
+	
+	//获取意向金明细
+	@RequestMapping(value="/getIntentionLog",method=RequestMethod.GET)
+	public String getIntentionLog(HttpServletRequest request,int userId,int intentionId,int adminId,String type,Integer pageNo, Integer pageSize,ModelMap mm) {
+		HashMap<String,Object> returnValue=intentionService.getIntentionLog(userId,intentionId, adminId, type,pageNo,pageSize);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.get("resultCode"));
 			mm.addAttribute("msg", returnValue.get("msg"));
