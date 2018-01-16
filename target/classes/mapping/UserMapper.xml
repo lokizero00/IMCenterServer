@@ -19,19 +19,17 @@
     <result column="regist_ip" jdbcType="VARCHAR" property="registIp" />
     <result column="identity_id" jdbcType="INTEGER" property="identityId" />
     <result column="enterprise_id" jdbcType="INTEGER" property="enterpriseId" />
-    <result column="wechat_QRcode" jdbcType="VARCHAR" property="wechatQRCode" />
-    <result column="alipay_account" jdbcType="VARCHAR" property="alipayAccount" />
     <result column="ease_id" jdbcType="VARCHAR" property="easeId" />
     <result column="ease_pwd" jdbcType="VARCHAR" property="easePwd" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id, user_name,password,nick_name,phone,phone_bind,email,email_bind,avatar,pay_pwd,regist_time,regist_ip,identity_id,enterprise_id,wechat_QRcode,alipay_account,ease_id,ease_pwd
+    id, user_name,password,nick_name,phone,phone_bind,email,email_bind,avatar,pay_pwd,regist_time,regist_ip,identity_id,enterprise_id,ease_id,ease_pwd
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.User">
-		insert into user(user_name,password,nick_name,phone,phone_bind,email,email_bind,avatar,pay_pwd,regist_time,regist_ip,identity_id,enterprise_id,wechat_QRcode,alipay_account,ease_id,ease_pwd) 
-		values(#{userName},#{password},#{nickName},#{phone},#{phoneBind},#{email},#{emailBind},#{avatar},#{payPwd},now(),#{registIp},#{identityId},#{enterpriseId},#{wechatQRCode},#{alipayAccount},#{easeId},#{easePwd})
+		insert into user(user_name,password,nick_name,phone,phone_bind,email,email_bind,avatar,pay_pwd,regist_time,regist_ip,identity_id,enterprise_id,ease_id,ease_pwd) 
+		values(#{userName},#{password},#{nickName},#{phone},#{phoneBind},#{email},#{emailBind},#{avatar},#{payPwd},now(),#{registIp},#{identityId},#{enterpriseId},#{easeId},#{easePwd})
 	</insert>
   
   <select id="findById" parameterType="int" resultMap="userDao">
@@ -46,7 +44,7 @@
   </select>
   
   <update id="update" parameterType="com.loki.server.entity.User">
-  	update user SET user_name=#{userName},password=#{password},nick_name=#{nickName},phone=#{phone},phone_bind=#{phoneBind},email=#{email},email_bind=#{emailBind},avatar=#{avatar},pay_pwd=#{payPwd},identity_id=#{identityId},enterprise_id=#{enterpriseId},wechat_QRcode=#{wechatQRcode},alipay_account=#{alipayAccount},ease_id=#{easeId},ease_pwd=#{easePwd} where id=#{id}
+  	update user SET user_name=#{userName},password=#{password},nick_name=#{nickName},phone=#{phone},phone_bind=#{phoneBind},email=#{email},email_bind=#{emailBind},avatar=#{avatar},pay_pwd=#{payPwd},identity_id=#{identityId},enterprise_id=#{enterpriseId},ease_id=#{easeId},ease_pwd=#{easePwd} where id=#{id}
   </update>
   
   <delete id="delete" parameterType="int">

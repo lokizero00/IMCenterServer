@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.UserBankcardDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="userBankcardDao" type="com.loki.server.entity.UserBankcard">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="bank_code" jdbcType="VARCHAR" property="bankCode" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="bank_card_type" jdbcType="VARCHAR" property="bankCardType" />
+    <result column="bank_card_number" jdbcType="VARCHAR" property="bankCardNumber" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,user_id,bank_code,bank_name,bank_card_type,bank_card_number
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.UserBankcard">
+		insert into user_bankcard(user_id,bank_code,bank_name,bank_card_type,bank_card_number) 
+		values(#{userId},#{bankCode},#{bankName},#{bankCardType},#{bankCardNumber})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.entity.UserBankcard">
+  	update user_bankcard SET user_id=#{userId},bank_code=#{bankCode},bank_name=#{bankName},bank_card_type=#{bankCardType},bank_card_number=#{bankCardNumber} where id=#{id}
+  </update>
+  
+  <select id="findByParam" resultMap="userBankcardDao">
+		select <include refid="Base_Column_List" /> 
+		from user_bankcard
+		<where>
+			<if test="userId !=null and userId!=0">
+				user_id=#{userId}
+			</if>
+			<if test="bankCode !=null and bankCode!=''">
+				and bank_code=#{bankCode}
+			</if>
+			<if test="bankName !=null and bankName!=''">
+				and bank_name=#{bankName}
+			</if>
+			<if test="bankCardType !=null and bankCardType!=''">
+				and bank_card_type=#{bankCardType}
+			</if>
+			<if test="bankCardNumber !=null and bankCardNumber!=''">
+				and bank_card_number=#{bankCardNumber}
+			</if>
+		</where>
+		order by id desc
+  </select>
+  
+  <select id="findById" parameterType="int" resultMap="userBankcardDao">
+		select <include refid="Base_Column_List" /> 
+		from user_bankcard
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="userBankcardDao">
+		select <include refid="Base_Column_List" /> 
+		from user_bankcard
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from user_bankcard where id=#{_parameter}
+	</delete>
+</mapper>

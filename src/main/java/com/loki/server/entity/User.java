@@ -19,8 +19,6 @@ public class User implements Serializable{
 	private String registIp;
 	private int identityId;
 	private int enterpriseId;
-	private String wechatQRCode;
-	private String alipayAccount;
 	private String easeId;
 	private String easePwd;
 	
@@ -107,18 +105,6 @@ public class User implements Serializable{
 	}
 	public void setEnterpriseId(int enterpriseId) {
 		this.enterpriseId = enterpriseId;
-	}
-	public String getWechatQRCode() {
-		return wechatQRCode;
-	}
-	public void setWechatQRCode(String wechatQRCode) {
-		this.wechatQRCode = wechatQRCode;
-	}
-	public String getAlipayAccount() {
-		return alipayAccount;
-	}
-	public void setAlipayAccount(String alipayAccount) {
-		this.alipayAccount = alipayAccount;
 	}
 	public String getEaseId() {
 		return easeId;
