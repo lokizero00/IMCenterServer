@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.UserTokenDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="userTokenDao" type="com.loki.server.model.UserToken">
+  <resultMap id="userTokenDao" type="com.loki.server.entity.UserToken">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="token" jdbcType="VARCHAR" property="token" />
@@ -17,7 +17,7 @@
     id,user_id,token,login_time,login_ip,client_type,expired
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.UserToken">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.UserToken">
 		insert into user_token(user_id,token,login_time,login_ip,client_type,expired) values(#{userId},#{token},now(),#{loginIp},#{clientType},#{expired})
 	</insert>
   

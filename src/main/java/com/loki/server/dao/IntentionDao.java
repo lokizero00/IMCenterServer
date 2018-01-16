@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.Intention;
+import com.loki.server.entity.Intention;
 
 public interface IntentionDao {
 	void insert(Intention intention);

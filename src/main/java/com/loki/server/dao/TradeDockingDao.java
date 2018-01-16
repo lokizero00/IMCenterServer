@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.TradeDocking;
+import com.loki.server.entity.TradeDocking;
 
 public interface TradeDockingDao {
 	void insert(TradeDocking tradeDocking);

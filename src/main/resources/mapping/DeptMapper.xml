@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.DeptDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="deptDao" type="com.loki.server.model.Dept">
+  <resultMap id="deptDao" type="com.loki.server.entity.Dept">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -20,12 +20,12 @@
     id,create_time,update_time,admin_creator_id,admin_updater_id,name,description,sort,pic,parent_id
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.Dept">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Dept">
 		insert into dept(create_time,admin_creator_id,name,description,sort,pic,parent_id) 
 		values(now(),#{adminCreatorId},#{name},#{description},#{sort},#{pic},#{parentId})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.Dept">
+  <update id="update" parameterType="com.loki.server.entity.Dept">
   	update dept SET update_time=now(),admin_updater_id=#{adminUpdaterId},name=#{name},description=#{description},sort=#{sort},pic=#{pic},parent_id=#{parentId} where id=#{id}
   </update>
   

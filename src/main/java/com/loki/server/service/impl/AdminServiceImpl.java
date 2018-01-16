@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.loki.server.dao.AdminDao;
 import com.loki.server.dao.AdminLogDao;
-import com.loki.server.model.Admin;
-import com.loki.server.model.AdminLog;
+import com.loki.server.entity.Admin;
+import com.loki.server.entity.AdminLog;
 import com.loki.server.service.AdminService;
 
 @Service

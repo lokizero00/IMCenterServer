@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.IntentionRecharge;
+import com.loki.server.entity.IntentionRecharge;
 
 public interface IntentionRechargeDao {
 	void insert(IntentionRecharge intentionRecharge);

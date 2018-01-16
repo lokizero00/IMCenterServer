@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.TradeInvoiceDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="tradeInvoiceDao" type="com.loki.server.model.TradeInvoice">
+  <resultMap id="tradeInvoiceDao" type="com.loki.server.entity.TradeInvoice">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
     <result column="invoice_id" jdbcType="INTEGER" property="invoiceId" />
@@ -14,12 +14,12 @@
     id,trade_id,invoice_id,invoice_name
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.TradeInvoice">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeInvoice">
 		insert into trade_invoice(trade_id,invoice_id,invoice_name) 
 		values(#{tradeId},#{invoiceId},#{invoiceName})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.TradeInvoice">
+  <update id="update" parameterType="com.loki.server.entity.TradeInvoice">
   	update trade_invoice SET trade_id=#{tradeId},invoice_id=#{invoiceId},invoice_name=#{invoiceName} where id=#{id}
   </update>
   

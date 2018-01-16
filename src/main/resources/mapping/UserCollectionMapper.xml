@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.UserCollectionDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="userCollectionDao" type="com.loki.server.model.UserCollection">
+  <resultMap id="userCollectionDao" type="com.loki.server.entity.UserCollection">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -18,12 +18,12 @@
     id,create_time,update_time,creator_id,updater_id,trade_id,user_id,type
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.UserCollection">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.UserCollection">
 		insert into user_collection(create_time,creator_id,trade_id,user_id,type) 
 		values(now(),#{creatorId},#{tradeId},#{userId},#{type})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.UserCollection">
+  <update id="update" parameterType="com.loki.server.entity.UserCollection">
   	update user_collection SET update_time=now(),updater_id=#{updaterId},trade_id=#{tradeId},user_id=#{userId},type=#{type} where id=#{id}
   </update>
   

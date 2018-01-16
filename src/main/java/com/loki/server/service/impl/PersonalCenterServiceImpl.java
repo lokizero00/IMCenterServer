@@ -11,10 +11,10 @@ import com.loki.server.dao.EnterpriseCertificationDao;
 import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserDao;
-import com.loki.server.model.EnterpriseCertification;
-import com.loki.server.model.IdentityCertification;
-import com.loki.server.model.Intention;
-import com.loki.server.model.User;
+import com.loki.server.entity.EnterpriseCertification;
+import com.loki.server.entity.IdentityCertification;
+import com.loki.server.entity.Intention;
+import com.loki.server.entity.User;
 import com.loki.server.service.PersonalCenterService;
 
 @Service

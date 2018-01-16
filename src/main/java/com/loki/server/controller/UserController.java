@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.loki.server.model.User;
+import com.loki.server.entity.User;
 import com.loki.server.service.UserService;
 
 @Controller

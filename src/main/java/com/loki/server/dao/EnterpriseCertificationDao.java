@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.EnterpriseCertification;
+import com.loki.server.entity.EnterpriseCertification;
 
 public interface EnterpriseCertificationDao {
 	void insert(EnterpriseCertification enterpriseCertification);

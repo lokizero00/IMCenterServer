@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.loki.server.model.User;
+import com.loki.server.entity.User;
 
 public interface UserDao {
 	void insert(User user);

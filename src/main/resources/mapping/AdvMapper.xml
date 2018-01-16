@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.AdvDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="advDao" type="com.loki.server.model.Adv">
+  <resultMap id="advDao" type="com.loki.server.entity.Adv">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -24,12 +24,12 @@
     id,create_time,update_time,admin_creator_id,admin_updater_id,position,title,preview_url,content,start_time,end_time,sort,click_count,is_show
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.Adv">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Adv">
 		insert into adv(create_time,admin_creator_id,position,title,preview_url,content,start_time,end_time,sort,click_count,is_show) 
 		values(now(),#{adminCreatorId},#{position},#{title},#{previewUrl},#{content},#{startTime},#{endTime},#{sort},#{clickCount},#{isShow})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.Adv">
+  <update id="update" parameterType="com.loki.server.entity.Adv">
   	update adv SET update_time=now(),admin_updater_id=#{adminUpdaterId},position=#{position},title=#{title},preview_url=#{previewUrl},content=#{content},start_time=#{startTime},end_time=#{endTime},sort=#{sort},click_count=#{clickCount},is_show=#{isShow} where id=#{id}
   </update>
   

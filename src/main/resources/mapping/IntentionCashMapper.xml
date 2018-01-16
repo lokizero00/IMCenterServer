@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.IntentionCashDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="intentionCashDao" type="com.loki.server.model.IntentionCash">
+  <resultMap id="intentionCashDao" type="com.loki.server.entity.IntentionCash">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -25,12 +25,12 @@
     id,create_time,update_time,creator_id,user_id,sn,intention_id,amount,pay_code,pay_name,status,admin_updater_id,pay_time,admin_payer_id,refuse_reason
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.IntentionCash">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.IntentionCash">
 		insert into intention_cash(create_time,creator_id,user_id,sn,intention_id,amount,pay_code,pay_name,status) 
 		values(now(),#{creatorId},#{userId},#{sn},#{intentionId},#{amount},#{payCode},#{payName},#{status})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.IntentionCash">
+  <update id="update" parameterType="com.loki.server.entity.IntentionCash">
   	update intention_cash SET update_time=now(),user_id=#{userId},sn=#{sn},intention_id=#{intentionId},amount#{amount},pay_code=#{payCode},pay_name=#{payName},status=#{status},admin_updater_id=#{adminUpdaterId},pay_time=#{payTime},admin_payer_id=#{adminPayerId},refuse_reason=#{refuseReason} where id=#{id}
   </update>
   

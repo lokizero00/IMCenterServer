@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.RoleResource;
+import com.loki.server.entity.RoleResource;
 
 public interface RoleResourceDao {
 	void insert(RoleResource roleResource);

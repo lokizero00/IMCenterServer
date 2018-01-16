@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.RoleAdmin;
+import com.loki.server.entity.RoleAdmin;
 
 public interface RoleAdminDao {
 	void insert(RoleAdmin roleAdmin);

@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.UserDao;
-import com.loki.server.model.IdentityCertification;
-import com.loki.server.model.User;
+import com.loki.server.entity.IdentityCertification;
+import com.loki.server.entity.User;
 import com.loki.server.service.IdentityCertificationService;
 
 @Service

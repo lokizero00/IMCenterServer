@@ -2,7 +2,7 @@ package com.loki.server.service;
 
 import java.util.List;
 
-import com.loki.server.model.Admin;
+import com.loki.server.entity.Admin;
 
 
 public interface AdminService {

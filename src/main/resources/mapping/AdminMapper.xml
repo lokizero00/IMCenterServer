@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.AdminDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="adminDao" type="com.loki.server.model.Admin">
+  <resultMap id="adminDao" type="com.loki.server.entity.Admin">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -21,7 +21,7 @@
     id,create_time,update_time,admin_creator_id,admin_updater_id,user_name,password,login_time,login_count,super_admin,status
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.model.Admin">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.Admin">
 		insert into admin(create_time,admin_creator_id,user_name,password,super_admin,status) values(now(),#{adminCreatorId},#{userName},#{password},#{superAdmin},#{status})
 	</insert>
   
@@ -36,7 +36,7 @@
 		from admin
   </select>
   
-  <update id="update" parameterType="com.loki.server.model.Admin">
+  <update id="update" parameterType="com.loki.server.entity.Admin">
   	update admin SET update_time=now(),admin_updater_id=${adminUpdaterId},user_name=#{userName},password=#{password},login_time=#{loginTime},login_count=#{loginCount},super_admin=#{superAdmin},status=#{status} where id=#{id}
   </update>
   

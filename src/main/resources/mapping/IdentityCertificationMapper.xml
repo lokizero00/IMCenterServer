@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.IdentityCertificationDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="identityCertificationDao" type="com.loki.server.model.IdentityCertification">
+  <resultMap id="identityCertificationDao" type="com.loki.server.entity.IdentityCertification">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -24,7 +24,7 @@
     id,create_time,update_time,creator_id,updater_id,user_id,true_name,identity_number,identity_front,identity_back,verify_time,admin_verifier_id,status,refuse_reason
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.model.IdentityCertification">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.IdentityCertification">
 		insert into identity_certification (create_time,creator_id,user_id,true_name,identity_number,identity_front,identity_back,status) values(now(),#{creatorId},#{userId},#{trueName},#{identityNumber},#{identityFront},#{identityBack},#{status})
 	</insert>
   
@@ -45,7 +45,7 @@
 		from identity_certification
   </select>
   
-  <update id="update" parameterType="com.loki.server.model.IdentityCertification">
+  <update id="update" parameterType="com.loki.server.entity.IdentityCertification">
   	update identity_certification SET update_time=#{updateTime},updater_id=#{updaterId},user_id=#{userId},true_name=#{trueName},identity_number=#{identityNumber},identity_front=#{identityFront},identity_back=#{identityBack},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},status=#{status},refuse_reason=#{refuseReason} where id=#{id}
   </update>
   

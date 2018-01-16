@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.TradePaycode;
+import com.loki.server.entity.TradePaycode;
 
 public interface TradePaycodeDao {
 	void insert(TradePaycode tradePaycode);

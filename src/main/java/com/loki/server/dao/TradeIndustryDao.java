@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.TradeIndustry;
+import com.loki.server.entity.TradeIndustry;
 
 public interface TradeIndustryDao {
 	void insert(TradeIndustry tradeIndustry);

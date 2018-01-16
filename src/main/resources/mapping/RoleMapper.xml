@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.RoleDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="roleDao" type="com.loki.server.model.Role">
+  <resultMap id="roleDao" type="com.loki.server.entity.Role">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -18,12 +18,12 @@
     id,create_time,update_time,admin_creator_id,admin_updater_id,name,description,sort
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.Role">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Role">
 		insert into role(create_time,admin_creator_id,name,description,sort) 
 		values(now(),#{adminCreatorId},#{name},#{description},#{sort})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.Role">
+  <update id="update" parameterType="com.loki.server.entity.Role">
   	update role SET update_time=now(),admin_updater_id=#{adminUpdaterId},name=#{name},description=#{description},sort=#{sort} where id=#{id}
   </update>
   

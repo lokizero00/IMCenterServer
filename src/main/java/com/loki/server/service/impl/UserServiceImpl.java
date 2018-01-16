@@ -11,10 +11,10 @@ import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserBindCodeDao;
 import com.loki.server.dao.UserDao;
 import com.loki.server.dao.UserTokenDao;
-import com.loki.server.model.Intention;
-import com.loki.server.model.User;
-import com.loki.server.model.UserBindCode;
-import com.loki.server.model.UserToken;
+import com.loki.server.entity.Intention;
+import com.loki.server.entity.User;
+import com.loki.server.entity.UserBindCode;
+import com.loki.server.entity.UserToken;
 import com.loki.server.service.UserService;
 import com.loki.server.utils.MD5;
 

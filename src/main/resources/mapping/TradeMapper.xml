@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.TradeDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="tradeDao" type="com.loki.server.model.Trade">
+  <resultMap id="tradeDao" type="com.loki.server.entity.Trade">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -36,12 +36,12 @@
     id,create_time,update_time,creator_id,updater_id,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,verify_time,admin_verifier_id,identity_id,enterprise_id,docking_id,read_count
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.Trade">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Trade">
 		insert into trade(create_time,creator_id,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,identity_id,enterprise_id,docking_id,read_count) 
 		values(now(),#{creatorId},#{userId},#{sn},#{title},#{content},#{type},#{provinceName},#{cityName},#{townName},#{quantity},#{deliveryTime},#{budget},#{resourceName},#{capacity},#{status},#{intention},#{identityId},#{enterpriseId},#{dockingId},#{readCount})
 	</insert>
 	
-  <update id="update" parameterType="com.loki.server.model.User">
+  <update id="update" parameterType="com.loki.server.entity.User">
   	update trade SET update_time=now(),updater_id=#{updaterId},user_id=#{userId},sn=#{sn},title=#{title},content=#{content},type=#{type},province_name=#{provinceName},city_name=#{cityName},town_name=#{townName},quantity=#{quantity},delivery_time=#{deliveryTime},budget=#{budget},resource_name=#{resourceName},capacity=#{capacity},status=#{status},intention=#{intention},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},identity_id=#{identityId},enterprise_id=#{enterpriseId},docking_id=#{dockingId},read_count=#{readCount} where id=#{id}
   </update>
 	

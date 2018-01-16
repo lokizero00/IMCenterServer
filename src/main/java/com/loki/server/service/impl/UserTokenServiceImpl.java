@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.loki.server.dao.UserTokenDao;
-import com.loki.server.model.UserToken;
+import com.loki.server.entity.UserToken;
 import com.loki.server.service.UserTokenService;
 
 @Service

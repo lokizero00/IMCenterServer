@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.TradeReportInformationDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="tradeReportInformationDao" type="com.loki.server.model.TradeReportInformation">
+  <resultMap id="tradeReportInformationDao" type="com.loki.server.entity.TradeReportInformation">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -19,12 +19,12 @@
     id,create_time,update_time,creator_id,updater_id,trade_report_id,trade_id,type,content
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.TradeReportInformation">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeReportInformation">
 		insert into trade_report_information(create_time,creator_id,trade_report_id,trade_id,type,content) 
 		values(now(),#{creatorId},#{tradeReportId},#{tradeId},#{type},#{content})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.TradeReportInformation">
+  <update id="update" parameterType="com.loki.server.entity.TradeReportInformation">
   	update trade_report_information SET update_time=now(),updater_id=#{updaterId},trade_report_id=#{tradeReportId},trade_id=#{tradeId},type=#{type},content=#{content} where id=#{id}
   </update>
   

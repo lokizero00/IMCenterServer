@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.TradeIndustryDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="tradeIndustryDao" type="com.loki.server.model.TradeIndustry">
+  <resultMap id="tradeIndustryDao" type="com.loki.server.entity.TradeIndustry">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
     <result column="industry_id" jdbcType="INTEGER" property="industryId" />
@@ -14,12 +14,12 @@
     id,trade_id,industry_id,industry_name
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.TradeIndustry">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeIndustry">
 		insert into trade_industry(trade_id,industry_id,industry_name) 
 		values(#{tradeId},#{industryId},#{industryName})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.TradeIndustry">
+  <update id="update" parameterType="com.loki.server.entity.TradeIndustry">
   	update trade_industry SET trade_id=#{tradeId},industry_id=#{industryId},industry_name=#{industryName} where id=#{id}
   </update>
   

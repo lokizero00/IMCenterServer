@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.AdminDeptDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="adminDeptDao" type="com.loki.server.model.AdminDept">
+  <resultMap id="adminDeptDao" type="com.loki.server.entity.AdminDept">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="admin_id" jdbcType="INTEGER" property="adminId" />
     <result column="dept_id" jdbcType="INTEGER" property="deptId" />
@@ -13,12 +13,12 @@
     id,admin_id,dept_id
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.AdminDept">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.AdminDept">
 		insert into admin_dept(admin_id,dept_id) 
 		values(#{adminId},#{deptId})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.AdminDept">
+  <update id="update" parameterType="com.loki.server.entity.AdminDept">
   	update admin_dept SET admin_id=#{adminId},dept_id=#{deptId} where id=#{id}
   </update>
   

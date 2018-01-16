@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.TradeAttachmentDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="tradeAttachmentDao" type="com.loki.server.model.TradeAttachment">
+  <resultMap id="tradeAttachmentDao" type="com.loki.server.entity.TradeAttachment">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
     <result column="url" jdbcType="VARCHAR" property="url" />
@@ -13,12 +13,12 @@
     id,trade_id,url
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.TradeAttachment">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeAttachment">
 		insert into trade_attachment(trade_id,url) 
 		values(#{tradeId},#{url})
 	</insert>
 	
-  <update id="update" parameterType="com.loki.server.model.User">
+  <update id="update" parameterType="com.loki.server.entity.User">
   	update trade_attachment SET trade_id=#{tradeId},url=#{url} where id=#{id}
   </update>
   

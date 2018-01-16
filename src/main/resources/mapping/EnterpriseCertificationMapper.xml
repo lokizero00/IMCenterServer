@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.EnterpriseCertificationDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="enterpriseCertificationDao" type="com.loki.server.model.EnterpriseCertification">
+  <resultMap id="enterpriseCertificationDao" type="com.loki.server.entity.EnterpriseCertification">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -24,7 +24,7 @@
     id,create_time,update_time,creator_id,updater_id,user_id,position,enterprise_name,license_pic,verify_time,admin_verifier_id,status,refuse_reason,deleted
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.model.EnterpriseCertification">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.EnterpriseCertification">
 		insert into enterprise_certification (create_time,creator_id,user_id,position,enterprise_name,license_pic,status) values(now(),#{creatorId},#{userId},#{position},#{enterpriseName},#{licensePic},#{status})
 	</insert>
   
@@ -55,7 +55,7 @@
   	update enterprise_certification set deleted=1 where user_id=#{_parameter} and deleted=0
   </update>
   
-  <update id="update" parameterType="com.loki.server.model.EnterpriseCertification">
+  <update id="update" parameterType="com.loki.server.entity.EnterpriseCertification">
   	update enterprise_certification SET update_time=#{updateTime},updater_id=#{updaterId},user_id=#{userId},position=#{position},enterprise_name=#{enterpriseName},license_pic=#{licensePic},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},status=#{status},refuse_reason=#{refuseReason},deleted=#{deleted} where id=#{id}
   </update>
   

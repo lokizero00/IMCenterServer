@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.IntentionRechargeDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="intentionRechargeDao" type="com.loki.server.model.IntentionRecharge">
+  <resultMap id="intentionRechargeDao" type="com.loki.server.entity.IntentionRecharge">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -26,12 +26,12 @@
     id,create_time,update_time,creator_id,updater_id,user_id,sn,intention_id,amount,pay_code,pay_name,trade_sn,status,pay_time,admin_updater_id,is_admin
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.IntentionRecharge">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.IntentionRecharge">
 		insert into intention_recharge(create_time,creator_id,user_id,sn,intention_id,amount,pay_code,pay_name,trade_sn,status,pay_time) 
 		values(now(),#{creatorId},#{userId},#{sn},#{intentionId},#{amount},#{payCode},#{payName},#{tradeSn},#{status},#{payTime})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.IntentionRecharge">
+  <update id="update" parameterType="com.loki.server.entity.IntentionRecharge">
   	update intention_recharge SET update_time=now(),updater_id=#{updaterId},user_id=#{userId},sn=#{sn},intention_id=#{intentionId},amount=#{amount},pay_code=#{payCode},pay_name=#{payName},trade_sn=#{tradeSn},status=#{status},pay_time=#{payTime},admin_updater_id=#{adminUpdaterId},is_admin=#{isAdmin} where id=#{id}
   </update>
   

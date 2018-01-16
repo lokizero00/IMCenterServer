@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.loki.server.model.Admin;
+import com.loki.server.entity.Admin;
 
 public interface AdminDao {
 	void insert(Admin admin);

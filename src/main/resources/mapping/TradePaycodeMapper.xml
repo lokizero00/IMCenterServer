@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.TradePaycodeDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="tradePaycodeDao" type="com.loki.server.model.TradePaycode">
+  <resultMap id="tradePaycodeDao" type="com.loki.server.entity.TradePaycode">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
     <result column="paycode_id" jdbcType="INTEGER" property="paycodeId" />
@@ -14,12 +14,12 @@
     id,trade_id,paycode_id,paycode_name
   </sql>
   
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.model.TradePaycode">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradePaycode">
 		insert into trade_paycode(trade_id,paycode_id,paycode_name) 
 		values(#{tradeId},#{paycodeId},#{paycodeName})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.model.TradePaycode">
+  <update id="update" parameterType="com.loki.server.entity.TradePaycode">
   	update trade_paycode SET trade_id=#{tradeId},paycode_id=#{paycodeId},paycode_name=#{paycodeName} where id=#{id}
   </update>
   

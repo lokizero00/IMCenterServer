@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.Adv;
+import com.loki.server.entity.Adv;
 
 public interface AdvDao {
 	void insert(Adv adv);

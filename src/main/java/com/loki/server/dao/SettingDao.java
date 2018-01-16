@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.Setting;
+import com.loki.server.entity.Setting;
 
 public interface SettingDao {
 	void insert(Setting setting);

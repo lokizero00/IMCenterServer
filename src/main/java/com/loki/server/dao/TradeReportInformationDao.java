@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.TradeReportInformation;
+import com.loki.server.entity.TradeReportInformation;
 
 public interface TradeReportInformationDao {
 	void insert(TradeReportInformation tradeReportInformation);

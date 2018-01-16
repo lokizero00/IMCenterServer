@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.Notice;
+import com.loki.server.entity.Notice;
 
 public interface NoticeDao {
 	void insert(Notice notice);

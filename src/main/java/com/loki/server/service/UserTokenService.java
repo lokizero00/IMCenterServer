@@ -2,7 +2,7 @@ package com.loki.server.service;
 
 import java.util.List;
 
-import com.loki.server.model.UserToken;
+import com.loki.server.entity.UserToken;
 
 public interface UserTokenService {
 	void insert(UserToken userToken);

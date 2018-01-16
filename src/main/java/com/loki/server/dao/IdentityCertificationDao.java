@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.IdentityCertification;
+import com.loki.server.entity.IdentityCertification;
 
 public interface IdentityCertificationDao {
 	void insert(IdentityCertification identityCertification);

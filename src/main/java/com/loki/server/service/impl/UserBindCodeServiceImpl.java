@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.loki.server.dao.UserBindCodeDao;
-import com.loki.server.model.UserBindCode;
+import com.loki.server.entity.UserBindCode;
 import com.loki.server.service.UserBindCodeService;
 import com.loki.server.utils.CommonUtil;
 import com.loki.server.utils.SendSmsUtil;

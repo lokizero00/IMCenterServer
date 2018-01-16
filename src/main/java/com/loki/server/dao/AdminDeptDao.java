@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.AdminDept;
+import com.loki.server.entity.AdminDept;
 
 public interface AdminDeptDao {
 	void insert(AdminDept adminDept);

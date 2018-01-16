@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.Role;
+import com.loki.server.entity.Role;
 
 public interface RoleDao {
 	void insert(Role role);

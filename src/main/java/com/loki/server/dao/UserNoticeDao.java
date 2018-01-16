@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.UserNotice;
+import com.loki.server.entity.UserNotice;
 
 public interface UserNoticeDao {
 	void insert(UserNotice userNotice);

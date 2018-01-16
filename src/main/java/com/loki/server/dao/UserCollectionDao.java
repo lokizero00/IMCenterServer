@@ -2,7 +2,7 @@ package com.loki.server.dao;
 
 import java.util.List;
 
-import com.loki.server.model.UserCollection;
+import com.loki.server.entity.UserCollection;
 
 public interface UserCollectionDao {
 	void insert(UserCollection userCollection);
