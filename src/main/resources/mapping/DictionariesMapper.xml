@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.DictionariesDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="dictionariesDao" type="com.loki.server.entity.Dictionaries">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
+    <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,create_time,update_time,admin_creator_id,admin_updater_id,type,code,value
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Dictionaries">
+		insert into dictionaries(create_time,admin_creator_id,type,code,value) 
+		values(now(),#{adminCreatorId},#{type},#{code},#{value})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.entity.Dictionaries">
+  	update dictionaries SET update_time=now(),admin_updater_id=#{adminUpdaterId},type=#{type},#{code},value=#{value} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="dictionariesDao">
+		select <include refid="Base_Column_List" /> 
+		from dictionaries
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findValueByCode" parameterType="String" resultType="String">
+		select name 
+		from dictionaries
+		where code=#{_parameter} limit 1
+  </select>
+  
+  <select id="findAll" resultMap="dictionariesDao">
+		select <include refid="Base_Column_List" /> 
+		from dictionaries
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from dictionaries where id=#{_parameter}
+	</delete>
+</mapper>

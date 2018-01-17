@@ -6,21 +6,21 @@
   <resultMap id="tradePaycodeDao" type="com.loki.server.entity.TradePaycode">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
-    <result column="paycode_id" jdbcType="INTEGER" property="paycodeId" />
-    <result column="paycode_name" jdbcType="VARCHAR" property="paycodeName" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,trade_id,paycode_id,paycode_name
+    id,trade_id,code,value
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradePaycode">
-		insert into trade_paycode(trade_id,paycode_id,paycode_name) 
-		values(#{tradeId},#{paycodeId},#{paycodeName})
+		insert into trade_paycode(trade_id,code,value) 
+		values(#{tradeId},#{code},#{value})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.TradePaycode">
-  	update trade_paycode SET trade_id=#{tradeId},paycode_id=#{paycodeId},paycode_name=#{paycodeName} where id=#{id}
+  	update trade_paycode SET trade_id=#{tradeId},code=#{code},value=#{value} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="tradePaycodeDao">

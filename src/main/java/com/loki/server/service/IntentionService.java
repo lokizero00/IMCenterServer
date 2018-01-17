@@ -13,4 +13,6 @@ public interface IntentionService {
 	ServiceResult<Intention> getIntention(int userId);
 	ServiceResult<PagedResult<IntentionLog>> getIntentionLog(int userId,int intentionId,int adminId,String type,Integer pageNo,Integer pageSize);
 	ServiceResult<List<UserBankcard>> getUserBankcard(int userId);
+	ServiceResult<UserBankcard> addUserBankcard(UserBankcard userBankcard);
+	ServiceResult<UserBankcard> deleteUserBankcard(int userBankcardId);
 }

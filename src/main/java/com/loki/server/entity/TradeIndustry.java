@@ -7,8 +7,8 @@ public class TradeIndustry implements Serializable{
 	
 	private int id;
 	private int tradeId;
-	private int industryId;
-	private String industryName;
+	private int code;
+	private String value;
 	public int getId() {
 		return id;
 	}
@@ -21,16 +21,16 @@ public class TradeIndustry implements Serializable{
 	public void setTradeId(int tradeId) {
 		this.tradeId = tradeId;
 	}
-	public int getIndustryId() {
-		return industryId;
+	public int getCode() {
+		return code;
 	}
-	public void setIndustryId(int industryId) {
-		this.industryId = industryId;
+	public void setCode(int code) {
+		this.code = code;
 	}
-	public String getIndustryName() {
-		return industryName;
+	public String getValue() {
+		return value;
 	}
-	public void setIndustryName(String industryName) {
-		this.industryName = industryName;
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

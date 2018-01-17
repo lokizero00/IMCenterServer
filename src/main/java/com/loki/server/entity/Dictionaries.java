@@ -3,7 +3,7 @@ package com.loki.server.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class TradeResource implements Serializable{
+public class Dictionaries implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private int id;
@@ -12,7 +12,8 @@ public class TradeResource implements Serializable{
 	private int adminCreatorId;
 	private int adminUpdaterId;
 	private String type;
-	private String name;
+	private String code;
+	private String value;
 	public int getId() {
 		return id;
 	}
@@ -49,10 +50,16 @@ public class TradeResource implements Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
-	public String getName() {
-		return name;
+	public String getCode() {
+		return code;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

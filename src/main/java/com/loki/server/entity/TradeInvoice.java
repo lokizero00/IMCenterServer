@@ -7,8 +7,8 @@ public class TradeInvoice implements Serializable{
 	
 	private int id;
 	private int tradeId;
-	private int invoiceId;
-	private String invoiceName;
+	private int code;
+	private String value;
 	public int getId() {
 		return id;
 	}
@@ -21,16 +21,16 @@ public class TradeInvoice implements Serializable{
 	public void setTradeId(int tradeId) {
 		this.tradeId = tradeId;
 	}
-	public int getInvoiceId() {
-		return invoiceId;
+	public int getCode() {
+		return code;
 	}
-	public void setInvoiceId(int invoiceId) {
-		this.invoiceId = invoiceId;
+	public void setCode(int code) {
+		this.code = code;
 	}
-	public String getInvoiceName() {
-		return invoiceName;
+	public String getValue() {
+		return value;
 	}
-	public void setInvoiceName(String invoiceName) {
-		this.invoiceName = invoiceName;
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

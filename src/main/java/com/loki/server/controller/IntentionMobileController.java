@@ -53,9 +53,9 @@ public class IntentionMobileController {
 		return "mobileResultJson";
 	}
 	
-	//获取意向金明细
-	@RequestMapping(value="/getUserBankcard",method=RequestMethod.GET)
-	public String getUserBankcard(HttpServletRequest request,int userId,ModelMap mm) {
+	//获取用户银行卡列表
+	@RequestMapping(value="/getUserBankcardList",method=RequestMethod.GET)
+	public String getUserBankcardList(HttpServletRequest request,int userId,ModelMap mm) {
 		ServiceResult<List<UserBankcard>> returnValue=intentionService.getUserBankcard(userId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
@@ -67,4 +67,20 @@ public class IntentionMobileController {
 		}
 		return "mobileResultJson";
 	}
+	
+	//添加银行卡
+	@RequestMapping(value="/addUserBankcard",method=RequestMethod.GET)
+	public String addUserBankcard(HttpServletRequest request,UserBankcard userBankcard,ModelMap mm) {
+		ServiceResult<UserBankcard> returnValue=intentionService.addUserBankcard(userBankcard);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+		return "mobileResultJson";
+	}
+	
 }

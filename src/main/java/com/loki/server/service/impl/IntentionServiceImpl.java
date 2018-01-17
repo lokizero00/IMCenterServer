@@ -82,4 +82,38 @@ public class IntentionServiceImpl implements IntentionService {
 		return returnValue;
 	}
 
+	@Override
+	public ServiceResult<UserBankcard> addUserBankcard(UserBankcard userBankcard) {
+		ServiceResult<UserBankcard> returnValue=new ServiceResult<UserBankcard>();
+		if(userBankcard!=null && userBankcard.getUserId()>0 && userBankcard.getBankCardNumber()!=null && userBankcard.getBankCardNumber()!="") {
+			userBankcard.setId(0);
+			userBankcardDao.insert(userBankcard);
+			if(userBankcard.getId()>0) {
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(userBankcard);
+			}else{
+				returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
+			}
+		}
+		else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
+
+	@Override
+	public ServiceResult<UserBankcard> deleteUserBankcard(int userBankcardId) {
+		ServiceResult<UserBankcard> returnValue=new ServiceResult<UserBankcard>();
+		if(userBankcardId>0) {
+			if(userBankcardDao.delete(userBankcardId)) {
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+			}else {
+				returnValue.setResultCode(ResultCodeEnums.DELETE_FAIL);
+			}
+		}else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
+
 }

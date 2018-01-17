@@ -18,7 +18,8 @@ public enum ResultCodeEnums {
 	UPLOAD_FAIL(-14,"上传失败"),
 	IDENTITY_CERTIFICATION_NOT_EXIST(-15,"实名认证不存在"),
 	INTENTION_NOT_EXIST(-16,"意向金账户不存在"),
-	FILE_NOT_FOUND(-17,"文件没有找到")
+	FILE_NOT_FOUND(-17,"文件没有找到"),
+	DELETE_FAIL(-18,"删除失败")
 	;
 
 	public int code;  

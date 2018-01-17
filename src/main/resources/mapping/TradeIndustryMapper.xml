@@ -6,21 +6,21 @@
   <resultMap id="tradeIndustryDao" type="com.loki.server.entity.TradeIndustry">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
-    <result column="industry_id" jdbcType="INTEGER" property="industryId" />
-    <result column="industry_name" jdbcType="VARCHAR" property="industryName" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,trade_id,industry_id,industry_name
+    id,trade_id,code,value
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeIndustry">
-		insert into trade_industry(trade_id,industry_id,industry_name) 
-		values(#{tradeId},#{industryId},#{industryName})
+		insert into trade_industry(trade_id,code,value) 
+		values(#{tradeId},#{code},#{value})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.TradeIndustry">
-  	update trade_industry SET trade_id=#{tradeId},industry_id=#{industryId},industry_name=#{industryName} where id=#{id}
+  	update trade_industry SET trade_id=#{tradeId},code=#{code},value=#{value} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="tradeIndustryDao">

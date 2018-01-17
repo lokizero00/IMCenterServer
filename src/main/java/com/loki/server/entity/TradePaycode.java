@@ -6,24 +6,31 @@ public class TradePaycode implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
-	private int paycodeId;
-	private int paycodeName;
+	private int tradeId;
+	private int code;
+	private int value;
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getPaycodeId() {
-		return paycodeId;
+	public int getTradeId() {
+		return tradeId;
 	}
-	public void setPaycodeId(int paycodeId) {
-		this.paycodeId = paycodeId;
+	public void setTradeId(int tradeId) {
+		this.tradeId = tradeId;
 	}
-	public int getPaycodeName() {
-		return paycodeName;
+	public int getCode() {
+		return code;
 	}
-	public void setPaycodeName(int paycodeName) {
-		this.paycodeName = paycodeName;
+	public void setCode(int code) {
+		this.code = code;
+	}
+	public int getValue() {
+		return value;
+	}
+	public void setValue(int value) {
+		this.value = value;
 	}
 }
