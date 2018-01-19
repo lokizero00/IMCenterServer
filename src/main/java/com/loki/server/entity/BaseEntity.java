@@ -1,4 +1,4 @@
-package com.loki.server.dto;
+package com.loki.server.entity;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;

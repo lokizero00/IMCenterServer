@@ -3,7 +3,7 @@ package com.loki.server.utils;
 import java.util.List;
 
 import com.github.pagehelper.Page;
-import com.loki.server.dto.PagedResult;
+import com.loki.server.entity.PagedResult;
 
 public class BeanUtil {
 	

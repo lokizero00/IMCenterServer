@@ -1,4 +1,4 @@
-package com.loki.server.dto;
+package com.loki.server.vo;
 
 import java.io.Serializable;
 

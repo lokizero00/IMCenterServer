@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.loki.server.dao.NoticeComplexDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="noticeComplexDao" type="com.loki.server.entity.NoticeComplex">  
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
+    <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="relation_id" jdbcType="INTEGER" property="relationId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="is_read" jdbcType="BIT" property="isRead" />
+  </resultMap>
+  
+  <select id="findByParam" resultMap="noticeComplexDao">
+		select notice.*,
+			user_notice.user_id,
+			user_notice.is_read
+			from user_notice 
+			left join notice on notice.id=user_notice.notice_id
+		<where>
+			<if test="createTimeStart != null">
+			 	<![CDATA[
+					notice.create_time>=UNIX_TIMESTAMP(#{createTimeStart})
+				]]>
+			</if>
+			<if test="createTimeEnd != null">
+			 	<![CDATA[
+					and notice.create_time<=UNIX_TIMESTAMP(#{createTimeEnd})
+				]]>
+			</if>
+			<if test="updateTimeStart != null">
+			 	<![CDATA[
+					and notice.update_time>=UNIX_TIMESTAMP(#{updateTimeStart})
+				]]>
+			</if>
+			<if test="createTimeEnd != null">
+			 	<![CDATA[
+					and notice.update_time<=UNIX_TIMESTAMP(#{updateTimeEnd})
+				]]>
+			</if>
+			<if test="adminCreatorId !=null">
+				and notice.admin_creator_id=#{adminCreatorId}
+			</if>
+			<if test="adminUpdaterId !=null">
+				and notice.admin_updater_id=#{adminUpdaterId}
+			</if>
+			<if test="title !=null">
+				and notice.title like CONCAT('%','${title}','%' ) 
+			</if>
+			<if test="content !=null">
+				and notice.content like CONCAT('%','${content}','%' ) 
+			</if>
+			<if test="type !=null">
+				and notice.type=#{type}
+			</if>
+			<if test="relationId !=null">
+				and notice.relation_id=#{relationId}
+			</if>
+			<if test="userId !=null">
+				and user_notice.user_id=#{userId}
+			</if>
+			<if test="isRead !=null">
+				and user_notice.is_read=#{isRead}
+			</if>
+		</where>
+		order by id desc
+  </select>
+  
+  <select id="findById" parameterType="int" resultMap="noticeComplexDao">
+  		select notice.*,
+		user_notice.user_id,
+		user_notice.is_read
+		from user_notice 
+		left join notice on notice.id=user_notice.notice_id
+		where notice.id=#{_parameter}
+  </select>
+</mapper>

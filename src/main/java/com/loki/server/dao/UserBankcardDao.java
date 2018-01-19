@@ -12,5 +12,5 @@ public interface UserBankcardDao {
 	UserBankcard findById(int id);
 	List<UserBankcard> findAll();
 	boolean delete(int id);
-	List<UserBankcard> findByParam(@Param("userId") int userId,@Param("bankCode") String bankCode,@Param("bankName") String bankName,@Param("bankCardType") String bankCardType,@Param("bankCardNumber") String bankCardNumber);
+	List<UserBankcard> findByParam(@Param("userId") int userId,@Param("bankCode") String bankCode,@Param("cardTypeCode") String cardTypeCode,@Param("cardNumber") String cardNumber);
 }

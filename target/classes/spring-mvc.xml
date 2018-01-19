@@ -80,6 +80,14 @@
         </property>
     </bean>
     
+    <bean id="baseMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean">
+        <property name="mappingFiles">
+            <list>
+                <value>classpath:dozermapping/dozer-mapping.xml</value>
+            </list>
+        </property>
+    </bean> 
+    
         <!-- 配置拦截器 -->
 	    <mvc:interceptors>
 	         <!-- 配置登陆拦截器 -->

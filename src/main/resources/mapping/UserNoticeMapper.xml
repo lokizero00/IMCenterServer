@@ -29,6 +29,46 @@
 		where id=#{_parameter}
   </select>
   
+  <select id="findListByParam" resultMap="userNoticeDao">
+		select <include refid="Base_Column_List" /> 
+		from user_notice
+		<where>
+			<if test="id != null and id != 0">
+				id=#{id}
+			</if>
+			<if test="userId !=null and userId != 0">
+				and user_id=#{userId}
+			</if>
+			<if test="noticeId !=null and noticeId!=0">
+				and notice_id=#{noticeId}
+			</if>
+			<if test="isRead !=null">
+				and is_read=#{isRead}
+			</if>
+		</where>
+		order by id desc
+  </select>
+  
+  <select id="findByParam" resultMap="userNoticeDao">
+		select <include refid="Base_Column_List" /> 
+		from user_notice
+		<where>
+			<if test="id != null and id != 0">
+				id=#{id}
+			</if>
+			<if test="userId !=null and userId != 0">
+				and user_id=#{userId}
+			</if>
+			<if test="noticeId !=null and noticeId!=0">
+				and notice_id=#{noticeId}
+			</if>
+			<if test="isRead !=null">
+				and is_read=#{isRead}
+			</if>
+		</where>
+		order by id desc
+  </select>
+  
   <select id="findAll" resultMap="userNoticeDao">
 		select <include refid="Base_Column_List" /> 
 		from user_notice

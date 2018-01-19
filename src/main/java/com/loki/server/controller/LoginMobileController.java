@@ -8,12 +8,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.loki.server.dto.ServiceResult;
-import com.loki.server.entity.UserBindCode;
 import com.loki.server.service.UserBindCodeService;
 import com.loki.server.service.UserService;
 import com.loki.server.utils.IpUtil;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.vo.ServiceResult;
 import com.loki.server.vo.UserLoginVO;
 
 @Controller
@@ -74,7 +73,7 @@ public class LoginMobileController {
 	//发送短信验证码
 	@RequestMapping(value="/sendSmsAuthCode",method=RequestMethod.POST)
 	public String sendSmsAuthCode(HttpServletRequest request,String phone,ModelMap mm) {
-		ServiceResult<UserBindCode> returnValue=userBindCodeService.sendSmsAuthCode(phone);
+		ServiceResult<Integer> returnValue=userBindCodeService.sendSmsAuthCode(phone);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

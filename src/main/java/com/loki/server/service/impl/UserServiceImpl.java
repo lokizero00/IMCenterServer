@@ -10,15 +10,17 @@ import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserBindCodeDao;
 import com.loki.server.dao.UserDao;
 import com.loki.server.dao.UserTokenDao;
-import com.loki.server.dto.ServiceResult;
 import com.loki.server.entity.Intention;
 import com.loki.server.entity.User;
 import com.loki.server.entity.UserBindCode;
 import com.loki.server.entity.UserToken;
 import com.loki.server.service.UserService;
+import com.loki.server.utils.BeanMapper;
 import com.loki.server.utils.MD5;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.vo.ServiceResult;
 import com.loki.server.vo.UserLoginVO;
+import com.loki.server.vo.UserVO;
 
 @Service
 @Transactional
@@ -160,15 +162,16 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public ServiceResult<User> getUser(int userId) {
-		ServiceResult<User> returnValue=new ServiceResult<User>();
+	public ServiceResult<UserVO> getUser(int userId) {
+		ServiceResult<UserVO> returnValue=new ServiceResult<UserVO>();
 		if (userId>0) {
 			User user=userDao.findById(userId);
 			if(null==user) {
 				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}else {
+				UserVO userVO=BeanMapper.map(user, UserVO.class);
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(user);
+				returnValue.setResultObj(userVO);
 			}
 		}else {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
@@ -177,8 +180,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public ServiceResult<User> updateNickName(int userId,String nickName) {
-		ServiceResult<User> returnValue=new ServiceResult<User>();
+	public ServiceResult<Void> updateNickName(int userId,String nickName) {
+		ServiceResult<Void> returnValue=new ServiceResult<Void>();
 		if (userId>0) {
 			User user=userDao.findById(userId);
 			if(null==user) {
@@ -187,7 +190,6 @@ public class UserServiceImpl implements UserService{
 				user.setNickName(nickName);
 				if(userDao.update(user)) {
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-					returnValue.setResultObj(user);
 				}else {
 					returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
 				}
@@ -199,8 +201,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public ServiceResult<User> updateAvatar(int userId, String avatar) {
-		ServiceResult<User> returnValue=new ServiceResult<User>();
+	public ServiceResult<Void> updateAvatar(int userId, String avatar) {
+		ServiceResult<Void> returnValue=new ServiceResult<Void>();
 		if (userId>0) {
 			User user=userDao.findById(userId);
 			if(null==user) {
@@ -209,7 +211,6 @@ public class UserServiceImpl implements UserService{
 				user.setAvatar(avatar);
 				if(userDao.update(user)) {
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-					returnValue.setResultObj(user);
 				}else {
 					returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
 				}
@@ -221,8 +222,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public ServiceResult<User> updatePhone(int userId, String phone, String authCode, int authCodeId) {
-		ServiceResult<User> returnValue=new ServiceResult<User>();
+	public ServiceResult<Void> updatePhone(int userId, String phone, String authCode, int authCodeId) {
+		ServiceResult<Void> returnValue=new ServiceResult<Void>();
 		if (userId>0 && authCodeId>0 && null!=phone && ""!=phone && null!=authCode && ""!=authCode) {
 			UserBindCode userBindCode=userBindCodeDao.findById(authCodeId);
 			if(null!=userBindCode && authCode.equals(userBindCode.getAuthCode())) {
@@ -238,7 +239,6 @@ public class UserServiceImpl implements UserService{
 						user.setPhoneBind(true);
 						if(userDao.update(user)) {
 							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-							returnValue.setResultObj(user);
 						}
 						else {
 							returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);

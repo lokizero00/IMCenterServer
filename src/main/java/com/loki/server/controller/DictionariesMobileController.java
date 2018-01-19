@@ -1,5 +1,7 @@
 package com.loki.server.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,21 +10,20 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.loki.server.service.PersonalCenterService;
+import com.loki.server.entity.Dictionaries;
+import com.loki.server.service.DictionariesService;
 import com.loki.server.utils.ResultCodeEnums;
-import com.loki.server.vo.PersonalCenterVO;
 import com.loki.server.vo.ServiceResult;
 
 @Controller
-@RequestMapping("/s/api/personalCenter")
-public class PersonalCenterMobileController {
-	@Autowired PersonalCenterService personalCenterService;
-	
-	//个人中心-首页
-	@RequestMapping(value="/getPersonalData",method=RequestMethod.GET)
-	public String getPersonalData(HttpServletRequest request,int userId,ModelMap mm) {
-		ServiceResult<PersonalCenterVO> returnValue=personalCenterService.getPersonalCenter(userId);
-		if (returnValue!=null) {
+@RequestMapping("/s/api/dictionaries")
+public class DictionariesMobileController {
+	@Autowired DictionariesService dictionariesService;
+	//更新实名认证
+	@RequestMapping(value="/getDictionariesByType",method=RequestMethod.GET)
+	public String getDictionariesByType(HttpServletRequest request,String type,ModelMap mm) {
+		ServiceResult<List<Dictionaries>> returnValue=dictionariesService.getDictionariesListByType(type);
+		if(returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
 			mm.addAttribute("resultObj", returnValue.getResultObj());

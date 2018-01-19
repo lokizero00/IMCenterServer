@@ -9,7 +9,6 @@ import com.loki.server.dao.EnterpriseCertificationDao;
 import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserDao;
-import com.loki.server.dto.ServiceResult;
 import com.loki.server.entity.EnterpriseCertification;
 import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.Intention;
@@ -17,6 +16,7 @@ import com.loki.server.entity.User;
 import com.loki.server.service.PersonalCenterService;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.PersonalCenterVO;
+import com.loki.server.vo.ServiceResult;
 
 @Service
 @Transactional

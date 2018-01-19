@@ -1,8 +1,8 @@
-package com.loki.server.entity;
+package com.loki.server.vo;
 
 import java.io.Serializable;
 
-public class UserBankcard implements Serializable{
+public class UserBankcardVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int id;

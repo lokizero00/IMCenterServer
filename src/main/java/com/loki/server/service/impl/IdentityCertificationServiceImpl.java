@@ -7,11 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.UserDao;
-import com.loki.server.dto.ServiceResult;
 import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.User;
 import com.loki.server.service.IdentityCertificationService;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.vo.ServiceResult;
 
 @Service
 @Transactional

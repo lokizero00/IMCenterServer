@@ -10,12 +10,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.loki.server.dto.ServiceResult;
 import com.loki.server.entity.EnterpriseCertification;
 import com.loki.server.entity.IdentityCertification;
 import com.loki.server.service.EnterpriseCertificationService;
 import com.loki.server.service.IdentityCertificationService;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.vo.ServiceResult;
 
 @Controller
 @RequestMapping("/s/api/certification")

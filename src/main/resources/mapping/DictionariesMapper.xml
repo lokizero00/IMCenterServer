@@ -12,19 +12,20 @@
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="list_order" jdbcType="INTEGER" property="listOrder" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,update_time,admin_creator_id,admin_updater_id,type,code,value
+    id,create_time,update_time,admin_creator_id,admin_updater_id,type,code,value,list_order
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Dictionaries">
-		insert into dictionaries(create_time,admin_creator_id,type,code,value) 
-		values(now(),#{adminCreatorId},#{type},#{code},#{value})
+		insert into dictionaries(create_time,admin_creator_id,type,code,value,list_order) 
+		values(now(),#{adminCreatorId},#{type},#{code},#{value},#{listOrder})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.Dictionaries">
-  	update dictionaries SET update_time=now(),admin_updater_id=#{adminUpdaterId},type=#{type},#{code},value=#{value} where id=#{id}
+  	update dictionaries SET update_time=now(),admin_updater_id=#{adminUpdaterId},type=#{type},#{code},value=#{value},list_order=#{listOrder} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="dictionariesDao">
@@ -33,10 +34,32 @@
 		where id=#{_parameter}
   </select>
   
-  <select id="findValueByCode" parameterType="String" resultType="String">
-		select name 
+  <select id="findValueByParam" resultType="String">
+		select value 
 		from dictionaries
-		where code=#{_parameter} limit 1
+		<where>
+			<if test="type !=null and type !=''">
+				type=#{type}
+			</if>
+			<if test="code !=null and code !=''">
+				and code=#{code}
+			</if>
+		</where>
+		order by id desc limit 1
+  </select>
+  
+  <select id="findListByParam" resultMap="dictionariesDao">
+		select <include refid="Base_Column_List" /> 
+		from dictionaries
+		<where>
+			<if test="type !=null and type !=''">
+				type=#{type}
+			</if>
+			<if test="code !=null and code !=''">
+				and code=#{code}
+			</if>
+		</where>
+		order by list_order asc
   </select>
   
   <select id="findAll" resultMap="dictionariesDao">

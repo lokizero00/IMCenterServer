@@ -8,21 +8,22 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="bank_code" jdbcType="VARCHAR" property="bankCode" />
     <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
-    <result column="bank_card_type" jdbcType="VARCHAR" property="bankCardType" />
-    <result column="bank_card_number" jdbcType="VARCHAR" property="bankCardNumber" />
+    <result column="card_type_code" jdbcType="VARCHAR" property="cardTypeCode" />
+    <result column="card_type_name" jdbcType="VARCHAR" property="cardTypeName" />
+    <result column="card_number" jdbcType="VARCHAR" property="cardNumber" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,user_id,bank_code,bank_name,bank_card_type,bank_card_number
+    id,user_id,bank_code,bank_name,card_type_code,card_type_name,card_number
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.UserBankcard">
-		insert into user_bankcard(user_id,bank_code,bank_name,bank_card_type,bank_card_number) 
-		values(#{userId},#{bankCode},#{bankName},#{bankCardType},#{bankCardNumber})
+		insert into user_bankcard(user_id,bank_code,bank_name,card_type_code,card_type_name,card_number) 
+		values(#{userId},#{bankCode},#{bankName},#{cardTypeCode},#{cardTypeName},#{cardNumber})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.UserBankcard">
-  	update user_bankcard SET user_id=#{userId},bank_code=#{bankCode},bank_name=#{bankName},bank_card_type=#{bankCardType},bank_card_number=#{bankCardNumber} where id=#{id}
+  	update user_bankcard SET user_id=#{userId},bank_code=#{bankCode},bank_name=#{bankName},card_type_code=#{cardTypeCode},card_type_name=#{cardTypeName},card_number=#{cardNumber} where id=#{id}
   </update>
   
   <select id="findByParam" resultMap="userBankcardDao">
@@ -35,14 +36,11 @@
 			<if test="bankCode !=null and bankCode!=''">
 				and bank_code=#{bankCode}
 			</if>
-			<if test="bankName !=null and bankName!=''">
-				and bank_name=#{bankName}
+			<if test="cardTypeCode !=null and cardTypeCode!=''">
+				and card_type_code=#{cardTypeCode}
 			</if>
-			<if test="bankCardType !=null and bankCardType!=''">
-				and bank_card_type=#{bankCardType}
-			</if>
-			<if test="bankCardNumber !=null and bankCardNumber!=''">
-				and bank_card_number=#{bankCardNumber}
+			<if test="cardNumber !=null and cardNumber!=''">
+				and card_number=#{cardNumber}
 			</if>
 		</where>
 		order by id desc

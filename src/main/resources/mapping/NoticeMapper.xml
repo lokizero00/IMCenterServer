@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 <mapper namespace="com.loki.server.dao.NoticeDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
   <resultMap id="noticeDao" type="com.loki.server.entity.Notice">
@@ -32,6 +32,57 @@
 		select <include refid="Base_Column_List" /> 
 		from notice
 		where id=#{_parameter}
+  </select>
+  
+  <select id="findByParam" resultMap="noticeDao">
+		select <include refid="Base_Column_List" /> 
+		from notice
+		<where>
+			<if test="createTimeStart != null">
+			 	<![CDATA[
+					create_time>=UNIX_TIMESTAMP(#{createTimeStart})
+				]]>
+			</if>
+			<if test="createTimeEnd != null">
+			 	<![CDATA[
+					and create_time<=UNIX_TIMESTAMP(#{createTimeEnd})
+				]]>
+			</if>
+			<if test="updateTimeStart != null">
+			 	<![CDATA[
+					and update_time>=UNIX_TIMESTAMP(#{updateTimeStart})
+				]]>
+			</if>
+			<if test="createTimeEnd != null">
+			 	<![CDATA[
+					and update_time<=UNIX_TIMESTAMP(#{updateTimeEnd})
+				]]>
+			</if>
+			<if test="adminCreatorId !=null">
+				and admin_creator_id=#{adminCreatorId}
+			</if>
+			<if test="adminUpdaterId !=null">
+				and admin_updater_id=#{adminUpdaterId}
+			</if>
+			<if test="title !=null">
+				and title like CONCAT('%','${title}','%' ) 
+			</if>
+			<if test="content !=null">
+				and content like CONCAT('%','${content}','%' ) 
+			</if>
+			<if test="type !=null">
+				and type=#{type}
+			</if>
+			<if test="relationId !=null">
+				and relation_id=#{relationId}
+			</if>
+		</where>
+		<if test="orderBy !=null">
+			order by #{orderBy}
+		</if>
+		<if test="orderByType !=null">
+			#{orderByType}
+		</if>
   </select>
   
   <select id="findAll" resultMap="noticeDao">

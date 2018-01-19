@@ -19,7 +19,10 @@ public enum ResultCodeEnums {
 	IDENTITY_CERTIFICATION_NOT_EXIST(-15,"实名认证不存在"),
 	INTENTION_NOT_EXIST(-16,"意向金账户不存在"),
 	FILE_NOT_FOUND(-17,"文件没有找到"),
-	DELETE_FAIL(-18,"删除失败")
+	DELETE_FAIL(-18,"删除失败"),
+	BANK_CODE_ERROR(-19,"银行代码错误"),
+	NOTICE_NOT_EXIST(-20,"消息不存在"),
+	RELATION_DATA_ERROR(-21,"关联数据错误")
 	;
 
 	public int code;  
