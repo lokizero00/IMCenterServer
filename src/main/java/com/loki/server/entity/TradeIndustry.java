@@ -7,7 +7,7 @@ public class TradeIndustry implements Serializable{
 	
 	private int id;
 	private int tradeId;
-	private int code;
+	private String code;
 	private String value;
 	public int getId() {
 		return id;
@@ -21,10 +21,10 @@ public class TradeIndustry implements Serializable{
 	public void setTradeId(int tradeId) {
 		this.tradeId = tradeId;
 	}
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 	public String getValue() {

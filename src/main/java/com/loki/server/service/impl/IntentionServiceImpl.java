@@ -14,16 +14,13 @@ import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.IntentionLogDao;
 import com.loki.server.dao.UserBankcardDao;
 import com.loki.server.entity.Intention;
+import com.loki.server.entity.IntentionLog;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.UserBankcard;
 import com.loki.server.service.IntentionService;
-import com.loki.server.utils.BeanMapper;
 import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
-import com.loki.server.vo.IntentionLogVO;
-import com.loki.server.vo.IntentionVO;
 import com.loki.server.vo.ServiceResult;
-import com.loki.server.vo.UserBankcardVO;
 
 @Service
 @Transactional
@@ -36,14 +33,13 @@ public class IntentionServiceImpl implements IntentionService {
 	DozerBeanMapper mapper = new DozerBeanMapper();
 	
 	@Override
-	public ServiceResult<IntentionVO> getIntention(int userId) {
-		ServiceResult<IntentionVO> returnValue=new ServiceResult<IntentionVO>();
+	public ServiceResult<Intention> getIntention(int userId) {
+		ServiceResult<Intention> returnValue=new ServiceResult<Intention>();
 		if(userId>0) {
 			Intention intention=intentionDao.findByUserId(userId);
 			if(null!=intention) {
-				IntentionVO intentionVO=BeanMapper.map(intention, IntentionVO.class);
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(intentionVO);
+				returnValue.setResultObj(intention);
 			}else {
 				returnValue.setResultCode(ResultCodeEnums.INTENTION_NOT_EXIST);
 			}
@@ -54,14 +50,14 @@ public class IntentionServiceImpl implements IntentionService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<IntentionLogVO>> getIntentionLog(int userId,int intentionId,int adminId,String type,Integer pageNo, Integer pageSize) {
+	public ServiceResult<PagedResult<IntentionLog>> getIntentionLog(int userId,int intentionId,int adminId,String type,Integer pageNo, Integer pageSize) {
 		pageNo = pageNo == null? 1:pageNo;  
 	    pageSize = pageSize == null? 10:pageSize; 
-	    ServiceResult<PagedResult<IntentionLogVO>> returnValue=new ServiceResult<PagedResult<IntentionLogVO>>();
+	    ServiceResult<PagedResult<IntentionLog>> returnValue=new ServiceResult<PagedResult<IntentionLog>>();
 		
 		if(userId>0) {
 			PageHelper.startPage(pageNo,pageSize);
-			PagedResult<IntentionLogVO> pageResult=BeanUtil.toPagedResult(BeanMapper.mapList(intentionLogDao.findByParam(userId, intentionId, adminId, type), IntentionLogVO.class));
+			PagedResult<IntentionLog> pageResult=BeanUtil.toPagedResult(intentionLogDao.findByParam(userId, intentionId, adminId, type));
 			if(null!=pageResult) {
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				returnValue.setResultObj(pageResult);
@@ -75,14 +71,13 @@ public class IntentionServiceImpl implements IntentionService {
 	}
 
 	@Override
-	public ServiceResult<List<UserBankcardVO>> getUserBankcard(int userId) {
-		ServiceResult<List<UserBankcardVO>> returnValue=new ServiceResult<List<UserBankcardVO>>();
+	public ServiceResult<List<UserBankcard>> getUserBankcard(int userId) {
+		ServiceResult<List<UserBankcard>> returnValue=new ServiceResult<List<UserBankcard>>();
 		if(userId>0) {
 			List<UserBankcard> userBankcardList=userBankcardDao.findByParam(userId, null, null, null);
 			if(null!=userBankcardList) {
-				List<UserBankcardVO> userBankcardVOList= BeanMapper.mapList(userBankcardList, UserBankcardVO.class);
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(userBankcardVOList);
+				returnValue.setResultObj(userBankcardList);
 			}else {
 				returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
 			}
@@ -93,9 +88,8 @@ public class IntentionServiceImpl implements IntentionService {
 	}
 
 	@Override
-	public ServiceResult<Void> addUserBankcard(UserBankcardVO userBankcardVO) {
+	public ServiceResult<Void> addUserBankcard(UserBankcard userBankcard) {
 		ServiceResult<Void> returnValue=new ServiceResult<Void>();
-		UserBankcard userBankcard=BeanMapper.map(userBankcardVO, UserBankcard.class);
 		if(userBankcard!=null && userBankcard.getUserId()>0 && userBankcard.getCardNumber()!=null && userBankcard.getCardNumber()!="" && userBankcard.getBankCode()!=null && userBankcard.getBankCode()!="" && userBankcard.getCardTypeCode()!=null && userBankcard.getCardTypeCode()!="") {
 			String bankName=dictionariesDao.findValueByParam("bank", userBankcard.getBankCode());
 			if(bankName!=null && bankName!="") {

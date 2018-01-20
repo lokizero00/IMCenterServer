@@ -8,11 +8,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.loki.server.entity.User;
 import com.loki.server.service.UserBindCodeService;
 import com.loki.server.service.UserService;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.ServiceResult;
-import com.loki.server.vo.UserVO;
 
 @Controller
 @RequestMapping("/s/api/user")
@@ -23,7 +23,7 @@ public class UserMobileController {
 	//获取用户信息
 	@RequestMapping(value="/getUser",method=RequestMethod.GET)
 	public String getUser(HttpServletRequest request,int userId,ModelMap mm) {
-		ServiceResult<UserVO> returnValue=userService.getUser(userId);
+		ServiceResult<User> returnValue=userService.getUser(userId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

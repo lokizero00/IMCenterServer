@@ -7,8 +7,8 @@ public class TradePaycode implements Serializable{
 	
 	private int id;
 	private int tradeId;
-	private int code;
-	private int value;
+	private String code;
+	private String value;
 	public int getId() {
 		return id;
 	}
@@ -21,16 +21,16 @@ public class TradePaycode implements Serializable{
 	public void setTradeId(int tradeId) {
 		this.tradeId = tradeId;
 	}
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
-	public int getValue() {
+	public String getValue() {
 		return value;
 	}
-	public void setValue(int value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 }

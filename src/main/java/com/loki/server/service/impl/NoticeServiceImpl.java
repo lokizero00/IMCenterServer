@@ -18,12 +18,9 @@ import com.loki.server.entity.NoticeComplex;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.UserNotice;
 import com.loki.server.service.NoticeService;
-import com.loki.server.utils.BeanMapper;
 import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
-import com.loki.server.vo.NoticeVO;
 import com.loki.server.vo.ServiceResult;
-import com.loki.server.vo.UserNoticeVO;
 
 @Service
 @Transactional
@@ -51,11 +48,10 @@ public class NoticeServiceImpl implements NoticeService {
 
 	//TODO 对于for循环中，部分保存失败的情况暂时未处理
 	@Override
-	public ServiceResult<Void> addUserNotice(List<UserNoticeVO> userNoticeVOList) {
+	public ServiceResult<Void> addUserNotice(List<UserNotice> userNoticeList) {
 		ServiceResult<Void> returnValue=new ServiceResult<Void>();
-		if(userNoticeVOList!=null && userNoticeVOList.size()>0) {
-			for(UserNoticeVO userNoticeVO:userNoticeVOList) {
-				UserNotice userNotice=BeanMapper.map(userNoticeVO, UserNotice.class);
+		if(userNoticeList!=null && userNoticeList.size()>0) {
+			for(UserNotice userNotice:userNoticeList) {
 				userNoticeDao.insert(userNotice);
 			}
 			returnValue.setResultCode(ResultCodeEnums.SUCCESS);
@@ -66,14 +62,13 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ServiceResult<NoticeVO> getNotice(int noticeId) {
-		ServiceResult<NoticeVO> returnValue=new ServiceResult<NoticeVO>();
+	public ServiceResult<Notice> getNotice(int noticeId) {
+		ServiceResult<Notice> returnValue=new ServiceResult<Notice>();
 		if(noticeId>0) {
 			Notice notice=noticeDao.findById(noticeId);
 			if(notice!=null) {
-				NoticeVO noticeVO=BeanMapper.map(notice, NoticeVO.class);
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(noticeVO);
+				returnValue.setResultObj(notice);
 			}else {
 				returnValue.setResultCode(ResultCodeEnums.NOTICE_NOT_EXIST);
 			}
@@ -84,15 +79,15 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<UserNoticeVO>> getUserNoticeList(int noticeId,Integer pageNo,Integer pageSize) {
-		ServiceResult<PagedResult<UserNoticeVO>> returnValue=new ServiceResult<PagedResult<UserNoticeVO>>();
+	public ServiceResult<PagedResult<UserNotice>> getUserNoticeList(int noticeId,Integer pageNo,Integer pageSize) {
+		ServiceResult<PagedResult<UserNotice>> returnValue=new ServiceResult<PagedResult<UserNotice>>();
 		if(noticeId>0) {
 			HashMap<String, Object> map=new HashMap<>();
 			map.put("noticeId", noticeId);
 			pageNo = pageNo == null? 1:pageNo;  
 		    pageSize = pageSize == null? 10:pageSize;
 		    PageHelper.startPage(pageNo,pageSize);
-		    PagedResult<UserNoticeVO> pageResult=BeanUtil.toPagedResult(BeanMapper.mapList(userNoticeDao.findListByParam(map), UserNoticeVO.class));
+		    PagedResult<UserNotice> pageResult=BeanUtil.toPagedResult(userNoticeDao.findListByParam(map));
 			if(pageResult!=null) {
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				returnValue.setResultObj(pageResult);
@@ -106,13 +101,13 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<NoticeVO>> getNoticeList(Map<String, Object> map,Integer pageNo,Integer pageSize) {
-		ServiceResult<PagedResult<NoticeVO>> returnValue=new ServiceResult<PagedResult<NoticeVO>>();
+	public ServiceResult<PagedResult<Notice>> getNoticeList(Map<String, Object> map,Integer pageNo,Integer pageSize) {
+		ServiceResult<PagedResult<Notice>> returnValue=new ServiceResult<PagedResult<Notice>>();
 		if(map!=null) {
 			pageNo = pageNo == null? 1:pageNo;  
 		    pageSize = pageSize == null? 10:pageSize; 
 		    PageHelper.startPage(pageNo,pageSize);
-			PagedResult<NoticeVO> pageResult=BeanUtil.toPagedResult(BeanMapper.mapList(noticeDao.findByParam(map), NoticeVO.class));
+			PagedResult<Notice> pageResult=BeanUtil.toPagedResult(noticeDao.findByParam(map));
 			if(pageResult!=null) {
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				returnValue.setResultObj(pageResult);
@@ -126,15 +121,15 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<NoticeVO>> getNoticeVOList(int userId,Integer pageNo,Integer pageSize) {
-		ServiceResult<PagedResult<NoticeVO>> returnValue=new ServiceResult<PagedResult<NoticeVO>>();
+	public ServiceResult<PagedResult<NoticeComplex>> getNoticeList_mobile(int userId,Integer pageNo,Integer pageSize) {
+		ServiceResult<PagedResult<NoticeComplex>> returnValue=new ServiceResult<PagedResult<NoticeComplex>>();
 		if(userId>0) {
 			HashMap<String,Object> map=new HashMap<>();
 			map.put("userId", userId);
 			pageNo = pageNo == null? 1:pageNo;  
 		    pageSize = pageSize == null? 10:pageSize; 
 		    PageHelper.startPage(pageNo,pageSize);
-		    PagedResult<NoticeVO> pageResult=BeanUtil.toPagedResult(BeanMapper.mapList(noticeComplexDao.findByParam(map), NoticeVO.class));
+		    PagedResult<NoticeComplex> pageResult=BeanUtil.toPagedResult(noticeComplexDao.findByParam(map));
 		    if(pageResult!=null) {
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				returnValue.setResultObj(pageResult);
@@ -148,8 +143,8 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ServiceResult<NoticeVO> getNoticeVO(int noticeId,int userId) {
-		ServiceResult<NoticeVO> returnValue=new ServiceResult<NoticeVO>();
+	public ServiceResult<NoticeComplex> getNotice_mobile(int noticeId,int userId) {
+		ServiceResult<NoticeComplex> returnValue=new ServiceResult<NoticeComplex>();
 		if(noticeId>0 && userId>0) {
 			NoticeComplex noticeComplex=noticeComplexDao.findById(noticeId);
 			if(noticeComplex!=null) {
@@ -165,9 +160,8 @@ public class NoticeServiceImpl implements NoticeService {
 					}
 					noticeComplex.setRead(true);
 				}
-				NoticeVO noticeVO=BeanMapper.map(noticeComplex, NoticeVO.class);
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(noticeVO);
+				returnValue.setResultObj(noticeComplex);
 			}else {
 				returnValue.setResultCode(ResultCodeEnums.NOTICE_NOT_EXIST);
 			}

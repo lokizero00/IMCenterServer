@@ -1,5 +1,8 @@
 package com.loki.server.utils;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -65,5 +68,32 @@ public class CommonUtil {
     public String getUUID() {  
         return UUID.randomUUID().toString().replace("-", "");  
     }  
+    
+    /**
+     * 生成贸易编号
+     * @param type
+     * @return
+     */
+    public String getTradeSN(String type) {
+    		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmsss");
+    		String prefix="";
+    		if(type.equals("trade_demand")) {
+    			prefix="PR";
+    		}else if(type.equals("trade_supply")) {
+    			prefix="SR";
+    		}else {
+    			return null;
+    		}
+    		String tradeSN=prefix+sdf.format(new Date()).toString();
+    		return tradeSN;
+    }
+    
+    public Timestamp convert(String date) {
+        if(null != date)
+        {
+            return Timestamp.valueOf(date);         
+        }
+        return null;
+    }
 
 }

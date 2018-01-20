@@ -9,13 +9,14 @@ import com.loki.server.entity.TradeIndustry;
 import com.loki.server.entity.TradeInvoice;
 import com.loki.server.entity.TradePaycode;
 
-public class TradeMobileVO implements Serializable{
+public class TradeVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Trade trade;
 	private List<TradeAttachment> tradeAttachmentList;
 	private List<TradeIndustry> tradeIndustryList;
 	private List<TradeInvoice> tradeInvoiceList;
 	private List<TradePaycode> tradePaycodeList;
+	private String tradeDeliveryTimeStr;
 	public Trade getTrade() {
 		return trade;
 	}
@@ -45,5 +46,11 @@ public class TradeMobileVO implements Serializable{
 	}
 	public void setTradePaycodeList(List<TradePaycode> tradePaycodeList) {
 		this.tradePaycodeList = tradePaycodeList;
+	}
+	public String getTradeDeliveryTimeStr() {
+		return tradeDeliveryTimeStr;
+	}
+	public void setTradeDeliveryTimeStr(String tradeDeliveryTimeStr) {
+		this.tradeDeliveryTimeStr = tradeDeliveryTimeStr;
 	}
 }

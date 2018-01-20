@@ -19,8 +19,9 @@ public class BeanMapper
   * @param destinationClass 要构造新的实例对象Class 
   */  
   public static <T> T map(Object source, Class<T> destinationClass)  
-  {  
+  { 
     return dozer.map(source, destinationClass);  
+    
   }  
     
     

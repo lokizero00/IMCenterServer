@@ -22,6 +22,7 @@ public class UserVO implements Serializable{
 	private int enterpriseId;
 	private String easeId;
 	private String easePwd;
+	private String aaa;
 	public int getId() {
 		return id;
 	}
@@ -117,5 +118,11 @@ public class UserVO implements Serializable{
 	}
 	public void setEasePwd(String easePwd) {
 		this.easePwd = easePwd;
+	}
+	public String getAaa() {
+		return aaa;
+	}
+	public void setAaa(String aaa) {
+		this.aaa = aaa;
 	}
 }

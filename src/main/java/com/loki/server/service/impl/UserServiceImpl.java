@@ -15,12 +15,10 @@ import com.loki.server.entity.User;
 import com.loki.server.entity.UserBindCode;
 import com.loki.server.entity.UserToken;
 import com.loki.server.service.UserService;
-import com.loki.server.utils.BeanMapper;
 import com.loki.server.utils.MD5;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.ServiceResult;
 import com.loki.server.vo.UserLoginVO;
-import com.loki.server.vo.UserVO;
 
 @Service
 @Transactional
@@ -162,16 +160,15 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public ServiceResult<UserVO> getUser(int userId) {
-		ServiceResult<UserVO> returnValue=new ServiceResult<UserVO>();
+	public ServiceResult<User> getUser(int userId) {
+		ServiceResult<User> returnValue=new ServiceResult<User>();
 		if (userId>0) {
 			User user=userDao.findById(userId);
 			if(null==user) {
 				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}else {
-				UserVO userVO=BeanMapper.map(user, UserVO.class);
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(userVO);
+				returnValue.setResultObj(user);
 			}
 		}else {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
