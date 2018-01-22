@@ -3,8 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.IntentionDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="intentionDao" type="com.loki.server.entity.Intention">
-  
+  <resultMap id="intentionDO" type="com.loki.server.entity.Intention">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="total" jdbcType="DECIMAL" property="total" />
     <result column="available" jdbcType="DECIMAL" property="available" />
@@ -21,19 +20,19 @@
 		values(#{total},#{available},#{freeze},#{userId})
 	</insert>
   
-  <select id="findById" parameterType="int" resultMap="intentionDao">
+  <select id="findById" parameterType="int" resultMap="intentionDO">
 		select <include refid="Base_Column_List" /> 
 		from intention
 		where id=#{_parameter}
   </select>
   
-  <select id="findByUserId" parameterType="int" resultMap="intentionDao">
+  <select id="findByUserId" parameterType="int" resultMap="intentionDO">
 		select <include refid="Base_Column_List" /> 
 		from intention
 		where user_id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="intentionDao">
+  <select id="findAll" resultMap="intentionDO">
 		select <include refid="Base_Column_List" /> 
 		from intention
   </select>

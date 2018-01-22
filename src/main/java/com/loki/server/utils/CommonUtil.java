@@ -1,5 +1,6 @@
 package com.loki.server.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -94,6 +95,15 @@ public class CommonUtil {
             return Timestamp.valueOf(date);         
         }
         return null;
+    }
+    
+    public String encodeStr(String str) {  
+        try {  
+            return new String(str.getBytes("ISO-8859-1"), "UTF-8");  
+        } catch (UnsupportedEncodingException e) {  
+            e.printStackTrace();  
+            return null;  
+        }  
     }
 
 }

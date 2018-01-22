@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.IntentionRechargeDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="intentionRechargeDao" type="com.loki.server.entity.IntentionRecharge">
+  <resultMap id="intentionRechargeDO" type="com.loki.server.entity.IntentionRecharge">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -35,13 +35,13 @@
   	update intention_recharge SET update_time=now(),updater_id=#{updaterId},user_id=#{userId},sn=#{sn},intention_id=#{intentionId},amount=#{amount},pay_code=#{payCode},pay_name=#{payName},trade_sn=#{tradeSn},status=#{status},pay_time=#{payTime},admin_updater_id=#{adminUpdaterId},is_admin=#{isAdmin} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="intentionRechargeDao">
+  <select id="findById" parameterType="int" resultMap="intentionRechargeDO">
 		select <include refid="Base_Column_List" /> 
 		from intention_recharge
 		where id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="intentionRechargeDao">
+  <select id="findAll" resultMap="intentionRechargeDO">
 		select <include refid="Base_Column_List" /> 
 		from intention_recharge
   </select>

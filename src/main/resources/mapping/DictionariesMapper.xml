@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.DictionariesDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="dictionariesDao" type="com.loki.server.entity.Dictionaries">
+  <resultMap id="dictionariesDO" type="com.loki.server.entity.Dictionaries">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -28,7 +28,7 @@
   	update dictionaries SET update_time=now(),admin_updater_id=#{adminUpdaterId},type=#{type},#{code},value=#{value},list_order=#{listOrder} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="dictionariesDao">
+  <select id="findById" parameterType="int" resultMap="dictionariesDO">
 		select <include refid="Base_Column_List" /> 
 		from dictionaries
 		where id=#{_parameter}
@@ -48,7 +48,7 @@
 		order by id desc limit 1
   </select>
   
-  <select id="findListByParam" resultMap="dictionariesDao">
+  <select id="findListByParam" resultMap="dictionariesDO">
 		select <include refid="Base_Column_List" /> 
 		from dictionaries
 		<where>
@@ -62,7 +62,7 @@
 		order by list_order asc
   </select>
   
-  <select id="findAll" resultMap="dictionariesDao">
+  <select id="findAll" resultMap="dictionariesDO">
 		select <include refid="Base_Column_List" /> 
 		from dictionaries
   </select>

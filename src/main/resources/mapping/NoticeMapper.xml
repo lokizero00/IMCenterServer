@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 <mapper namespace="com.loki.server.dao.NoticeDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="noticeDao" type="com.loki.server.entity.Notice">
+  <resultMap id="noticeDO" type="com.loki.server.entity.Notice">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -28,13 +28,13 @@
   	update notice SET update_time=now(),admin_updater_id=#{adminUpdaterId},title=#{title},content=#{content},type=#{type},relation_id=#{relationId} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="noticeDao">
+  <select id="findById" parameterType="int" resultMap="noticeDO">
 		select <include refid="Base_Column_List" /> 
 		from notice
 		where id=#{_parameter}
   </select>
   
-  <select id="findByParam" resultMap="noticeDao">
+  <select id="findByParam" resultMap="noticeDO">
 		select <include refid="Base_Column_List" /> 
 		from notice
 		<where>
@@ -85,7 +85,7 @@
 		</if>
   </select>
   
-  <select id="findAll" resultMap="noticeDao">
+  <select id="findAll" resultMap="noticeDO">
 		select <include refid="Base_Column_List" /> 
 		from notice
   </select>

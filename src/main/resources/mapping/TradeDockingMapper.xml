@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.TradeDockingDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="tradeDockingDao" type="com.loki.server.entity.TradeDocking">
+  <resultMap id="tradeDockingDO" type="com.loki.server.entity.TradeDocking">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -31,25 +31,25 @@
   	update trade_docking SET update_time=now(),updater_id=#{updaterId},user_id=#{userId},trade_id=#{tradeId},identity_id=#{identityId},enterprise_id=#{enterpriseId},offer=#{offer},intention=#{intention},message=#{message} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="tradeDockingDao">
+  <select id="findById" parameterType="int" resultMap="tradeDockingDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_docking
 		where id=#{_parameter}
   </select>
   
-  <select id="findByTradeId" parameterType="int" resultMap="tradeDockingDao">
+  <select id="findByTradeId" parameterType="int" resultMap="tradeDockingDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_docking
 		where trade_id=#{_parameter}
   </select>
   
-  <select id="findByUserId" parameterType="int" resultMap="tradeDockingDao">
+  <select id="findByUserId" parameterType="int" resultMap="tradeDockingDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_docking
 		where user_id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="tradeDockingDao">
+  <select id="findAll" resultMap="tradeDockingDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_docking
   </select>

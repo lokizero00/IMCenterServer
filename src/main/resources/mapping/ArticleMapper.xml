@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.ArticleDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="articleDao" type="com.loki.server.entity.Article">
+  <resultMap id="articleDO" type="com.loki.server.entity.Article">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -29,13 +29,13 @@
   	update article SET update_time=now(),admin_updater_id=#{adminUpdaterId},title=#{title},content=#{content},sort=#{sort},is_show=#{isShow},read_count=#{readCount} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="articleDao">
+  <select id="findById" parameterType="int" resultMap="articleDO">
 		select <include refid="Base_Column_List" /> 
 		from article
 		where id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="articleDao">
+  <select id="findAll" resultMap="articleDO">
 		select <include refid="Base_Column_List" /> 
 		from article
   </select>

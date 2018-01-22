@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.UserTokenDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="userTokenDao" type="com.loki.server.entity.UserToken">
+  <resultMap id="userTokenDO" type="com.loki.server.entity.UserToken">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="token" jdbcType="VARCHAR" property="token" />
@@ -21,13 +21,13 @@
 		insert into user_token(user_id,token,login_time,login_ip,client_type,expired) values(#{userId},#{token},now(),#{loginIp},#{clientType},#{expired})
 	</insert>
   
-  <select id="findByUserId" parameterType="int" resultMap="userTokenDao">
+  <select id="findByUserId" parameterType="int" resultMap="userTokenDO">
 		select <include refid="Base_Column_List" /> 
 		from user_token
 		where user_id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="userTokenDao">
+  <select id="findAll" resultMap="userTokenDO">
 		select <include refid="Base_Column_List" /> 
 		from user_token
   </select>
@@ -45,7 +45,7 @@
 		from user_token
 		where token=#{_parameter} and expired=0
   </select>
-  <select id="findByToken" parameterType="String" resultMap="userTokenDao">
+  <select id="findByToken" parameterType="String" resultMap="userTokenDO">
   		select <include refid="Base_Column_List" /> 
 		from user_token where token=#{_parameter}
   </select>

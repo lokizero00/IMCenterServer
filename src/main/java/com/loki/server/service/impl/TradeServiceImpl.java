@@ -1,6 +1,7 @@
 package com.loki.server.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,12 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.loki.server.dao.DictionariesDao;
 import com.loki.server.dao.TradeAttachmentDao;
+import com.loki.server.dao.TradeComplexDao;
 import com.loki.server.dao.TradeDao;
 import com.loki.server.dao.TradeIndustryDao;
 import com.loki.server.dao.TradeInvoiceDao;
 import com.loki.server.dao.TradePaycodeDao;
 import com.loki.server.entity.Trade;
 import com.loki.server.entity.TradeAttachment;
+import com.loki.server.entity.TradeComplex;
 import com.loki.server.entity.TradeIndustry;
 import com.loki.server.entity.TradeInvoice;
 import com.loki.server.entity.TradePaycode;
@@ -33,6 +36,8 @@ public class TradeServiceImpl implements TradeService {
 	@Resource TradeInvoiceDao tradeInvoiceDao;
 	@Resource TradePaycodeDao tradePaycodeDao;
 	@Resource DictionariesDao dictionariesDao;
+	
+	@Resource TradeComplexDao tradeComplexDao;
 	
 	@Override
 	public ServiceResult<Integer> publishTrade(TradeVO tradeVO) {
@@ -91,4 +96,37 @@ public class TradeServiceImpl implements TradeService {
 		return returnValue;
 	}
 
+	@Override
+	public ServiceResult<List<TradeComplex>> getTradeList_mobile(Map<String, Object> map) {
+		ServiceResult<List<TradeComplex>> returnValue=new ServiceResult<List<TradeComplex>>();
+		if(map!=null) {
+			List<TradeComplex> tradeComplexList=tradeComplexDao.findByParam(map);
+			if(tradeComplexList!=null) {
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(tradeComplexList);
+			}else {
+				returnValue.setResultCode(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
+
+	@Override
+	public ServiceResult<TradeComplex> getTrade_mobile(int tradeId) {
+		ServiceResult<TradeComplex> returnValue=new ServiceResult<>();
+		if(tradeId>0) {
+			TradeComplex tradeComplex=tradeComplexDao.findById(tradeId);
+			if(tradeComplex!=null) {
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(tradeComplex);
+			}else {
+				returnValue.setResultCode(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
 }

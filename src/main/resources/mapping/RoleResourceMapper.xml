@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.RoleResourceDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="roleResourceDao" type="com.loki.server.entity.RoleResource">
+  <resultMap id="roleResourceDO" type="com.loki.server.entity.RoleResource">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="resource_id" jdbcType="INTEGER" property="resourceId" />
@@ -22,13 +22,13 @@
   	update role_resource SET role_id=#{roleId},resource_id=#{resourceId} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="roleResourceDao">
+  <select id="findById" parameterType="int" resultMap="roleResourceDO">
 		select <include refid="Base_Column_List" /> 
 		from role_resource
 		where id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="roleResourceDao">
+  <select id="findAll" resultMap="roleResourceDO">
 		select <include refid="Base_Column_List" /> 
 		from role_resource
   </select>

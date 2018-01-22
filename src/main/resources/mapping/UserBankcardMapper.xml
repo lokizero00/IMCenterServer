@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.UserBankcardDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="userBankcardDao" type="com.loki.server.entity.UserBankcard">
+  <resultMap id="userBankcardDO" type="com.loki.server.entity.UserBankcard">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="bank_code" jdbcType="VARCHAR" property="bankCode" />
@@ -26,7 +26,7 @@
   	update user_bankcard SET user_id=#{userId},bank_code=#{bankCode},bank_name=#{bankName},card_type_code=#{cardTypeCode},card_type_name=#{cardTypeName},card_number=#{cardNumber} where id=#{id}
   </update>
   
-  <select id="findByParam" resultMap="userBankcardDao">
+  <select id="findByParam" resultMap="userBankcardDO">
 		select <include refid="Base_Column_List" /> 
 		from user_bankcard
 		<where>
@@ -46,13 +46,13 @@
 		order by id desc
   </select>
   
-  <select id="findById" parameterType="int" resultMap="userBankcardDao">
+  <select id="findById" parameterType="int" resultMap="userBankcardDO">
 		select <include refid="Base_Column_List" /> 
 		from user_bankcard
 		where id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="userBankcardDao">
+  <select id="findAll" resultMap="userBankcardDO">
 		select <include refid="Base_Column_List" /> 
 		from user_bankcard
   </select>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.TradeComplexDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="tradeComplexDO" type="com.loki.server.entity.TradeComplex">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+    <result column="updater_id" jdbcType="INTEGER" property="updaterId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="town_name" jdbcType="VARCHAR" property="townName" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
+    <result column="budget" jdbcType="DECIMAL" property="budget" />
+    <result column="resource_name" jdbcType="VARCHAR" property="resourceName" />
+    <result column="capacity" jdbcType="INTEGER" property="capacity" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="intention" jdbcType="DECIMAL" property="intention" />
+    <result column="verify_time" jdbcType="TIMESTAMP" property="verifyTime" />
+    <result column="admin_verifier_id" jdbcType="INTEGER" property="adminVerifierId" />
+    <result column="identity_id" jdbcType="INTEGER" property="identityId" />
+    <result column="enterprise_id" jdbcType="INTEGER" property="enterpriseId" />
+    <result column="docking_id" jdbcType="INTEGER" property="dockingId" />
+    <result column="read_count" jdbcType="INTEGER" property="readCount" />
+    
+    <result column="industry_name" jdbcType="VARCHAR" property="industryName" />
+    <result column="invoice_name" jdbcType="VARCHAR" property="invoiceName" />
+    <result column="paycode_name" jdbcType="VARCHAR" property="paycodeName" />
+    <result column="attachment_url" jdbcType="VARCHAR" property="attachmentUrl" />
+  </resultMap>
+  
+  <select id="findByParam" resultMap="tradeComplexDO">
+		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.attachment_url
+		from trade 
+		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
+		left join(select trade_id,group_concat(url) as attachment_url from trade_attachment group by trade_id) _attachment on _attachment.trade_id=trade.id
+		<where>
+			<if test="sn!=null and sn!=''">
+				trade.sn=#{sn}
+			</if>
+			<if test="title!=null and title!=''">
+				and trade.title like CONCAT('%','${title}','%' ) 
+			</if>
+			<if test="type!=null and type!=''">
+				and trade.type=#{type}
+			</if>
+			<if test="provinceName!=null and provinceName!=''">
+				and trade.province_name=#{provinceName}
+			</if>
+			<if test="cityName!=null and cityName!=''">
+				and trade.city_name=#{cityName}
+			</if>
+			<if test="townName!=null and townName!=''">
+				and trade.town_name=#{townName}
+			</if>
+			<if test="status!=null and status!=''">
+				and trade.status=#{status}
+			</if>
+			<if test="userId!=null and userId!=0">
+				and trade.user_id=#{userId} 
+			</if>
+			<if test="invoiceCode!=null and invoiceCode!=''">
+				and trade.id in(
+				select trade_id from trade_invoice where code=#{invoiceCode})
+			</if>
+			<if test="industryCode!=null and industryCode!=''">
+				and trade.id in(
+				select trade_id from trade_industry where code=#{industryCode})
+			</if>
+			<if test="payCode!=null and payCode!=''">
+				and trade.id in(
+				select trade_id from trade_paycode where code=#{payCode})
+			</if>
+		</where>
+		order by id desc
+  </select>
+  
+  <select id="findById" parameterType="int" resultMap="tradeComplexDO">
+		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.attachment_url
+		from trade 
+		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
+		left join(select trade_id,group_concat(url) as attachment_url from trade_attachment group by trade_id) _attachment on _attachment.trade_id=trade.id
+		where trade.id=#{_parameter}
+  </select>
+</mapper>

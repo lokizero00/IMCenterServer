@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.EnterpriseCertificationDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="enterpriseCertificationDao" type="com.loki.server.entity.EnterpriseCertification">
+  <resultMap id="enterpriseCertificationDO" type="com.loki.server.entity.EnterpriseCertification">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -28,25 +28,25 @@
 		insert into enterprise_certification (create_time,creator_id,user_id,position,enterprise_name,license_pic,status) values(now(),#{creatorId},#{userId},#{position},#{enterpriseName},#{licensePic},#{status})
 	</insert>
   
-  <select id="findById" parameterType="int" resultMap="enterpriseCertificationDao">
+  <select id="findById" parameterType="int" resultMap="enterpriseCertificationDO">
 		select <include refid="Base_Column_List" /> 
 		from enterprise_certification
 		where id=#{_parameter}
   </select>
   
-  <select id="findCurrentByUserId" parameterType="int" resultMap="enterpriseCertificationDao">
+  <select id="findCurrentByUserId" parameterType="int" resultMap="enterpriseCertificationDO">
 		select <include refid="Base_Column_List" /> 
 		from enterprise_certification
 		where user_id=#{_parameter} and deleted=0 limit 1
   </select>
   
-  <select id="findAllByUserId" parameterType="int" resultMap="enterpriseCertificationDao">
+  <select id="findAllByUserId" parameterType="int" resultMap="enterpriseCertificationDO">
 		select <include refid="Base_Column_List" /> 
 		from enterprise_certification
 		where user_id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="enterpriseCertificationDao">
+  <select id="findAll" resultMap="enterpriseCertificationDO">
 		select <include refid="Base_Column_List" /> 
 		from enterprise_certification
   </select>

@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.TradeReportDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="tradeReportDao" type="com.loki.server.entity.TradeReport">
+  <resultMap id="tradeReportDO" type="com.loki.server.entity.TradeReport">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -29,13 +29,13 @@
   	update trade_report SET update_time=now(),trade_id=#{tradeId},informer_id=#{informerId},delinquent_id=#{delinquentId},status=#{status},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="tradeReportDao">
+  <select id="findById" parameterType="int" resultMap="tradeReportDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_report
 		where id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="tradeReportDao">
+  <select id="findAll" resultMap="tradeReportDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_report
   </select>

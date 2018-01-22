@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.UserBindCodeDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="userBindCodeDao" type="com.loki.server.entity.UserBindCode">
+  <resultMap id="userBindCodeDO" type="com.loki.server.entity.UserBindCode">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="auth_code" jdbcType="CHAR" property="authCode" />
@@ -19,13 +19,13 @@
 		values(#{userId},#{authCode},now())
 	</insert>
   
-  <select id="findById" parameterType="int" resultMap="userBindCodeDao">
+  <select id="findById" parameterType="int" resultMap="userBindCodeDO">
 		select <include refid="Base_Column_List" /> 
 		from user_bind_code
 		where id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="userBindCodeDao">
+  <select id="findAll" resultMap="userBindCodeDO">
 		select <include refid="Base_Column_List" /> 
 		from user_bind_code
   </select>

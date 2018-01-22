@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.IntentionLogDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="intentionLogDao" type="com.loki.server.entity.IntentionLog">
+  <resultMap id="intentionLogDO" type="com.loki.server.entity.IntentionLog">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="available_amount" jdbcType="DECIMAL" property="availableAmount" />
@@ -28,18 +28,18 @@
   	update intention_log SET available_amount=#{availableAmount},freeze_amount=#{freezeAmount},content=#{content},type=#{type},user_id=#{userId},intention_id=#{intentionId},admin_id=#{adminId} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="intentionLogDao">
+  <select id="findById" parameterType="int" resultMap="intentionLogDO">
 		select <include refid="Base_Column_List" /> 
 		from intention_log
 		where id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="intentionLogDao">
+  <select id="findAll" resultMap="intentionLogDO">
 		select <include refid="Base_Column_List" /> 
 		from intention_log
   </select>
   
-  <select id="findByParam" resultMap="intentionLogDao">
+  <select id="findByParam" resultMap="intentionLogDO">
 		select <include refid="Base_Column_List" /> 
 		from intention_log
 		<where>

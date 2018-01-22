@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.AdvDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="advDao" type="com.loki.server.entity.Adv">
+  <resultMap id="advDO" type="com.loki.server.entity.Adv">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -33,13 +33,13 @@
   	update adv SET update_time=now(),admin_updater_id=#{adminUpdaterId},position=#{position},title=#{title},preview_url=#{previewUrl},content=#{content},start_time=#{startTime},end_time=#{endTime},sort=#{sort},click_count=#{clickCount},is_show=#{isShow} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="advDao">
+  <select id="findById" parameterType="int" resultMap="advDO">
 		select <include refid="Base_Column_List" /> 
 		from adv
 		where id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="advDao">
+  <select id="findAll" resultMap="advDO">
 		select <include refid="Base_Column_List" /> 
 		from adv
   </select>

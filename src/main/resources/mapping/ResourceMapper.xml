@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.ResourceDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="resourceDao" type="com.loki.server.entity.Resource">
+  <resultMap id="resourceDO" type="com.loki.server.entity.Resource">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -32,13 +32,13 @@
   	update resource SET update_time=now(),admin_updater_id=#{adminUpdaterId},name=#{name},url=#{url},description=#{description},type=#{type},sort=#{sort},status=#{status},pic=#{pic},parent_id=#{parentId} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="resourceDao">
+  <select id="findById" parameterType="int" resultMap="resourceDO">
 		select <include refid="Base_Column_List" /> 
 		from resource
 		where id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="resourceDao">
+  <select id="findAll" resultMap="resourceDO">
 		select <include refid="Base_Column_List" /> 
 		from resource
   </select>

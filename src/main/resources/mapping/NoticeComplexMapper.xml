@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 <mapper namespace="com.loki.server.dao.NoticeComplexDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="noticeComplexDao" type="com.loki.server.entity.NoticeComplex">  
+  <resultMap id="noticeComplexDO" type="com.loki.server.entity.NoticeComplex">  
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -17,7 +17,7 @@
     <result column="is_read" jdbcType="BIT" property="isRead" />
   </resultMap>
   
-  <select id="findByParam" resultMap="noticeComplexDao">
+  <select id="findByParam" resultMap="noticeComplexDO">
 		select notice.*,
 			user_notice.user_id,
 			user_notice.is_read
@@ -72,7 +72,7 @@
 		order by id desc
   </select>
   
-  <select id="findById" parameterType="int" resultMap="noticeComplexDao">
+  <select id="findById" parameterType="int" resultMap="noticeComplexDO">
   		select notice.*,
 		user_notice.user_id,
 		user_notice.is_read

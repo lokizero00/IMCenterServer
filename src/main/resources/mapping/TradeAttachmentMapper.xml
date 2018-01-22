@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.TradeAttachmentDao">
   <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="tradeAttachmentDao" type="com.loki.server.entity.TradeAttachment">
+  <resultMap id="tradeAttachmentDO" type="com.loki.server.entity.TradeAttachment">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
     <result column="url" jdbcType="VARCHAR" property="url" />
@@ -22,19 +22,19 @@
   	update trade_attachment SET trade_id=#{tradeId},url=#{url} where id=#{id}
   </update>
   
-  <select id="findById" parameterType="int" resultMap="tradeAttachmentDao">
+  <select id="findById" parameterType="int" resultMap="tradeAttachmentDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_attachment
 		where id=#{_parameter}
   </select>
   
-  <select id="findByTradeId" parameterType="int" resultMap="tradeAttachmentDao">
+  <select id="findByTradeId" parameterType="int" resultMap="tradeAttachmentDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_attachment
 		where trade_id=#{_parameter}
   </select>
   
-  <select id="findAll" resultMap="tradeAttachmentDao">
+  <select id="findAll" resultMap="tradeAttachmentDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_attachment
   </select>
