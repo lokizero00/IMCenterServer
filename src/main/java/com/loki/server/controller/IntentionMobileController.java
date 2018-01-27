@@ -1,5 +1,6 @@
 package com.loki.server.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +41,13 @@ public class IntentionMobileController {
 	
 	//获取意向金明细
 	@RequestMapping(value="/getIntentionLog",method=RequestMethod.GET)
-	public String getIntentionLog(HttpServletRequest request,int userId,int intentionId,int adminId,String type,Integer pageNo, Integer pageSize,ModelMap mm) {
-		ServiceResult<PagedResult<IntentionLog>> returnValue=intentionService.getIntentionLog(userId,intentionId, adminId, type,pageNo,pageSize);
+	public String getIntentionLog(HttpServletRequest request,String logRole,int intentionId,int logOperatorId,String type,Integer pageNo, Integer pageSize,ModelMap mm) {
+		HashMap<String,Object> map=new HashMap<>();
+		map.put("logRole", logRole);
+		map.put("intentionId", intentionId);
+		map.put("logOperatorId", logOperatorId);
+		map.put("type", type);
+		ServiceResult<PagedResult<IntentionLog>> returnValue=intentionService.getIntentionLog(map,pageNo,pageSize);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

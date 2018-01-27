@@ -2,6 +2,8 @@ package com.loki.server.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.loki.server.entity.Trade;
 
 public interface TradeDao {
@@ -11,4 +13,5 @@ public interface TradeDao {
 	List<Trade> findAll();
 	List<Trade> findByUserId(int userId);
 	Trade findById(int id);
+	Trade findByIdAndUserId(@Param("id") int id,@Param("userId") int userId);
 }

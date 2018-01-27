@@ -8,16 +8,15 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="admin_id" jdbcType="INTEGER" property="adminId" />
-    <result column="admin_name" jdbcType="VARCHAR" property="adminName" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,content,admin_id,admin_name,ip
+    id,create_time,content,admin_id,ip
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.AdminLog">
-		insert into admin_log(create_time,content,admin_id,admin_name,ip) values(now(),#{content},#{adminId},#{adminName},#{ip})
+		insert into admin_log(create_time,content,admin_id,ip) values(now(),#{content},#{adminId},#{ip})
 	</insert>
   
   <select id="findById" parameterType="int" resultMap="adminLogDO">
@@ -30,10 +29,6 @@
 		select <include refid="Base_Column_List" /> 
 		from admin_log
   </select>
-  
-  <update id="update" parameterType="com.loki.server.entity.AdminLog">
-  	update admin_log SET content=${content},admin_id=#{adminId},admin_name=#{adminName},ip=#{ip} where id=#{id}
-  </update>
   
   <delete id="delete" parameterType="int">
 		delete from admin_log where id=#{_parameter}

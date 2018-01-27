@@ -10,7 +10,6 @@ public class AdminLog implements Serializable{
 	private Timestamp createTime;
 	private String content;
 	private int adminId;
-	private String adminName;
 	private String ip;
 	public int getId() {
 		return id;
@@ -35,12 +34,6 @@ public class AdminLog implements Serializable{
 	}
 	public void setAdminId(int adminId) {
 		this.adminId = adminId;
-	}
-	public String getAdminName() {
-		return adminName;
-	}
-	public void setAdminName(String adminName) {
-		this.adminName = adminName;
 	}
 	public String getIp() {
 		return ip;

@@ -1,8 +1,7 @@
 package com.loki.server.dao;
 
 import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
+import java.util.Map;
 
 import com.loki.server.entity.IntentionLog;
 
@@ -11,6 +10,6 @@ public interface IntentionLogDao {
 	boolean update(IntentionLog intentionLog);
 	IntentionLog findById(int id);
 	List<IntentionLog> findAll();
-	List<IntentionLog> findByParam(@Param("userId") int userId,@Param("intentionId") int intentionId,@Param("adminId") int adminId,@Param("type") String type);
+	List<IntentionLog> findByParam(Map<String,Object> map);
 	boolean delete(int id);
 }

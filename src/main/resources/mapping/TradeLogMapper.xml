@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.TradeLogDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="tradeLogDO" type="com.loki.server.entity.TradeLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="log_role" jdbcType="VARCHAR" property="logRole" />
+    <result column="log_operator_id" jdbcType="INTEGER" property="logOperatorId" />
+    <result column="log_state" jdbcType="VARCHAR" property="logState" />
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,trade_id,content,create_time,log_role,log_operator_id,log_state
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeLog">
+		insert into trade_log(trade_id,content,create_time,log_role,log_operator_id,log_state) 
+		values(#{tradeId},#{content},now(),#{logRole},#{logOperatorId},#{logState})
+	</insert>
+  
+  <select id="findById" parameterType="int" resultMap="tradeLogDO">
+		select <include refid="Base_Column_List" /> 
+		from trade_log
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findByTradeId" parameterType="int" resultMap="tradeLogDO">
+		select <include refid="Base_Column_List" /> 
+		from trade_log
+		where trade_id=#{_parameter} 
+		order by id desc
+  </select>
+  
+  <select id="findAll" resultMap="tradeLogDO">
+		select <include refid="Base_Column_List" /> 
+		from trade_log
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from trade_log where id=#{_parameter}
+	</delete>
+</mapper>

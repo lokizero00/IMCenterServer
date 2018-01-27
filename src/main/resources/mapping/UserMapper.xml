@@ -38,6 +38,12 @@
 		where id=#{_parameter}
   </select>
   
+  <select id="findNickNameById" parameterType="int" resultType="String">
+		select nick_name
+		from user
+		where id=#{_parameter}
+  </select>
+  
   <select id="findAll" resultMap="userDO">
 		select <include refid="Base_Column_List" /> 
 		from user

@@ -32,6 +32,12 @@
 		where user_id=#{_parameter}
   </select>
   
+  <select id="findAvailableByUserId" parameterType="int" resultType="BigDecimal">
+		select available 
+		from intention
+		where user_id=#{_parameter}
+  </select>
+  
   <select id="findAll" resultMap="intentionDO">
 		select <include refid="Base_Column_List" /> 
 		from intention

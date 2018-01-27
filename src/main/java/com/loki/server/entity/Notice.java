@@ -13,7 +13,7 @@ public class Notice implements Serializable{
 	private int adminUpdaterId;
 	private String title;
 	private String content;
-	private String type;
+	private String relationType;
 	private int relationId;
 	public int getId() {
 		return id;
@@ -57,16 +57,16 @@ public class Notice implements Serializable{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
 	public int getRelationId() {
 		return relationId;
 	}
 	public void setRelationId(int relationId) {
 		this.relationId = relationId;
+	}
+	public String getRelationType() {
+		return relationType;
+	}
+	public void setRelationType(String relationType) {
+		this.relationType = relationType;
 	}
 }

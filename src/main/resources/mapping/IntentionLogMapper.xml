@@ -7,25 +7,26 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="available_amount" jdbcType="DECIMAL" property="availableAmount" />
-    <result column="freeze_amount" jdbcType="DECIMAL" property="freezeAmount" />
+    <result column="change_amount" jdbcType="DECIMAL" property="freezeAmount" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="relation_type" jdbcType="VARCHAR" property="relationType" />
+    <result column="relation_id" jdbcType="INTEGER" property="relationId" />
     <result column="intention_id" jdbcType="INTEGER" property="intentionId" />
-    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="log_role" jdbcType="VARCHAR" property="logRole" />
+    <result column="log_operator_id" jdbcType="INTEGER" property="logOperatorId" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,available_amount,freeze_amount,content,type,user_id,intention_id,admin_id
+    id,create_time,available_amount,change_amount,content,relation_type,relation_id,intention_id,log_role,log_operator_id
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.IntentionLog">
-		insert into intention_log(create_time,available_amount,freeze_amount,content,type,user_id,intention_id,admin_id) 
-		values(now(),#{availableAmount},#{freezeAmount},#{content},#{type},#{userId},#{intentionId},#{adminId})
+		insert into intention_log(create_time,available_amount,change_amount,content,relation_type,relation_id,intention_id,log_role,log_operator_id) 
+		values(now(),#{availableAmount},#{changeAmount},#{content},#{relationType},#{relationId},#{intentionId},#{logRole},#{logOperatorId})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.IntentionLog">
-  	update intention_log SET available_amount=#{availableAmount},freeze_amount=#{freezeAmount},content=#{content},type=#{type},user_id=#{userId},intention_id=#{intentionId},admin_id=#{adminId} where id=#{id}
+  	update intention_log SET available_amount=#{availableAmount},change_amount=#{changeAmount},content=#{content},relation_type=#{relationType},relation_id=#{relationId},intention_id=#{intentionId},log_role=#{logRole},log_operator_id=#{logOperatorId} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="intentionLogDO">
@@ -43,17 +44,33 @@
 		select <include refid="Base_Column_List" /> 
 		from intention_log
 		<where>
-			<if test="userId != null and userId != 0">
-				user_id=#{userId,jdbcType=INTEGER}
+			<if test="createTimeStart != null">
+			 	<![CDATA[
+					create_time>=UNIX_TIMESTAMP(#{createTimeStart})
+				]]>
+			</if>
+			<if test="createTimeEnd != null">
+			 	<![CDATA[
+					and create_time<=UNIX_TIMESTAMP(#{createTimeEnd})
+				]]>
+			</if>
+			<if test="logRole != null and logRole != ''">
+				and log_role=#{logRole}
 			</if>
 			<if test="intentionId != null and intentionId != 0">
-				and intention_id=#{intentionId,jdbcType=INTEGER}
+				and intention_id=#{intentionId}
 			</if>
-			<if test="adminId != null and adminId != 0">
-				and admin_id=#{adminId,jdbcType=INTEGER}
+			<if test="logOperatorId != null and logOperatorId != 0">
+				and log_operator_id=#{logOperatorId}
 			</if>
 			<if test="type != null and type != ''">
-				and type=#{type,jdbcType=VARCHAR}
+				and type=#{type}
+			</if>
+			<if test="relationType != null and relationType != ''">
+				and relation_type=#{relationType}
+			</if>
+			<if test="relationId != null and relationId != 0">
+				and relation_id=#{relationId}
 			</if>
 		</where>
 		order by id desc

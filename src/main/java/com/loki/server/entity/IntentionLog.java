@@ -10,12 +10,13 @@ public class IntentionLog implements Serializable{
 	private int id;
 	private Timestamp createTime;
 	private BigDecimal availableAmount;
-	private BigDecimal freezeAmount;
+	private BigDecimal changeAmount;
 	private String content;
-	private String type;
-	private int userId;
+	private String relationType;
+	private int relationId;
 	private int intentionId;
-	private int adminId;
+	private String logRole;
+	private int logOperatorId;
 	public int getId() {
 		return id;
 	}
@@ -34,17 +35,11 @@ public class IntentionLog implements Serializable{
 	public void setAvailableAmount(BigDecimal availableAmount) {
 		this.availableAmount = availableAmount;
 	}
-	public BigDecimal getFreezeAmount() {
-		return freezeAmount;
+	public BigDecimal getChangeAmount() {
+		return changeAmount;
 	}
-	public void setFreezeAmount(BigDecimal freezeAmount) {
-		this.freezeAmount = freezeAmount;
-	}
-	public int getUserId() {
-		return userId;
-	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setChangeAmount(BigDecimal changeAmount) {
+		this.changeAmount = changeAmount;
 	}
 	public int getIntentionId() {
 		return intentionId;
@@ -52,22 +47,34 @@ public class IntentionLog implements Serializable{
 	public void setIntentionId(int intentionId) {
 		this.intentionId = intentionId;
 	}
-	public int getAdminId() {
-		return adminId;
-	}
-	public void setAdminId(int adminId) {
-		this.adminId = adminId;
-	}
 	public String getContent() {
 		return content;
 	}
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getType() {
-		return type;
+	public String getLogRole() {
+		return logRole;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setLogRole(String logRole) {
+		this.logRole = logRole;
+	}
+	public int getLogOperatorId() {
+		return logOperatorId;
+	}
+	public void setLogOperatorId(int logOperatorId) {
+		this.logOperatorId = logOperatorId;
+	}
+	public String getRelationType() {
+		return relationType;
+	}
+	public void setRelationType(String relationType) {
+		this.relationType = relationType;
+	}
+	public int getRelationId() {
+		return relationId;
+	}
+	public void setRelationId(int relationId) {
+		this.relationId = relationId;
 	}
 }

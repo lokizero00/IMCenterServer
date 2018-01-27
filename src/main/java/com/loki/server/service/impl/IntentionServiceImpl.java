@@ -1,6 +1,7 @@
 package com.loki.server.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -50,14 +51,14 @@ public class IntentionServiceImpl implements IntentionService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<IntentionLog>> getIntentionLog(int userId,int intentionId,int adminId,String type,Integer pageNo, Integer pageSize) {
+	public ServiceResult<PagedResult<IntentionLog>> getIntentionLog(Map<String,Object> map,Integer pageNo, Integer pageSize) {
 		pageNo = pageNo == null? 1:pageNo;  
 	    pageSize = pageSize == null? 10:pageSize; 
 	    ServiceResult<PagedResult<IntentionLog>> returnValue=new ServiceResult<PagedResult<IntentionLog>>();
 		
-		if(userId>0) {
+		if(map!=null) {
 			PageHelper.startPage(pageNo,pageSize);
-			PagedResult<IntentionLog> pageResult=BeanUtil.toPagedResult(intentionLogDao.findByParam(userId, intentionId, adminId, type));
+			PagedResult<IntentionLog> pageResult=BeanUtil.toPagedResult(intentionLogDao.findByParam(map));
 			if(null!=pageResult) {
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				returnValue.setResultObj(pageResult);

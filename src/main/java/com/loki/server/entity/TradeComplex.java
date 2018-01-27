@@ -3,6 +3,7 @@ package com.loki.server.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class TradeComplex implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -10,13 +11,13 @@ public class TradeComplex implements Serializable{
 	private int id;
 	private Timestamp createTime;
 	private Timestamp updateTime;
-	private int creatorId;
-	private int updaterId;
 	private int userId;
+	private String userNickName;
 	private String sn;
 	private String title;
 	private String content;
 	private String type;
+	private String typeName;
 	private String provinceName;
 	private String cityName;
 	private String townName;
@@ -26,9 +27,8 @@ public class TradeComplex implements Serializable{
 	private String resourceName;
 	private int capacity;
 	private String status;
+	private String statusName;
 	private BigDecimal intention;
-	private Timestamp verifyTime;
-	private int adminVerifierId;
 	private int identityId;
 	private int enterpriseId;
 	private int dockingId;
@@ -37,6 +37,10 @@ public class TradeComplex implements Serializable{
 	private String invoiceName;
 	private String paycodeName;
 	private String attachmentUrl;
+	private List<TradeIndustry> tradeIndustryList;
+	private List<TradeInvoice> tradeInvoiceList;
+	private List<TradePaycode> tradePaycodeList;
+	private List<TradeAttachment> tradeAttachmentList;
 	public int getId() {
 		return id;
 	}
@@ -54,18 +58,6 @@ public class TradeComplex implements Serializable{
 	}
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
-	}
-	public int getCreatorId() {
-		return creatorId;
-	}
-	public void setCreatorId(int creatorId) {
-		this.creatorId = creatorId;
-	}
-	public int getUpdaterId() {
-		return updaterId;
-	}
-	public void setUpdaterId(int updaterId) {
-		this.updaterId = updaterId;
 	}
 	public int getUserId() {
 		return userId;
@@ -157,18 +149,6 @@ public class TradeComplex implements Serializable{
 	public void setIntention(BigDecimal intention) {
 		this.intention = intention;
 	}
-	public Timestamp getVerifyTime() {
-		return verifyTime;
-	}
-	public void setVerifyTime(Timestamp verifyTime) {
-		this.verifyTime = verifyTime;
-	}
-	public int getAdminVerifierId() {
-		return adminVerifierId;
-	}
-	public void setAdminVerifierId(int adminVerifierId) {
-		this.adminVerifierId = adminVerifierId;
-	}
 	public int getIdentityId() {
 		return identityId;
 	}
@@ -216,5 +196,47 @@ public class TradeComplex implements Serializable{
 	}
 	public void setAttachmentUrl(String attachmentUrl) {
 		this.attachmentUrl = attachmentUrl;
+	}
+	public String getTypeName() {
+		return typeName;
+	}
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+	public String getStatusName() {
+		return statusName;
+	}
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+	public String getUserNickName() {
+		return userNickName;
+	}
+	public void setUserNickName(String userNickName) {
+		this.userNickName = userNickName;
+	}
+	public List<TradeIndustry> getTradeIndustryList() {
+		return tradeIndustryList;
+	}
+	public void setTradeIndustryList(List<TradeIndustry> tradeIndustryList) {
+		this.tradeIndustryList = tradeIndustryList;
+	}
+	public List<TradeInvoice> getTradeInvoiceList() {
+		return tradeInvoiceList;
+	}
+	public void setTradeInvoiceList(List<TradeInvoice> tradeInvoiceList) {
+		this.tradeInvoiceList = tradeInvoiceList;
+	}
+	public List<TradePaycode> getTradePaycodeList() {
+		return tradePaycodeList;
+	}
+	public void setTradePaycodeList(List<TradePaycode> tradePaycodeList) {
+		this.tradePaycodeList = tradePaycodeList;
+	}
+	public List<TradeAttachment> getTradeAttachmentList() {
+		return tradeAttachmentList;
+	}
+	public void setTradeAttachmentList(List<TradeAttachment> tradeAttachmentList) {
+		this.tradeAttachmentList = tradeAttachmentList;
 	}
 }

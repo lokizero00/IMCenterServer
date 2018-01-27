@@ -37,4 +37,8 @@
   <delete id="delete" parameterType="int">
 		delete from trade_invoice where id=#{_parameter}
 	</delete>
+	
+  <delete id="deleteByTradeId" parameterType="int">
+		delete from trade_invoice where trade_id=#{_parameter}
+	</delete>
 </mapper>

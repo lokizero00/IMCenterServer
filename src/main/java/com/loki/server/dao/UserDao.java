@@ -14,4 +14,5 @@ public interface UserDao {
 	List<User> findAll();
 	User loginCheck(@Param("phone") String phone,@Param("password") String password);
 	int userExistCheck(String phone);
+	String findNickNameById(int id);
 }

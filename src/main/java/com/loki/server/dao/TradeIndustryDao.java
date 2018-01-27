@@ -10,4 +10,5 @@ public interface TradeIndustryDao {
 	boolean delete(int id);
 	List<TradeIndustry> findAll();
 	TradeIndustry findById(int id);
+	boolean deleteByTradeId(int tradeId);
 }

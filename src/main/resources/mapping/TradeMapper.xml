@@ -7,8 +7,6 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
-    <result column="updater_id" jdbcType="INTEGER" property="updaterId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="sn" jdbcType="VARCHAR" property="sn" />
     <result column="title" jdbcType="VARCHAR" property="title" />
@@ -24,8 +22,6 @@
     <result column="capacity" jdbcType="INTEGER" property="capacity" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="intention" jdbcType="DECIMAL" property="intention" />
-    <result column="verify_time" jdbcType="TIMESTAMP" property="verifyTime" />
-    <result column="admin_verifier_id" jdbcType="INTEGER" property="adminVerifierId" />
     <result column="identity_id" jdbcType="INTEGER" property="identityId" />
     <result column="enterprise_id" jdbcType="INTEGER" property="enterpriseId" />
     <result column="docking_id" jdbcType="INTEGER" property="dockingId" />
@@ -33,16 +29,16 @@
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,update_time,creator_id,updater_id,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,verify_time,admin_verifier_id,identity_id,enterprise_id,docking_id,read_count
+    id,create_time,update_time,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,identity_id,enterprise_id,docking_id,read_count
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Trade">
-		insert into trade(create_time,creator_id,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,identity_id,enterprise_id,docking_id,read_count) 
-		values(now(),#{creatorId},#{userId},#{sn},#{title},#{content},#{type},#{provinceName},#{cityName},#{townName},#{quantity},#{deliveryTime},#{budget},#{resourceName},#{capacity},#{status},#{intention},#{identityId},#{enterpriseId},#{dockingId},#{readCount})
+		insert into trade(create_time,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,identity_id,enterprise_id,docking_id,read_count) 
+		values(now(),#{userId},#{sn},#{title},#{content},#{type},#{provinceName},#{cityName},#{townName},#{quantity},#{deliveryTime},#{budget},#{resourceName},#{capacity},#{status},#{intention},#{identityId},#{enterpriseId},#{dockingId},#{readCount})
 	</insert>
 	
   <update id="update" parameterType="com.loki.server.entity.User">
-  	update trade SET update_time=now(),updater_id=#{updaterId},user_id=#{userId},sn=#{sn},title=#{title},content=#{content},type=#{type},province_name=#{provinceName},city_name=#{cityName},town_name=#{townName},quantity=#{quantity},delivery_time=#{deliveryTime},budget=#{budget},resource_name=#{resourceName},capacity=#{capacity},status=#{status},intention=#{intention},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},identity_id=#{identityId},enterprise_id=#{enterpriseId},docking_id=#{dockingId},read_count=#{readCount} where id=#{id}
+  	update trade SET update_time=now(),user_id=#{userId},sn=#{sn},title=#{title},content=#{content},type=#{type},province_name=#{provinceName},city_name=#{cityName},town_name=#{townName},quantity=#{quantity},delivery_time=#{deliveryTime},budget=#{budget},resource_name=#{resourceName},capacity=#{capacity},status=#{status},intention=#{intention},identity_id=#{identityId},enterprise_id=#{enterpriseId},docking_id=#{dockingId},read_count=#{readCount} where id=#{id}
   </update>
 	
   <select id="findById" parameterType="int" resultMap="tradeDO">
@@ -55,6 +51,12 @@
 		select <include refid="Base_Column_List" /> 
 		from trade
 		where user_id=#{_parameter}
+  </select>
+  
+  <select id="findByIdAndUserId" resultMap="tradeDO">
+		select <include refid="Base_Column_List" /> 
+		from trade
+		where id=#{id} and user_id=#{userId}
   </select>
   
   <select id="findAll" resultMap="tradeDO">

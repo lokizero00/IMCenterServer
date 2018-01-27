@@ -11,4 +11,5 @@ public interface TradeAttachmentDao {
 	List<TradeAttachment> findAll();
 	List<TradeAttachment> findByTradeId(int tradeId);
 	TradeAttachment findById(int id);
+	boolean deleteByTradeId(int tradeId);
 }

@@ -10,8 +10,6 @@ public class Trade implements Serializable{
 	private int id;
 	private Timestamp createTime;
 	private Timestamp updateTime;
-	private int creatorId;
-	private int updaterId;
 	private int userId;
 	private String sn;
 	private String title;
@@ -27,8 +25,6 @@ public class Trade implements Serializable{
 	private int capacity;
 	private String status;
 	private BigDecimal intention;
-	private Timestamp verifyTime;
-	private int adminVerifierId;
 	private int identityId;
 	private int enterpriseId;
 	private int dockingId;
@@ -50,18 +46,6 @@ public class Trade implements Serializable{
 	}
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
-	}
-	public int getCreatorId() {
-		return creatorId;
-	}
-	public void setCreatorId(int creatorId) {
-		this.creatorId = creatorId;
-	}
-	public int getUpdaterId() {
-		return updaterId;
-	}
-	public void setUpdaterId(int updaterId) {
-		this.updaterId = updaterId;
 	}
 	public int getUserId() {
 		return userId;
@@ -152,18 +136,6 @@ public class Trade implements Serializable{
 	}
 	public void setIntention(BigDecimal intention) {
 		this.intention = intention;
-	}
-	public Timestamp getVerifyTime() {
-		return verifyTime;
-	}
-	public void setVerifyTime(Timestamp verifyTime) {
-		this.verifyTime = verifyTime;
-	}
-	public int getAdminVerifierId() {
-		return adminVerifierId;
-	}
-	public void setAdminVerifierId(int adminVerifierId) {
-		this.adminVerifierId = adminVerifierId;
 	}
 	public int getIdentityId() {
 		return identityId;

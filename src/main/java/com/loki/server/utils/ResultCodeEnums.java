@@ -23,7 +23,9 @@ public enum ResultCodeEnums {
 	BANK_CODE_ERROR(-19,"银行代码错误"),
 	NOTICE_NOT_EXIST(-20,"消息不存在"),
 	RELATION_DATA_ERROR(-21,"关联数据错误"),
-	DATA_QUERY_FAIL(-22,"数据查询失败")
+	DATA_QUERY_FAIL(-22,"数据查询失败"),
+	INTENTION_AVAILABLE_NOT_ENOUGH(-23,"可用意向金不足"),
+	DATA_INVALID(-24,"数据校验错误")
 	;
 
 	public int code;  

@@ -11,21 +11,21 @@
     <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="relation_type" jdbcType="VARCHAR" property="relationType" />
     <result column="relation_id" jdbcType="INTEGER" property="relationId" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,update_time,admin_creator_id,admin_updater_id,title,content,type,relation_id
+    id,create_time,update_time,admin_creator_id,admin_updater_id,title,content,relation_type,relation_id
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Notice">
-		insert into notice(create_time,admin_creator_id,title,content,type,relation_id) 
-		values(now(),#{adminCreatorId},#{title},#{content},#{type},#{relationId})
+		insert into notice(create_time,admin_creator_id,title,content,relation_type,relation_id) 
+		values(now(),#{adminCreatorId},#{title},#{content},#{relationType},#{relationId})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.Notice">
-  	update notice SET update_time=now(),admin_updater_id=#{adminUpdaterId},title=#{title},content=#{content},type=#{type},relation_id=#{relationId} where id=#{id}
+  	update notice SET update_time=now(),admin_updater_id=#{adminUpdaterId},title=#{title},content=#{content},relation_type=#{relationType},relation_id=#{relationId} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="noticeDO">
@@ -70,8 +70,8 @@
 			<if test="content !=null">
 				and content like CONCAT('%','${content}','%' ) 
 			</if>
-			<if test="type !=null">
-				and type=#{type}
+			<if test="relationType !=null">
+				and relation_type=#{relationType}
 			</if>
 			<if test="relationId !=null">
 				and relation_id=#{relationId}

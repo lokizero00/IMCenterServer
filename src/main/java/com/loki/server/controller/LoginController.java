@@ -26,14 +26,14 @@ public class LoginController {
 			Admin admin=adminService.login(userName, md5_password,ip);
 			if(admin != null) {
 				//登录成功，保存登录信息
-				httpSession.setAttribute("admin_id", admin.getId());
+				httpSession.setAttribute("adminId", admin.getId());
 				httpSession.setAttribute("userName", admin.getUserName());
 				httpSession.setAttribute("superAdmin", admin.isSuperAdmin());
 				httpSession.setAttribute("clientAdmin", admin);
 				
 				//保存资源信息
 				
-				return "redirect:/s/admin/getAllAdmin";
+				return "redirect:/s/trade/getTradeList";
 			}else {
 				//登录失败
 				return "redirect:/login.jsp";

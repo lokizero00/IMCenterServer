@@ -1,6 +1,7 @@
 package com.loki.server.vo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.loki.server.entity.Trade;
@@ -16,6 +17,7 @@ public class TradeVO implements Serializable{
 	private List<TradeIndustry> tradeIndustryList;
 	private List<TradeInvoice> tradeInvoiceList;
 	private List<TradePaycode> tradePaycodeList;
+	private BigDecimal freezeIntention;
 	private String tradeDeliveryTimeStr;
 	public Trade getTrade() {
 		return trade;
@@ -52,5 +54,11 @@ public class TradeVO implements Serializable{
 	}
 	public void setTradeDeliveryTimeStr(String tradeDeliveryTimeStr) {
 		this.tradeDeliveryTimeStr = tradeDeliveryTimeStr;
+	}
+	public BigDecimal getFreezeIntention() {
+		return freezeIntention;
+	}
+	public void setFreezeIntention(BigDecimal freezeIntention) {
+		this.freezeIntention = freezeIntention;
 	}
 }

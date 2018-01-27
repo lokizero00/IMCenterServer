@@ -10,4 +10,5 @@ public interface TradeInvoiceDao {
 	boolean delete(int id);
 	List<TradeInvoice> findAll();
 	TradeInvoice findById(int id);
+	boolean deleteByTradeId(int tradeId);
 }

@@ -62,9 +62,8 @@ public class AdminServiceImpl implements AdminService {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		AdminLog adminLog=new AdminLog();
 		adminLog.setAdminId(admin.getId());
-		adminLog.setAdminName(admin.getUserName());
 		adminLog.setIp(clientIP);
-		adminLog.setContent("管理员id:"+admin.getId()+",name:"+admin.getUserName()+",在"+dateFormat.format(new Date())+"登录了系统");
+		adminLog.setContent("管理员 "+admin.getUserName()+" 在"+dateFormat.format(new Date())+"登录了系统");
 		adminLogDao.insert(adminLog);
 		
 		return admin;

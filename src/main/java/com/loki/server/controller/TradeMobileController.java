@@ -1,5 +1,6 @@
 package com.loki.server.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import com.loki.server.vo.TradeVO;
 public class TradeMobileController {
 	@Autowired TradeService tradeService;
 	
-	//发布贸易（需求/供应）
+	//发布贸易（自动上架）
 	@RequestMapping(value="/publishTrade",method=RequestMethod.POST)
 	public String publishTrade(HttpServletRequest request, @RequestBody TradeVO tradeVO,ModelMap mm) {
 		ServiceResult<Integer> returnValue=tradeService.publishTrade(tradeVO);
@@ -73,6 +74,70 @@ public class TradeMobileController {
 		map.put("payCode", payCode);
 		
 		ServiceResult<List<TradeComplex>> returnValue=tradeService.getTradeList_mobile(map);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+			
+		return "mobileResultJson";
+	}
+	
+	//新增贸易（需要手动上架）
+	@RequestMapping(value="/addTrade",method=RequestMethod.POST)
+	public String addTrade(HttpServletRequest request,@RequestBody TradeVO tradeVO,ModelMap mm) {
+		ServiceResult<Integer> returnValue=tradeService.addTrade(tradeVO);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+			
+		return "mobileResultJson";
+	}
+	
+	//修改贸易
+	@RequestMapping(value="/editTrade",method=RequestMethod.POST)
+	public String editTrade(HttpServletRequest request,@RequestBody TradeVO tradeVO,ModelMap mm) {
+		ServiceResult<Void> returnValue=tradeService.editTrade(tradeVO);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+			
+		return "mobileResultJson";
+	}
+	
+	//贸易上架
+	@RequestMapping(value="/setTradeOnShelves",method=RequestMethod.POST)
+	public String setTradeOnShelves(HttpServletRequest request,int tradeId,int userId,BigDecimal tradeIntention,ModelMap mm) {
+		ServiceResult<Void> returnValue=tradeService.setTradeOnShelves(tradeId,userId,tradeIntention);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+			
+		return "mobileResultJson";
+	}
+	
+	//贸易下架
+	@RequestMapping(value="/setTradeUnderCarriage",method=RequestMethod.POST)
+	public String setTradeUnderCarriage(HttpServletRequest request,int tradeId,int userId,ModelMap mm) {
+		ServiceResult<Void> returnValue=tradeService.setTradeUnderCarriage(tradeId, userId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
