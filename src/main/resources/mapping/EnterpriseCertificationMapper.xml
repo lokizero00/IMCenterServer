@@ -25,7 +25,7 @@
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.EnterpriseCertification">
-		insert into enterprise_certification (create_time,creator_id,user_id,position,enterprise_name,license_pic,status) values(now(),#{creatorId},#{userId},#{position},#{enterpriseName},#{licensePic},#{status})
+		insert into enterprise_certification (create_time,creator_id,user_id,position,enterprise_name,license_pic,status,admin_verifier_id) values(now(),#{creatorId},#{userId},#{position},#{enterpriseName},#{licensePic},#{status},0)
 	</insert>
   
   <select id="findById" parameterType="int" resultMap="enterpriseCertificationDO">

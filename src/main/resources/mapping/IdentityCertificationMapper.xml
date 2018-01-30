@@ -25,7 +25,7 @@
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.IdentityCertification">
-		insert into identity_certification (create_time,creator_id,user_id,true_name,identity_number,identity_front,identity_back,status) values(now(),#{creatorId},#{userId},#{trueName},#{identityNumber},#{identityFront},#{identityBack},#{status})
+		insert into identity_certification (create_time,creator_id,user_id,true_name,identity_number,identity_front,identity_back,status,admin_verifier_id) values(now(),#{creatorId},#{userId},#{trueName},#{identityNumber},#{identityFront},#{identityBack},#{status},0)
 	</insert>
   
   <select id="findById" parameterType="int" resultMap="identityCertificationDO">
@@ -38,6 +38,12 @@
 		select <include refid="Base_Column_List" />
 		from identity_certification
 		where user_id=#{_parameter} limit 1
+  </select>
+  
+  <select id="findByIdAndUserId" resultMap="identityCertificationDO">
+		select <include refid="Base_Column_List" />
+		from identity_certification
+		where id=#{id} and user_id=#{userId}
   </select>
   
   <select id="findAll" resultMap="identityCertificationDO">

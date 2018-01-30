@@ -2,6 +2,8 @@ package com.loki.server.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.loki.server.entity.IdentityCertification;
 
 public interface IdentityCertificationDao {
@@ -11,4 +13,5 @@ public interface IdentityCertificationDao {
 	List<IdentityCertification> findAll();
 	IdentityCertification findById(int id);
 	IdentityCertification findByUserId(int userId);
+	IdentityCertification findByIdAndUserId(@Param("id") int id,@Param("userId") int userId);
 }

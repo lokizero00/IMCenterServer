@@ -11,7 +11,6 @@ public enum ResultCodeEnums {
 	UPDATE_FAIL(-7,"更新失败"),
 	NOT_ALLOW_EDIT(-8,"禁止修改"),
 	AUTH_CODE_SEND_FAIL(-9,"验证码发送失败"),
-	AUTH_CODE_SAVE_FAIL(-10,"验证码保存失败"),
 	AUTH_CODE_WRONG(-11,"验证码错误"),
 	AUTH_CODE_TIME_OUT(-12,"验证码超时"),
 	TOKEN_INVALID(-13,"令牌校验错误"),

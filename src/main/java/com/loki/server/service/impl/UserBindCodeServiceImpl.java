@@ -34,7 +34,7 @@ public class UserBindCodeServiceImpl implements UserBindCodeService {
 					returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_SEND_FAIL);
 				}
 			}else {
-				returnValue.setResultCode(ResultCodeEnums.AUTH_CODE_SAVE_FAIL);
+				returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
 			}
 		}else {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);

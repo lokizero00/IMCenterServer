@@ -25,6 +25,7 @@
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/controller/BaseController.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/PagedResult.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/controller/NoticeMobileController.java
+/Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/vo/EnterpriseCertificationVO.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/cache/RedisCacheTransfer.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/TradeLogDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/UserCollection.java
@@ -98,6 +99,7 @@
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/service/impl/IdentityCertificationServiceImpl.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/RoleResource.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/AdminDeptDao.java
+/Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/vo/IdentityCertificationVO.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/vo/TradeVO.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/listener/SessionListener.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/DictionariesDao.java

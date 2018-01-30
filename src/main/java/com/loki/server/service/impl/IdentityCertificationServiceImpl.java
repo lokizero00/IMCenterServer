@@ -11,6 +11,7 @@ import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.User;
 import com.loki.server.service.IdentityCertificationService;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.vo.IdentityCertificationVO;
 import com.loki.server.vo.ServiceResult;
 
 @Service
@@ -18,61 +19,6 @@ import com.loki.server.vo.ServiceResult;
 public class IdentityCertificationServiceImpl implements IdentityCertificationService{
 	@Resource IdentityCertificationDao identityCertificationDao;
 	@Resource UserDao userDao;
-	
-	//不存在则创建，存在则更新
-	//TODO 逻辑中使用了太多的if，后续优化
-	@Override
-	public ServiceResult<IdentityCertification> updateIdentityCertification(int userId,String trueName,String identityNumber,String identityFront,String identityBack) {
-		ServiceResult<IdentityCertification> returnValue=new ServiceResult<IdentityCertification>();
-		if(userId>0) {
-			IdentityCertification identityCertification=identityCertificationDao.findByUserId(userId);
-			if (null!=identityCertification) {
-				if(identityCertification.getStatus().equals("ic_refuse")) {
-					identityCertification.setUpdaterId(userId);
-					identityCertification.setUserId(userId);
-					identityCertification.setTrueName(trueName);
-					identityCertification.setIdentityNumber(identityNumber);
-					identityCertification.setIdentityFront(identityFront);
-					identityCertification.setIdentityBack(identityBack);
-					identityCertification.setVerifyTime(null);
-					identityCertification.setAdminVerifierId(0);
-					identityCertification.setStatus("ic_verify");
-					identityCertification.setRefuseReason("");
-					if(identityCertificationDao.update(identityCertification)) {
-						returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-						returnValue.setResultObj(identityCertification);
-					}else {
-						returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
-					}
-				}else {
-					returnValue.setResultCode(ResultCodeEnums.NOT_ALLOW_EDIT);
-				}
-			}else {
-				identityCertification=new IdentityCertification();
-				identityCertification.setUserId(userId);
-				identityCertification.setTrueName(trueName);
-				identityCertification.setIdentityNumber(identityNumber);
-				identityCertification.setIdentityFront(identityFront);
-				identityCertification.setIdentityBack(identityBack);
-				identityCertification.setStatus("ic_verify");
-				identityCertification.setCreatorId(userId);
-				identityCertificationDao.insert(identityCertification);
-				if(identityCertification.getId()>0) {
-					//更新user表的实名认证id
-					User user=userDao.findById(userId);
-					user.setIdentityId(identityCertification.getId());
-					userDao.update(user);
-					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-					returnValue.setResultObj(identityCertification);
-				}else {
-					returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
-				}
-			}
-		}else {
-			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
-		}
-		return returnValue;
-	}
 
 	@Override
 	public ServiceResult<IdentityCertification> getIdentityCertification(int userId) {
@@ -107,6 +53,64 @@ public class IdentityCertificationServiceImpl implements IdentityCertificationSe
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 					returnValue.setResultObj(identityCertification.getStatus());
 				}
+			}
+		}else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
+
+	@Override
+	public ServiceResult<Integer> addIdentityCertification(IdentityCertificationVO identityCertificationVO) {
+		ServiceResult<Integer> returnValue=new ServiceResult<>();
+		if(identityCertificationVO!=null && identityCertificationVO.getUserId()>0) {
+			IdentityCertification identityCertification=new IdentityCertification();
+			identityCertification.setCreatorId(identityCertificationVO.getUserId());
+			identityCertification.setUserId(identityCertificationVO.getUserId());
+			identityCertification.setTrueName(identityCertificationVO.getTrueName());
+			identityCertification.setIdentityNumber(identityCertificationVO.getIdentityNumber());
+			identityCertification.setIdentityFront(identityCertificationVO.getIdentityFront());
+			identityCertification.setIdentityBack(identityCertificationVO.getIdentityBack());
+			identityCertification.setStatus("ic_verify");
+			identityCertificationDao.insert(identityCertification);
+			if(identityCertification.getId()>0) {
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(identityCertification.getId());
+			}else {
+				returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
+			}
+		}else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
+
+	@Override
+	public ServiceResult<Void> editIdentityCertification(IdentityCertificationVO identityCertificationVO) {
+		ServiceResult<Void> returnValue=new ServiceResult<>();
+		if(identityCertificationVO!=null && identityCertificationVO.getId()>0 && identityCertificationVO.getUserId()>0) {
+			IdentityCertification identityCertification=identityCertificationDao.findByIdAndUserId(identityCertificationVO.getId(), identityCertificationVO.getUserId());
+			if(identityCertification!=null) {
+				if(identityCertification.getStatus().equals("ic_refuse")) {
+					identityCertification.setUpdaterId(identityCertificationVO.getUserId());
+					identityCertification.setTrueName(identityCertificationVO.getTrueName());
+					identityCertification.setIdentityNumber(identityCertificationVO.getIdentityNumber());
+					identityCertification.setIdentityFront(identityCertificationVO.getIdentityFront());
+					identityCertification.setIdentityBack(identityCertificationVO.getIdentityBack());
+					identityCertification.setVerifyTime(null);
+					identityCertification.setAdminVerifierId(0);
+					identityCertification.setStatus("ic_verify");
+					identityCertification.setRefuseReason("");
+					if(identityCertificationDao.update(identityCertification)) {
+						returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+					}else {
+						returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
+					}
+				}else {
+					returnValue.setResultCode(ResultCodeEnums.DATA_INVALID);
+				}
+			}else {
+				returnValue.setResultCode(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
 		}else {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
