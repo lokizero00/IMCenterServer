@@ -2,7 +2,6 @@ package com.loki.server.controller;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.TradeComplex;
 import com.loki.server.service.TradeService;
-import com.loki.server.utils.CommonUtil;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.ServiceResult;
 import com.loki.server.vo.TradeVO;
@@ -59,21 +58,21 @@ public class TradeMobileController {
 	
 	//获取贸易列表（需求/供应）
 	@RequestMapping(value="/getTradeList",method=RequestMethod.GET)
-	public String getTradeList(HttpServletRequest request, Integer userId,String sn,String title,String type,String provinceName,String cityName,String townName,String status,String invoiceCode,String industryCode,String payCode,ModelMap mm) {
+	public String getTradeList(HttpServletRequest request, Integer userId,String sn,String title,String type,String provinceName,String cityName,String townName,String status,String invoiceCode,String industryCode,String payCode,Integer pageNo,Integer pageSize,ModelMap mm) {
 		HashMap<String,Object> map=new HashMap<>();
 		map.put("userId", userId);
 		map.put("sn", sn);
-		map.put("title", title==null?null:CommonUtil.getInstance().encodeStr(title));
+		map.put("title", title);
 		map.put("type", type);
-		map.put("provinceName", provinceName==null?null:CommonUtil.getInstance().encodeStr(provinceName));
-		map.put("cityName", cityName==null?null:CommonUtil.getInstance().encodeStr(cityName));
-		map.put("townName", townName==null?null:CommonUtil.getInstance().encodeStr(townName));
+		map.put("provinceName", provinceName);
+		map.put("cityName", cityName);
+		map.put("townName", townName);
 		map.put("status", status);
 		map.put("invoiceCode", invoiceCode);
 		map.put("industryCode", industryCode);
 		map.put("payCode", payCode);
 		
-		ServiceResult<List<TradeComplex>> returnValue=tradeService.getTradeList_mobile(map);
+		ServiceResult<PagedResult<TradeComplex>> returnValue=tradeService.getTradeListMobile(map,pageNo,pageSize);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

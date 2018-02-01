@@ -33,7 +33,7 @@ public class LoginController {
 				
 				//保存资源信息
 				
-				return "redirect:/s/trade/getTradeList";
+				return "redirect:/s/trade/";
 			}else {
 				//登录失败
 				return "redirect:/login.jsp";

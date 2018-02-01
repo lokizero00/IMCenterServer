@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.TradeAttachmentDao;
 import com.loki.server.dao.TradeComplexDao;
@@ -18,6 +19,7 @@ import com.loki.server.dao.TradeInvoiceDao;
 import com.loki.server.dao.TradePaycodeDao;
 import com.loki.server.dao.UserDao;
 import com.loki.server.entity.Intention;
+import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.Trade;
 import com.loki.server.entity.TradeAttachment;
 import com.loki.server.entity.TradeComplex;
@@ -25,8 +27,10 @@ import com.loki.server.entity.TradeIndustry;
 import com.loki.server.entity.TradeInvoice;
 import com.loki.server.entity.TradePaycode;
 import com.loki.server.service.TradeService;
+import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.CommonUtil;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ServiceResult;
 import com.loki.server.vo.TradeVO;
 
@@ -141,15 +145,18 @@ public class TradeServiceImpl extends BaseServiceImpl implements TradeService {
 	}
 
 	@Override
-	public ServiceResult<List<TradeComplex>> getTradeList_mobile(Map<String, Object> map) {
-		ServiceResult<List<TradeComplex>> returnValue=new ServiceResult<List<TradeComplex>>();
+	public ServiceResult<PagedResult<TradeComplex>> getTradeListMobile(Map<String, Object> map,Integer pageNo,Integer pageSize) {
+		ServiceResult<PagedResult<TradeComplex>> returnValue=new ServiceResult<>();
 		if(map!=null) {
-			List<TradeComplex> tradeComplexList=tradeComplexDao.findByParam(map);
+			pageNo = pageNo == null? 1:pageNo;  
+		    pageSize = pageSize == null? 10:pageSize;
+		    PageHelper.startPage(pageNo,pageSize);
+			PagedResult<TradeComplex> tradeComplexList=BeanUtil.toPagedResult(tradeComplexDao.findByParam(map));
 			if(tradeComplexList!=null) {
 				//字段code处理
-				for(int i=0;i<tradeComplexList.size();i++) {
-					tradeComplexList.get(i).setStatusName(getDictionariesValue("trade_status", tradeComplexList.get(i).getStatus()));
-					tradeComplexList.get(i).setTypeName(getDictionariesValue("trade_type", tradeComplexList.get(i).getType()));
+				for(int i=0;i<tradeComplexList.getRows().size();i++) {
+					tradeComplexList.getRows().get(i).setStatusName(getDictionariesValue("trade_status", tradeComplexList.getRows().get(i).getStatus()));
+					tradeComplexList.getRows().get(i).setTypeName(getDictionariesValue("trade_type", tradeComplexList.getRows().get(i).getType()));
 				}
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				returnValue.setResultObj(tradeComplexList);
@@ -183,16 +190,16 @@ public class TradeServiceImpl extends BaseServiceImpl implements TradeService {
 	}
 
 	@Override
-	public ServiceResult<Void> tradeVerify(int tradeId, String tradeStatus, String refuseReason,int adminId) {
-		ServiceResult<Void> returnValue=new ServiceResult<>();
-		if(tradeId>0 && tradeStatus!=null && tradeStatus!="") {
+	public void tradeVerify(int tradeId, String verifyResult, String refuseReason,int adminId) throws ServiceException {
+		if(tradeId>0 && verifyResult!=null && verifyResult!="") {
 			Trade trade=tradeDao.findById(tradeId);
 			if(trade!=null) {
 				if(trade.getStatus().equals("trade_verify")) {
 					String tradeTypeName=getDictionariesValue("trade_type", trade.getType());
 					String tradeLogContent=tradeTypeName;
-					if(tradeStatus.equals("trade_tendering")) {
+					if(verifyResult.equals("verify_pass")) {
 						tradeLogContent+=" 审核通过";
+						trade.setStatus("trade_tendering");
 					}else {
 						tradeLogContent+=" 已被管理员下架";
 						//解冻意向金
@@ -208,24 +215,22 @@ public class TradeServiceImpl extends BaseServiceImpl implements TradeService {
 							addIntentionLog(intention.getId(), intention.getAvailable(), tradeIntention, "trade_unfreeze", trade.getId(), "admin", adminId, intentionLogContent);
 						}
 						tradeLogContent+="，原因："+refuseReason;
+						trade.setStatus("trade_under_carriage");
 					}
-					trade.setStatus(tradeStatus);
 					if(tradeDao.update(trade)) {
-						addTradeLog(trade.getId(), "admin", adminId, tradeStatus, tradeLogContent);
-						returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+						addTradeLog(trade.getId(), "admin", adminId, trade.getStatus(), tradeLogContent);
 					}else {
-						returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
+						throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
 					}
 				}else {
-					returnValue.setResultCode(ResultCodeEnums.DATA_INVALID);
+					throw new ServiceException(ResultCodeEnums.DATA_INVALID);
 				}
 			}else {
-				returnValue.setResultCode(ResultCodeEnums.DATA_QUERY_FAIL);
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
 		}else {
-			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
-		return returnValue;
 	}
 
 	@Override
@@ -461,5 +466,37 @@ public class TradeServiceImpl extends BaseServiceImpl implements TradeService {
 		return returnValue;
 	}
 	
+	@Override
+	public PagedResult<TradeComplex> getTradeList(Map<String, Object> map) throws ServiceException{
+		if(map!=null) {
+			int pageNo = map.get("pageNo") == null? 1:(int) map.get("pageNo");  
+		    int pageSize = map.get("pageSize") == null? 10:(int) map.get("pageSize");
+		    PageHelper.startPage(pageNo,pageSize);
+		    PagedResult<TradeComplex> tradeComplexList=BeanUtil.toPagedResult(tradeComplexDao.findByParam(map));
+			if(tradeComplexList!=null) {
+				return tradeComplexList;
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
 	
+	@Override
+	public TradeComplex getTrade(int tradeId) throws ServiceException{
+		if(tradeId>0) {
+			TradeComplex tradeComplex=tradeComplexDao.findById(tradeId);
+			if(tradeComplex!=null) {
+				//字段code处理
+				tradeComplex.setStatusName(getDictionariesValue("trade_status", tradeComplex.getStatus()));
+				tradeComplex.setTypeName(getDictionariesValue("trade_type", tradeComplex.getType()));
+				return tradeComplex;
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
 }

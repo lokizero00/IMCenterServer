@@ -13,10 +13,14 @@ public class NoticeComplex implements Serializable{
 	private int adminUpdaterId;
 	private String title;
 	private String content;
-	private String type;
+	private String relationType;
 	private int relationId;
 	private int userId;
 	private boolean isRead;
+	private int userCount;
+	private String relationTypeName;
+	private String adminCreatorName;
+	private String adminUpdaterName;
 	public int getId() {
 		return id;
 	}
@@ -59,12 +63,6 @@ public class NoticeComplex implements Serializable{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
 	public int getRelationId() {
 		return relationId;
 	}
@@ -82,5 +80,35 @@ public class NoticeComplex implements Serializable{
 	}
 	public void setRead(boolean isRead) {
 		this.isRead = isRead;
+	}
+	public String getRelationType() {
+		return relationType;
+	}
+	public void setRelationType(String relationType) {
+		this.relationType = relationType;
+	}
+	public int getUserCount() {
+		return userCount;
+	}
+	public void setUserCount(int userCount) {
+		this.userCount = userCount;
+	}
+	public String getRelationTypeName() {
+		return relationTypeName;
+	}
+	public void setRelationTypeName(String relationTypeName) {
+		this.relationTypeName = relationTypeName;
+	}
+	public String getAdminCreatorName() {
+		return adminCreatorName;
+	}
+	public void setAdminCreatorName(String adminCreatorName) {
+		this.adminCreatorName = adminCreatorName;
+	}
+	public String getAdminUpdaterName() {
+		return adminUpdaterName;
+	}
+	public void setAdminUpdaterName(String adminUpdaterName) {
+		this.adminUpdaterName = adminUpdaterName;
 	}
 }

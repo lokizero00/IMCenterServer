@@ -6,6 +6,8 @@ import java.util.Map;
 import com.loki.server.entity.NoticeComplex;
 
 public interface NoticeComplexDao {
-	NoticeComplex findById(int id);
+	NoticeComplex findByIdMobile(int id);
+	List<NoticeComplex> findByParamMobile(Map<String, Object> map);
 	List<NoticeComplex> findByParam(Map<String, Object> map);
+	NoticeComplex findById(int id);
 }

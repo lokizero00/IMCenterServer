@@ -1,59 +1,43 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib prefix="error" tagdir="/WEB-INF/tags" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="contextPath" value="<%=basePath%>"></c:set>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-	<script type="text/javascript">
-		function tradeStatusSelectChanged(){
-			var tradeStatusSelect=document.getElementById("tradeStatusSelect");
-			if(tradeStatusSelect.selectedIndex==0){
-				//删除文本框
-				$('div#div2').remove();
-			}else{
-				//添加文本框
-				$('div#div1').append('<div id="div2">拒绝原因：<input type="text" id="refuseReasonInput" name="refuseReason" /></div>');
-			}
-		}
-	</script> 
-	<script type="text/javascript">
-	function tradeVerify(){
-		var form = document.forms['tradeVerifyForm'];
-		form.action = "<%=basePath%>s/trade/tradeVerify";
-		form.method="post";
-		form.submit();
-	}
-</script>
-  <head>
-    <base href="<%=basePath%>">
-    <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
-    <title>贸易审核</title>
-  </head>
-  
-  <body>
-    <h1>贸易详情</h1>
-	<c:if test="${trade.type == 'trade_demand'}">
-		<jsp:include   page="tradeDemand.jsp" flush="true"/>
-	</c:if>
-	<c:if test="${trade.type == 'trade_supply'}">
-		<jsp:include   page="tradeSupply.jsp" flush="true"/>
-	</c:if>
-	<error:error/>
-	<form action="" name="tradeVerifyForm">	
-		<input type="hidden" name="tradeId" value="${trade.id }"/>
-		审核结果：
-		<select name="tradeStatus" id="tradeStatusSelect" onchange="tradeStatusSelectChanged()">
-			<option value="trade_tendering">通过</option>
-			<option value="trade_under_carriage">不通过</option>
-		</select>
-		<div id="div1" style="border:1px solid #ccc">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>贸易审核</title>
+<link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css"
+	rel="stylesheet">
+</head>
+
+<body>
+	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
+	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
+	<jsp:include page="trade.jsp" />
+	<jsp:include page="tradeLog.jsp" />
+
+	<div class="form-group">
+		<div>
+			<label for="name">请选择审核结果</label> <select class="form-control"
+				id="select_verifyResult"></select>
 		</div>
-		<input type="button" value="提交" onclick="tradeVerify()"/>
-		<input type="button" value="返回" onclick="window.history.back()"/>
-	</form>
-  </body>
-  
+		<div class="form-group" id="div_tradeRefuseReason" style="display:none;">
+			<label for="name">拒绝原因</label>
+			<textarea class="form-control" id="ta_tradeRefuseReason" rows="3"></textarea>
+		</div>
+		<div>
+			<button type="button" id="btnVerify" class="btn btn-success">提交</button>
+			<button type="button" id="btnBack" class="btn btn-primary">返回</button>
+		</div>
+	</div>
+	<script src="<%=basePath%>static/js/tradeVerify.js"></script>
+</body>
 </html>

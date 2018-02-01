@@ -1,12 +1,15 @@
 package com.loki.server.entity;
 
 import java.util.List;
+import java.util.Map;
 
 public class PagedResult <T> extends BaseEntity{
 	private static final long serialVersionUID = 1L;
-
+	//查询条件
+	private Map queryConditions;
+	
 	//数据
-	private List<T> dataList;
+	private List<T> rows;
 	
 	//当前页
 	private long pageNo;
@@ -20,13 +23,6 @@ public class PagedResult <T> extends BaseEntity{
 	//总页面数目
 	private long pages;
 
-	public List<T> getDataList() {
-		return dataList;
-	}
-
-	public void setDataList(List<T> dataList) {
-		this.dataList = dataList;
-	}
 
 	public long getPageNo() {
 		return pageNo;
@@ -59,4 +55,21 @@ public class PagedResult <T> extends BaseEntity{
 	public void setPages(long pages) {
 		this.pages = pages;
 	}
+
+	public Map getQueryConditions() {
+		return queryConditions;
+	}
+
+	public void setQueryConditions(Map queryConditions) {
+		this.queryConditions = queryConditions;
+	}
+
+	public List<T> getRows() {
+		return rows;
+	}
+
+	public void setRows(List<T> rows) {
+		this.rows = rows;
+	}
+
 }

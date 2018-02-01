@@ -13,8 +13,8 @@ import com.loki.server.service.IOService;
 import com.loki.server.utils.CommonUtil;
 import com.loki.server.utils.FileUtil;
 import com.loki.server.utils.PropertyUtil;
+import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
-import com.loki.server.utils.ServiceExceptionEnums;
 
 @Service
 @Transactional
@@ -36,7 +36,7 @@ public class IOServiceImpl implements IOService {
 				throw ioe;
 			}
 		}else {
-			throw new ServiceException(ServiceExceptionEnums.FILE_NOT_FOUND);
+			throw new ServiceException(ResultCodeEnums.FILE_NOT_FOUND);
 		}
 	}
 

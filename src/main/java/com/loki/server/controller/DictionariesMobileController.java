@@ -19,10 +19,10 @@ import com.loki.server.vo.ServiceResult;
 @RequestMapping("/s/api/dictionaries")
 public class DictionariesMobileController {
 	@Autowired DictionariesService dictionariesService;
-	//更新实名认证
+	//获取系统字典
 	@RequestMapping(value="/getDictionariesByType",method=RequestMethod.GET)
 	public String getDictionariesByType(HttpServletRequest request,String type,ModelMap mm) {
-		ServiceResult<List<Dictionaries>> returnValue=dictionariesService.getDictionariesListByType(type);
+		ServiceResult<List<Dictionaries>> returnValue=dictionariesService.getDictionariesListMobile(type);
 		if(returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

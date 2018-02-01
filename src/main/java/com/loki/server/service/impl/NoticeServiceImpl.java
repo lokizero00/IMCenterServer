@@ -20,6 +20,7 @@ import com.loki.server.entity.UserNotice;
 import com.loki.server.service.NoticeService;
 import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ServiceResult;
 
 @Service
@@ -62,13 +63,13 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ServiceResult<Notice> getNotice(int noticeId) {
-		ServiceResult<Notice> returnValue=new ServiceResult<Notice>();
+	public ServiceResult<NoticeComplex> getNotice(int noticeId) {
+		ServiceResult<NoticeComplex> returnValue=new ServiceResult<>();
 		if(noticeId>0) {
-			Notice notice=noticeDao.findById(noticeId);
-			if(notice!=null) {
+			NoticeComplex noticeComplex=noticeComplexDao.findById(noticeId);
+			if(noticeComplex!=null) {
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(notice);
+				returnValue.setResultObj(noticeComplex);
 			}else {
 				returnValue.setResultCode(ResultCodeEnums.NOTICE_NOT_EXIST);
 			}
@@ -101,23 +102,20 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<Notice>> getNoticeList(Map<String, Object> map,Integer pageNo,Integer pageSize) {
-		ServiceResult<PagedResult<Notice>> returnValue=new ServiceResult<PagedResult<Notice>>();
+	public PagedResult<NoticeComplex> getNoticeList(Map<String, Object> map,Integer pageNo,Integer pageSize) throws ServiceException{
 		if(map!=null) {
 			pageNo = pageNo == null? 1:pageNo;  
 		    pageSize = pageSize == null? 10:pageSize; 
 		    PageHelper.startPage(pageNo,pageSize);
-			PagedResult<Notice> pageResult=BeanUtil.toPagedResult(noticeDao.findByParam(map));
+			PagedResult<NoticeComplex> pageResult=BeanUtil.toPagedResult(noticeComplexDao.findByParam(map));
 			if(pageResult!=null) {
-				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(pageResult);
+				return pageResult;
 			}else {
-				returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
 		}else {
-			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
-		return returnValue;
 	}
 
 	@Override
@@ -129,7 +127,7 @@ public class NoticeServiceImpl implements NoticeService {
 			pageNo = pageNo == null? 1:pageNo;  
 		    pageSize = pageSize == null? 10:pageSize; 
 		    PageHelper.startPage(pageNo,pageSize);
-		    PagedResult<NoticeComplex> pageResult=BeanUtil.toPagedResult(noticeComplexDao.findByParam(map));
+		    PagedResult<NoticeComplex> pageResult=BeanUtil.toPagedResult(noticeComplexDao.findByParamMobile(map));
 		    if(pageResult!=null) {
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				returnValue.setResultObj(pageResult);
@@ -146,7 +144,7 @@ public class NoticeServiceImpl implements NoticeService {
 	public ServiceResult<NoticeComplex> getNotice_mobile(int noticeId,int userId) {
 		ServiceResult<NoticeComplex> returnValue=new ServiceResult<NoticeComplex>();
 		if(noticeId>0 && userId>0) {
-			NoticeComplex noticeComplex=noticeComplexDao.findById(noticeId);
+			NoticeComplex noticeComplex=noticeComplexDao.findByIdMobile(noticeId);
 			if(noticeComplex!=null) {
 				if(!noticeComplex.isRead()) {
 					//标记消息已读

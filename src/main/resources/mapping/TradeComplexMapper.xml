@@ -80,7 +80,18 @@
 				select trade_id from trade_paycode where code=#{payCode})
 			</if>
 		</where>
-		order by id desc
+		ORDER BY
+		 <choose>
+	        <when test="sortName!=null">
+	                ${sortName}
+	            <if test="sortOrder!=null">
+	                ${sortOrder}
+	            </if>
+	        </when>
+	        <otherwise>
+	            id desc
+	        </otherwise>
+	     </choose>
   </select>
   
   <select id="findById" parameterType="int" resultMap="tradeComplexDO">

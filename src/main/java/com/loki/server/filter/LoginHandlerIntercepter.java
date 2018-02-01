@@ -39,7 +39,7 @@ public class LoginHandlerIntercepter implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
 		String requestURI=request.getRequestURI();
-		
+//		return true;
 		//手机端
 		if(requestURI.indexOf("api")>0) {
 			//客户端登录验证，使用token令牌
