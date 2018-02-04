@@ -10,4 +10,5 @@ public interface RoleAdminDao {
 	boolean delete(int id);
 	List<RoleAdmin> findAll();
 	RoleAdmin findById(int id);
+	RoleAdmin findByAdminId(int adminId);
 }

@@ -2,12 +2,12 @@ package com.loki.server.entity;
 
 import java.io.Serializable;
 
-public class RoleResource implements Serializable{
+public class RoleResources implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
 	private int roleId;
-	private int resourceId;
+	private int resourcesId;
 	public int getId() {
 		return id;
 	}
@@ -20,10 +20,10 @@ public class RoleResource implements Serializable{
 	public void setRoleId(int roleId) {
 		this.roleId = roleId;
 	}
-	public int getResourceId() {
-		return resourceId;
+	public int getResourcesId() {
+		return resourcesId;
 	}
-	public void setResourceId(int resourceId) {
-		this.resourceId = resourceId;
+	public void setResourcesId(int resourcesId) {
+		this.resourcesId = resourcesId;
 	}
 }

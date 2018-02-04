@@ -1,9 +1,9 @@
-package com.loki.server.entity;
+package com.loki.server.vo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Resource implements Serializable{
+public class RoleVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
@@ -12,13 +12,12 @@ public class Resource implements Serializable{
 	private int adminCreatorId;
 	private int adminUpdaterId;
 	private String name;
-	private String url;
 	private String description;
-	private String type;
 	private int sort;
-	private String status;
-	private String pic;
-	private int parentId;
+	
+	private String adminCreatorName;
+	private String adminUpdaterName;
+	
 	public int getId() {
 		return id;
 	}
@@ -55,23 +54,11 @@ public class Resource implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getUrl() {
-		return url;
-	}
-	public void setUrl(String url) {
-		this.url = url;
-	}
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
 	}
 	public int getSort() {
 		return sort;
@@ -79,23 +66,16 @@ public class Resource implements Serializable{
 	public void setSort(int sort) {
 		this.sort = sort;
 	}
-	public String getStatus() {
-		return status;
+	public String getAdminCreatorName() {
+		return adminCreatorName;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+	public void setAdminCreatorName(String adminCreatorName) {
+		this.adminCreatorName = adminCreatorName;
 	}
-	public String getPic() {
-		return pic;
+	public String getAdminUpdaterName() {
+		return adminUpdaterName;
 	}
-	public void setPic(String pic) {
-		this.pic = pic;
+	public void setAdminUpdaterName(String adminUpdaterName) {
+		this.adminUpdaterName = adminUpdaterName;
 	}
-	public int getParentId() {
-		return parentId;
-	}
-	public void setParentId(int parentId) {
-		this.parentId = parentId;
-	}
-
 }

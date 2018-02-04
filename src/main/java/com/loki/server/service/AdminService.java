@@ -3,6 +3,8 @@ package com.loki.server.service;
 import java.util.List;
 
 import com.loki.server.entity.Admin;
+import com.loki.server.utils.ServiceException;
+import com.loki.server.vo.AdminVO;
 
 
 public interface AdminService {
@@ -11,5 +13,5 @@ public interface AdminService {
 	boolean delete(int id);
 	Admin findById(int id);
 	List<Admin> findAll();
-	Admin login(String userName,String password,String clientIP);
+	AdminVO login(String userName,String password,String clientIP) throws ServiceException;
 }

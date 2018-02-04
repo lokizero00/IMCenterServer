@@ -28,6 +28,12 @@
 		where id=#{_parameter}
   </select>
   
+  <select id="findByAdminId" parameterType="int" resultMap="roleAdminDO">
+		select <include refid="Base_Column_List" /> 
+		from role_admin
+		where admin_id=#{_parameter}
+  </select>
+  
   <select id="findAll" resultMap="roleAdminDO">
 		select <include refid="Base_Column_List" /> 
 		from role_admin

@@ -11,6 +11,7 @@ import com.loki.server.entity.Admin;
 import com.loki.server.service.AdminService;
 import com.loki.server.utils.IpUtil;
 import com.loki.server.utils.MD5;
+import com.loki.server.vo.AdminVO;
 
 @Controller
 @RequestMapping("/login")
@@ -23,17 +24,17 @@ public class LoginController {
 		if(userName!=null&&password!=null) {
 			String md5_password=MD5.getMD5Str(password);
 			String ip=IpUtil.getIpFromRequest(request);
-			Admin admin=adminService.login(userName, md5_password,ip);
-			if(admin != null) {
+			AdminVO adminVO=adminService.login(userName, md5_password,ip);
+			if(adminVO != null) {
 				//登录成功，保存登录信息
-				httpSession.setAttribute("adminId", admin.getId());
-				httpSession.setAttribute("userName", admin.getUserName());
-				httpSession.setAttribute("superAdmin", admin.isSuperAdmin());
-				httpSession.setAttribute("clientAdmin", admin);
+				httpSession.setAttribute("adminId", adminVO.getAdmin().getId());
+				httpSession.setAttribute("userName", adminVO.getAdmin().getUserName());
+				httpSession.setAttribute("superAdmin", adminVO.getAdmin().isSuperAdmin());
+				httpSession.setAttribute("clientAdmin", adminVO.getAdmin());
+				httpSession.setAttribute("menuList", adminVO.getMenuList());
+				httpSession.setAttribute("permissionList", adminVO.getPermissionList());
 				
-				//保存资源信息
-				
-				return "redirect:/s/trade/";
+				return "redirect:/main.jsp";
 			}else {
 				//登录失败
 				return "redirect:/login.jsp";
