@@ -88,7 +88,7 @@ float:right;
 				</tr>
 	</table>
 	</div>
-	<input type="hidden" id="contextPath" value="${contextPath }" />
+	<input type="hidden" id="contextPath" value="${contextPath}" />
 	<div class="container-fluid">
 		<div id="toolbar" class="btn-group">
 			<button id="btn_add" type="button" class="btn btn-default">
@@ -101,6 +101,7 @@ float:right;
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap-table.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap-table-zh-CN.js"></script>
+	<script src="<%=basePath%>static/js/common.js"></script>
 	<script src="<%=basePath%>static/js/tradeList.js"></script>
 </body>
 </html>

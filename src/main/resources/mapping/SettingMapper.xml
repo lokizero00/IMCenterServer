@@ -33,6 +33,12 @@
 		from setting
   </select>
   
+  <select id="findByName" parameterType="String" resultType="String">
+		select value 
+		from setting
+		where name=#{_parameter}
+  </select>
+  
   <delete id="delete" parameterType="int">
 		delete from setting where id=#{_parameter}
 	</delete>

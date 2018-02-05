@@ -14,15 +14,13 @@
 <title>Insert title here</title>
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
-<link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css"
-	rel="stylesheet">
 </head>
 <body>
 	<input type="hidden" id="contextPath" value="${contextPath }" />
 	<nav class="navbar navbar-default" role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">菜鸟教程标题</a>
+			<a class="navbar-brand" href="#">互联制造</a>
 		</div>
 		<ul class="nav navbar-nav navbar-right" id="ul_adminInfo">
 			

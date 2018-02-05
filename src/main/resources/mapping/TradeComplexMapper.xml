@@ -83,7 +83,7 @@
 		ORDER BY
 		 <choose>
 	        <when test="sortName!=null">
-	                ${sortName}
+	                trade.${sortName}
 	            <if test="sortOrder!=null">
 	                ${sortOrder}
 	            </if>

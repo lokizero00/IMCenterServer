@@ -24,7 +24,9 @@ public enum ResultCodeEnums {
 	RELATION_DATA_ERROR(-21,"关联数据错误"),
 	DATA_QUERY_FAIL(-22,"数据查询失败"),
 	INTENTION_AVAILABLE_NOT_ENOUGH(-23,"可用意向金不足"),
-	DATA_INVALID(-24,"数据校验错误")
+	DATA_INVALID(-24,"数据校验错误"),
+	LOGIN_FAIL(-25,"登录失败"),
+	LOGIN_DATA_INVALID(-26,"用户名或密码错误")
 	;
 
 	public int code;  

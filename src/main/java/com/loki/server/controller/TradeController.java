@@ -28,11 +28,6 @@ public class TradeController extends BaseController{
 	
 //	private static final Logger logger = Logger.getLogger(TradeController.class);
 	
-	@RequestMapping("/")  
-	public String index(){
-		return "trade/tradeList";
-	}
-	
 	/**
      * 显示首页
      * @return
@@ -46,7 +41,7 @@ public class TradeController extends BaseController{
      * 分页查询
      * @return
      */
-    @RequestMapping(value="/getTradeList", method= RequestMethod.GET)
+    @RequestMapping(value="/tradeList.do", method= RequestMethod.GET)
     @ResponseBody
     public String getTradeList(Integer userId,String sn,String title,String type,String provinceName,String cityName,String townName,String status,String invoiceCode,String industryCode,String payCode,Integer pageSize,Integer pageNo,String sortName,String sortOrder) {
 		try {
@@ -86,7 +81,7 @@ public class TradeController extends BaseController{
      * 获取单个贸易
      * @return
      */
-	@RequestMapping(value="/getTrade",method=RequestMethod.GET)
+	@RequestMapping(value="/tradeDetail.do",method=RequestMethod.GET)
 	@ResponseBody
 	public String getTrade(HttpServletRequest request, int id) {
 		try {
@@ -101,7 +96,7 @@ public class TradeController extends BaseController{
      * 获取贸易日志
      * @return
      */
-	@RequestMapping(value="/getTradeLog",method=RequestMethod.GET)
+	@RequestMapping(value="/tradeLog.do",method=RequestMethod.GET)
 	@ResponseBody
 	public String getTradeLog(HttpServletRequest request, int tradeId) {
 		try {
@@ -125,7 +120,7 @@ public class TradeController extends BaseController{
      * 贸易审核
      * @return
      */
-	@RequestMapping(value="/tradeVerify",method=RequestMethod.POST)
+	@RequestMapping(value="/tradeVerify.do",method=RequestMethod.POST)
 	@ResponseBody
 	public String tradeVerify(HttpServletRequest request,HttpSession httpSession, Integer tradeId, String verifyResult, String refuseReason) {
 		try {

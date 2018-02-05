@@ -75,7 +75,7 @@ function showSel(elementName, elementType) {
 	$
 			.ajax({
 				"type" : 'get',
-				"url" : path + '/s/dictionaries/getDictionariesList?type='
+				"url" : path + 's/dictionaries/dictionariesList.do?type='
 						+ elementType,
 				"dataType" : "json",
 				"success" : function(data) {
@@ -107,7 +107,7 @@ var TableInit = function() {
 	// 初始化Table
 	oTableInit.Init = function() {
 		$('#table_tradeList').bootstrapTable({
-			url : path + 's/trade/getTradeList', // 请求后台的URL（*）
+			url : path + 's/trade/tradeList.do', // 请求后台的URL（*）
 			method : 'get', // 请求方式（*）
 			toolbar : '#toolbar', // 工具按钮用哪个容器
 			striped : true, // 是否显示行间隔色
@@ -145,12 +145,14 @@ var TableInit = function() {
 				title : '创建时间',
 				field : 'createTime',
 				sortable : true,
-				sortName : 'create_time'
+				sortName : 'create_time',
+				formatter:operateDateFormatter
 			}, {
 				title : '更新时间',
 				field : 'updateTime',
 				sortable : true,
-				sortName : 'update_time'
+				sortName : 'update_time',
+				formatter:operateDateFormatter
 			}, {
 				title : '用户',
 				field : 'userNickName',
@@ -187,20 +189,11 @@ var TableInit = function() {
 					return str;
 				}
 			}, {
-				title : '地区-省',
-				field : 'provinceName',
-				sortable : true,
-				sortName : 'province_name'
-			}, {
-				title : '地区-市',
-				field : 'cityName',
-				sortable : true,
-				sortName : 'city_name'
-			}, {
-				title : '地区-镇',
+				title : '地区',
 				field : 'townName',
 				sortable : true,
-				sortName : 'town_name'
+				sortName : 'town_name',
+				formatter:operateRegionFormatter
 			}, {
 				title : '状态',
 				field : 'status',
@@ -232,7 +225,7 @@ var TableInit = function() {
 			}, {
 				title : '操作',
 				field : 'operate',
-				width : '8%',
+				width : '5%',
 				events : operateEvents,
 				formatter : operateFormatter
 			} ]
@@ -263,11 +256,11 @@ var TableInit = function() {
 	// 表格-操作 - 格式化
 	function operateFormatter(value, row, index) {
 		var operate = '<a class="view" href="'
-				+ (path + 's/trade/tradeDetail?id=') + row.id + '">查看</a>';
+				+ (path + 's/trade/tradeDetail?id=') + row.id + '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
 		if (row.status == 'trade_verify') {
 			operate += ' <a class="verify" href="'
 					+ (path + 's/trade/tradeVerify?id=') + row.id
-					+ '">审核</a>';
+					+ '" title="审核"><span class="glyphicon glyphicon-wrench"></span></a>';
 		}
 		return operate;
 	}

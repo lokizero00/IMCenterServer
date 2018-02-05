@@ -10,6 +10,7 @@
     <result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
     <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="type" jdbcType="VARCHAR" property="type" />
@@ -20,16 +21,16 @@
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,update_time,admin_creator_id,admin_updater_id,name,url,description,type,sort,status,pic,parent_id
+    id,create_time,update_time,admin_creator_id,admin_updater_id,name,model,url,description,type,sort,status,pic,parent_id
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Resources">
-		insert into resources(create_time,admin_creator_id,name,url,description,type,sort,status,pic,parent_id) 
-		values(now(),#{adminCreatorId},#{name},#{url},#{description},#{type},#{sort},#{status},#{pic},#{parentId})
+		insert into resources(create_time,admin_creator_id,name,model,url,description,type,sort,status,pic,parent_id) 
+		values(now(),#{adminCreatorId},#{name},#{model},#{url},#{description},#{type},#{sort},#{status},#{pic},#{parentId})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.Resources">
-  	update resources SET update_time=now(),admin_updater_id=#{adminUpdaterId},name=#{name},url=#{url},description=#{description},type=#{type},sort=#{sort},status=#{status},pic=#{pic},parent_id=#{parentId} where id=#{id}
+  	update resources SET update_time=now(),admin_updater_id=#{adminUpdaterId},name=#{name},model=#{model},url=#{url},description=#{description},type=#{type},sort=#{sort},status=#{status},pic=#{pic},parent_id=#{parentId} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="resourcesDO">

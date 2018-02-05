@@ -4,7 +4,7 @@ var paramId=getQueryString('id');
 $(document).ready(function() {
 	$.ajax({
 		"type" : 'get',
-		"url" : path + '/s/trade/getTrade?id='
+		"url" : path + 's/trade/tradeDetail.do?id='
 				+ paramId,
 		"dataType" : "json",
 		"success" : function(data) {

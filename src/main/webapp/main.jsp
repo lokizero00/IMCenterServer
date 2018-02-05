@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <frameset cols="160,*" frameborder="No" border="0" framespacing="1">    
         <frame src="left.jsp" name="leftFrame" scrolling="No"
 			noresize="noresize" id="leftFrame" title="leftFrame" />    
-        <frame src="<%=basePath%>s/trade/" name="mainFrame" noresize="noresize"
+        <frame src="<%=basePath%>s/trade/tradeList" name="mainFrame" noresize="noresize"
 			id="mainFrame" title="mainFrame" />    
     </frameset>    
 </frameset> 

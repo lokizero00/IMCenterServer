@@ -17,6 +17,7 @@ import com.loki.server.dao.ResourcesDao;
 import com.loki.server.dao.RoleAdminDao;
 import com.loki.server.dao.RoleDao;
 import com.loki.server.dao.RoleResourcesDao;
+import com.loki.server.dao.SettingDao;
 import com.loki.server.entity.Admin;
 import com.loki.server.entity.AdminLog;
 import com.loki.server.entity.Resources;
@@ -37,6 +38,7 @@ public class AdminServiceImpl implements AdminService {
 	@Resource private ResourcesDao resourcesDao;
 	@Resource private RoleAdminDao roleAdminDao;
 	@Resource private RoleResourcesDao roleResourcesDao;
+	@Resource private SettingDao settingDao;
 
 	@Override
 	public void insert(Admin admin) {
@@ -86,14 +88,16 @@ public class AdminServiceImpl implements AdminService {
 					List<RoleResources> roleResourcesList=roleResourcesDao.findByRoleId(role.getId());
 					
 					List<Resources> menuList=new ArrayList<Resources>();
-					List<Resources> permissionList=new ArrayList<Resources>();
+					List<String> permissionList=new ArrayList<String>();
+					String urlContext=settingDao.findByName("url_context");
 					//获取菜单/权限资源
 					for(RoleResources roleResource:roleResourcesList) {
 						Resources resources=resourcesDao.findById(roleResource.getResourcesId());
 						if(resources.getType().equals("menu")) {
 							menuList.add(resources);
-						}else if(resources.getType().equals("action")) {
-							permissionList.add(resources);
+						}else if(resources.getType().equals("action")||resources.getType().equals("page")) {
+							resources.setUrl(urlContext+resources.getUrl());
+							permissionList.add(resources.getUrl());
 						}
 						else {}
 					}
@@ -109,7 +113,7 @@ public class AdminServiceImpl implements AdminService {
 					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
 				}
 			}else {
-				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+				throw new ServiceException(ResultCodeEnums.LOGIN_DATA_INVALID);
 			}
 		}else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);

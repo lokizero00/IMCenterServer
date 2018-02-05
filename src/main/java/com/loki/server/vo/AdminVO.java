@@ -13,7 +13,7 @@ public class AdminVO implements Serializable{
 	private Admin admin;
 	private Role role;
 	private List<Resources> menuList;
-	private List<Resources> permissionList;
+	private List<String> permissionList;
 	public Admin getAdmin() {
 		return admin;
 	}
@@ -32,10 +32,10 @@ public class AdminVO implements Serializable{
 	public void setMenuList(List<Resources> menuList) {
 		this.menuList = menuList;
 	}
-	public List<Resources> getPermissionList() {
+	public List<String> getPermissionList() {
 		return permissionList;
 	}
-	public void setPermissionList(List<Resources> permissionList) {
+	public void setPermissionList(List<String> permissionList) {
 		this.permissionList = permissionList;
 	}
 }

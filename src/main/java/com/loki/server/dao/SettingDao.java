@@ -10,4 +10,5 @@ public interface SettingDao {
 	Setting findById(int id);
 	List<Setting> findAll();
 	boolean delete(int id);
+	String findByName(String name);
 }

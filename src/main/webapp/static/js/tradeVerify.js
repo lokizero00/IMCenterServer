@@ -4,7 +4,7 @@ var paramId=getQueryString('id');
 $(document).ready(function() {
 	$.ajax({
 		"type" : 'get',
-		"url" : path + '/s/dictionaries/getDictionariesList?type=verify_operate',
+		"url" : path + 's/dictionaries/dictionariesList.do?type=verify_operate',
 		"dataType" : "json",
 		"success" : function(data) {
 			var data_list = data;
@@ -38,7 +38,7 @@ $(document).ready(function() {
 				param.refuseReason=$("#ta_tradeRefuseReason").val();
 				$.ajax({
 					"type" : 'post',
-					"url" : path + '/s/trade/tradeVerify',
+					"url" : path + 's/trade/tradeVerify.do',
 					"dataType":"json",
 					"data":param,
 					"success" : function(data) {
@@ -46,11 +46,11 @@ $(document).ready(function() {
 							alert('发生错误：'+data.errorMsg);
 						}else{
 							alert('执行成功');
-							window.location = path+'/s/trade/';
+							window.location = path+'s/trade/';
 						}
 					},
 					error:function(data){  
-				        alert(data)  
+						alert(data.statusText);
 				    }  
 				});
 			}else{

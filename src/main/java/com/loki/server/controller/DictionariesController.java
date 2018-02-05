@@ -20,7 +20,7 @@ public class DictionariesController extends BaseController {
 	DictionariesService dictionariesService;
 
 	// 获取系统字典
-	@RequestMapping(value = "/getDictionariesList", method = RequestMethod.GET)
+	@RequestMapping(value = "/dictionariesList.do", method = RequestMethod.GET)
 	@ResponseBody
 	public String getDictionariesList(HttpServletRequest request, String type) {
 		try {

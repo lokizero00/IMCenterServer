@@ -12,6 +12,7 @@ public class Resources implements Serializable{
 	private int adminCreatorId;
 	private int adminUpdaterId;
 	private String name;
+	private String model;
 	private String url;
 	private String description;
 	private String type;
@@ -96,6 +97,12 @@ public class Resources implements Serializable{
 	}
 	public void setParentId(int parentId) {
 		this.parentId = parentId;
+	}
+	public String getModel() {
+		return model;
+	}
+	public void setModel(String model) {
+		this.model = model;
 	}
 
 }

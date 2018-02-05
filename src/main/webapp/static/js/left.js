@@ -3,7 +3,7 @@ var path = $("#contextPath").val();
 $(document).ready(function() {
 	$.ajax({
 		"type" : 'get',
-		"url" : path + '/s/session/getArray?sessionKey=menuList',
+		"url" : path + 's/session/getArray.do?sessionKey=menuList',
 		"dataType" : "json",
 		"success" : function(data) {
 			var str="";

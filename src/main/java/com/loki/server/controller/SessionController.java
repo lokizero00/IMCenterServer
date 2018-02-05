@@ -17,7 +17,7 @@ public class SessionController extends BaseController{
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/getObject")
+	@RequestMapping(value="/getObject.do")
 	@ResponseBody
 	public String getObject(HttpSession httpSession,String sessionKey) {
 		try {
@@ -33,7 +33,7 @@ public class SessionController extends BaseController{
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/getArray")
+	@RequestMapping(value="/getArray.do")
 	@ResponseBody
 	public String getArray(HttpSession httpSession,String sessionKey) {
 		try {

@@ -18,11 +18,6 @@ import com.loki.server.service.NoticeService;
 public class NoticeController extends BaseController{
 	@Autowired NoticeService noticeService;
 	
-	@RequestMapping("/")  
-	public String index(){
-		return "notice/noticeList";
-	}
-	
 	/**
      * 显示首页
      * @return
