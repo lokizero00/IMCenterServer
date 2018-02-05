@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>贸易详情</title>
+<title>通知详情</title>
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
 </head>
@@ -19,8 +19,8 @@
 <body>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
-	<jsp:include page="trade.jsp"/>
-	<jsp:include page="tradeLog.jsp"/>
+	<jsp:include page="notice.jsp"/>
+	<%-- <jsp:include page="tradeLog.jsp"/> --%>
 	<div class="form-group">
 		<div>
 			<button type="button" id="btnBack" onclick="window.history.go(-1);" class="btn btn-primary">返回</button>

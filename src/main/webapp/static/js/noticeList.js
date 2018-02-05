@@ -15,14 +15,11 @@ $(document).ready(function() {
 	oTable.Init();
 
 	// 填充文本框
-	showInput('#tradeList_queryTitle');
-	showInput('#tradeList_querySn');
+	showInput('#noticeList_queryTitle');
+	showInput('#noticeList_queryCreateTimeStart');
+	showInput('#noticeList_queryCreateTimeEnd');
 	// 填充界面上的下拉框
-	showSel("#tradeList_queryStatus", "trade_status");
-	showSel("#tradeList_queryType", "trade_type");
-	showSel("#tradeList_queryIndustryCode", "industry");
-	showSel("#tradeList_queryInvoiceCode", "invoice");
-	showSel("#tradeList_queryPayCode", "paycode");
+	showSel("#noticeList_queryRelationType", "notice_type");
 
 	// 初始化页面上面的按钮事件
 	$("#btn_add").click(function() {
@@ -30,36 +27,60 @@ $(document).ready(function() {
 	});
 	$("#queryButton").click(function() {
 		saveSearchParam();
-		var $table = $('#table_tradeList');
+		var $table = $('#table_noticeList');
 		$table.bootstrapTable('selectPage', 1);
 	});
 	$("#resetButton").click(function() {
 		clearSearchParam();
-		var $table = $('#table_tradeList');
+		var $table = $('#table_noticeList');
 		$table.bootstrapTable('selectPage', 1);
+	});
+	
+	$('.form_datetime').datetimepicker({
+	    //language:  'fr',
+	    weekStart: 1,
+	    todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+	    showMeridian: 1
+	});
+	$('.form_date').datetimepicker({
+	    language:  'fr',
+	    weekStart: 1,
+	    todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+	});
+	$('.form_time').datetimepicker({
+	    language:  'fr',
+	    weekStart: 1,
+	    todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 1,
+		minView: 0,
+		maxView: 1,
+		forceParse: 0
 	});
 });
 
 function saveSearchParam() {
-	saveInStorage("#tradeList_queryTitle", $("#tradeList_queryTitle").val());
-	saveInStorage("#tradeList_queryType", $("#tradeList_queryType").val());
-	saveInStorage("#tradeList_querySn", $("#tradeList_querySn").val());
-	saveInStorage("#tradeList_queryStatus", $("#tradeList_queryStatus").val());
-	saveInStorage("#tradeList_queryIndustryCode", $(
-			"#tradeList_queryIndustryCode").val());
-	saveInStorage("#tradeList_queryInvoiceCode", $(
-			"#tradeList_queryInvoiceCode").val());
-	saveInStorage("#tradeList_queryPayCode", $("#tradeList_queryPayCode").val());
+	saveInStorage("#noticeList_queryTitle", $("#noticeList_queryTitle").val());
+	saveInStorage("#noticeList_queryRelationType", $("#noticeList_queryRelationType").val());
+	saveInStorage("#noticeList_queryCreateTimeStart", $("#noticeList_queryCreateTimeStart").val());
+	saveInStorage("#noticeList_queryCreateTimeEnd", $("#noticeList_queryCreateTimeEnd").val());
 }
 function clearSearchParam() {
 	storage.clear();
-	$("#tradeList_queryTitle").val('');
-	$("#tradeList_queryType").val('');
-	$("#tradeList_querySn").val('');
-	$("#tradeList_queryStatus").val('');
-	$("#tradeList_queryIndustryCode").val('');
-	$("#tradeList_queryInvoiceCode").val('');
-	$("#tradeList_queryPayCode").val('');
+	$("#noticeList_queryTitle").val('');
+	$("#noticeList_queryRelationType").val('');
+	$("#noticeList_queryCreateTimeStart").val('');
+	$("#noticeList_queryCreateTimeEnd").val('');
 }
 
 function getFromStorage(elementName) {
@@ -106,8 +127,8 @@ var TableInit = function() {
 	var oTableInit = new Object();
 	// 初始化Table
 	oTableInit.Init = function() {
-		$('#table_tradeList').bootstrapTable({
-			url : path + 's/trade/tradeList.do', // 请求后台的URL（*）
+		$('#table_noticeList').bootstrapTable({
+			url : path + 's/notice/noticeList.do', // 请求后台的URL（*）
 			method : 'get', // 请求方式（*）
 			toolbar : '#toolbar', // 工具按钮用哪个容器
 			striped : true, // 是否显示行间隔色
@@ -137,10 +158,10 @@ var TableInit = function() {
 			columns : [ {
 				checkbox : true
 			}, {
-				title : '贸易编号',
-				field : 'sn',
+				title : '标题',
+				field : 'title',
 				sortable : true,
-				sortName : 'sn'
+				sortName : 'title'
 			}, {
 				title : '创建时间',
 				field : 'createTime',
@@ -148,48 +169,29 @@ var TableInit = function() {
 				sortName : 'create_time',
 				formatter:operateDateFormatter
 			}, {
+				title : '创建人',
+				field : 'adminCreatorName',
+				sortable : false
+			}, {
 				title : '更新时间',
 				field : 'updateTime',
 				sortable : true,
 				sortName : 'update_time',
 				formatter:operateDateFormatter
 			}, {
-				title : '用户',
-				field : 'userNickName',
-				sortable : false,
-				formatter : function(v, r, i) {
-					if (v) {
-						return v.substring(0, 3) + "****" + v.substring(7, 4);
-					}
-					return v;
-				}
+				title : '更新人',
+				field : 'adminUpdaterName',
+				sortable : false
 			}, {
-				title : '标题',
-				field : 'title',
+				title : '通知类型',
+				field : 'relationTypeName',
 				sortable : true,
-				sortName : 'title'
+				sortName : 'relation_type'
 			}, {
-				title : '类型',
-				field : 'typeName',
-				sortable : true,
-				sortName : 'type'
-			}, {
-				title : '地区',
-				field : 'townName',
-				sortable : true,
-				sortName : 'town_name',
-				formatter:operateRegionFormatter
-			}, {
-				title : '状态',
-				field : 'statusName',
-				sortable : true,
-				sortName : 'status'
-			}, {
-				title : '意向金',
-				field : 'intention',
-				sortable : true,
-				sortName : 'intention'
-			}, {
+				title : '通知人数',
+				field : 'userCount',
+				sortable : false
+			},{
 				title : '操作',
 				field : 'operate',
 				width : '5%',
@@ -206,13 +208,10 @@ var TableInit = function() {
 			pageNo : params.pageNumber, // 页码
 			sortName : params.sortName, // 排序列名
 			sortOrder : params.sortOrder, // 排序方式
-			title : getFromStorage('#tradeList_queryTitle'),
-			type : getFromStorage('#tradeList_queryType'),
-			status : getFromStorage('#tradeList_queryStatus'),
-			industryCode : getFromStorage('#tradeList_queryIndustryCode'),
-			invoiceCode : getFromStorage('#tradeList_queryInvoiceCode'),
-			payCode : getFromStorage('#tradeList_queryPayCode'),
-			sn : getFromStorage('#tradeList_uerySn')
+			title : getFromStorage('#noticeList_queryTitle'),
+			relationType : getFromStorage('#noticeList_queryRelationType'),
+			createTimeStart_str : getFromStorage('#noticeList_queryCreateTimeStart'),
+			createTimeEnd_str : getFromStorage('#noticeList_queryCreateTimeEnd')
 		};
 		return temp;
 	};
@@ -223,7 +222,7 @@ var TableInit = function() {
 	// 表格-操作 - 格式化
 	function operateFormatter(value, row, index) {
 		var operate = '<a class="view" href="'
-				+ (path + 's/trade/tradeDetail?id=') + row.id + '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
+				+ (path + 's/notice/noticeDetail?id=') + row.id + '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
 		if (row.status == 'trade_verify') {
 			operate += ' <a class="verify" href="'
 					+ (path + 's/trade/tradeVerify?id=') + row.id

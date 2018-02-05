@@ -474,6 +474,11 @@ public class TradeServiceImpl extends BaseServiceImpl implements TradeService {
 		    PageHelper.startPage(pageNo,pageSize);
 		    PagedResult<TradeComplex> tradeComplexList=BeanUtil.toPagedResult(tradeComplexDao.findByParam(map));
 			if(tradeComplexList!=null) {
+				for(int i=0;i<tradeComplexList.getRows().size();i++) {
+					//字段code处理
+					tradeComplexList.getRows().get(i).setStatusName(getDictionariesValue("trade_status", tradeComplexList.getRows().get(i).getStatus()));
+					tradeComplexList.getRows().get(i).setTypeName(getDictionariesValue("trade_type", tradeComplexList.getRows().get(i).getType()));
+				}
 				return tradeComplexList;
 			}else {
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);

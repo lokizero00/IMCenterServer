@@ -16,12 +16,15 @@ import com.loki.server.entity.TradeLog;
 @Service
 @Transactional
 public class BaseServiceImpl {
-	@Resource TradeLogDao tradeLogDao;
-	@Resource IntentionLogDao intentionLogDao;
-	@Resource DictionariesDao dictionariesDao;
-	
-	protected void addTradeLog(int tradeId,String logRole,int logOperatorId,String logState,String logContent) {
-		TradeLog tradeLog=new TradeLog();
+	@Resource
+	TradeLogDao tradeLogDao;
+	@Resource
+	IntentionLogDao intentionLogDao;
+	@Resource
+	DictionariesDao dictionariesDao;
+
+	protected void addTradeLog(int tradeId, String logRole, int logOperatorId, String logState, String logContent) {
+		TradeLog tradeLog = new TradeLog();
 		tradeLog.setTradeId(tradeId);
 		tradeLog.setLogRole(logRole);
 		tradeLog.setLogOperatorId(logOperatorId);
@@ -29,9 +32,10 @@ public class BaseServiceImpl {
 		tradeLog.setContent(logContent);
 		tradeLogDao.insert(tradeLog);
 	}
-	
-	protected void addIntentionLog(int intentionId,BigDecimal availableAmount,BigDecimal changeAmount,String logType,int relationId,String logRole,int logOperatorId,String logContent) {
-		IntentionLog intentionLog=new IntentionLog();
+
+	protected void addIntentionLog(int intentionId, BigDecimal availableAmount, BigDecimal changeAmount, String logType,
+			int relationId, String logRole, int logOperatorId, String logContent) {
+		IntentionLog intentionLog = new IntentionLog();
 		intentionLog.setIntentionId(intentionId);
 		intentionLog.setAvailableAmount(availableAmount);
 		intentionLog.setChangeAmount(changeAmount);
@@ -42,8 +46,12 @@ public class BaseServiceImpl {
 		intentionLog.setLogOperatorId(logOperatorId);
 		intentionLogDao.insert(intentionLog);
 	}
-	
-	protected String getDictionariesValue(String type,String code) {
-		return dictionariesDao.findValueByParam(type, code);
+
+	protected String getDictionariesValue(String type, String code) {
+		if (type != null && !(type.equals("")) && code != null && !(code.equals(""))) {
+			return dictionariesDao.findValueByParam(type, code);
+		}else {
+			return null;
+		}
 	}
 }

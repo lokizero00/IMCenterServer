@@ -14,9 +14,9 @@ public interface NoticeService {
 	//admin
 	ServiceResult<Void> addNotice(Notice notice);
 	ServiceResult<Void> addUserNotice(List<UserNotice> userNoticeList);
-	ServiceResult<NoticeComplex> getNotice(int noticeId);
+	NoticeComplex getNotice(int noticeId) throws ServiceException;
 	ServiceResult<PagedResult<UserNotice>> getUserNoticeList(int noticeId,Integer pageNo,Integer pageSize);
-	PagedResult<NoticeComplex> getNoticeList(Map<String, Object> map,Integer pageNo,Integer pageSize) throws ServiceException;
+	PagedResult<NoticeComplex> getNoticeList(Map<String, Object> map) throws ServiceException;
 	//mobile
 	ServiceResult<PagedResult<NoticeComplex>> getNoticeList_mobile(int userId,Integer pageNo,Integer pageSize);
 	ServiceResult<NoticeComplex> getNotice_mobile(int noticeId,int userId);

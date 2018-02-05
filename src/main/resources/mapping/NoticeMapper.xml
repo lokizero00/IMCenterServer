@@ -40,22 +40,22 @@
 		<where>
 			<if test="createTimeStart != null">
 			 	<![CDATA[
-					create_time>=UNIX_TIMESTAMP(#{createTimeStart})
+					create_time>=#{createTimeStart}
 				]]>
 			</if>
 			<if test="createTimeEnd != null">
 			 	<![CDATA[
-					and create_time<=UNIX_TIMESTAMP(#{createTimeEnd})
+					and create_time<=#{createTimeEnd}
 				]]>
 			</if>
 			<if test="updateTimeStart != null">
 			 	<![CDATA[
-					and update_time>=UNIX_TIMESTAMP(#{updateTimeStart})
+					and update_time>=#{updateTimeStart}
 				]]>
 			</if>
-			<if test="createTimeEnd != null">
+			<if test="updateTimeEnd != null">
 			 	<![CDATA[
-					and update_time<=UNIX_TIMESTAMP(#{updateTimeEnd})
+					and update_time<=#{updateTimeEnd}
 				]]>
 			</if>
 			<if test="adminCreatorId !=null">

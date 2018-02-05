@@ -9,7 +9,11 @@ $(document).ready(function() {
 			var str="";
 			for(var i=0;i<data.length;i++){
 				var menu=data[i];
-				str+='<li class="active"><a href="'+path+menu.url+'" target="mainFrame" >'+menu.name+'</a></li>';
+				str+='<li ';
+				if(i===0){
+					str+='class="active"';
+				}
+				str+='><a href="'+path+menu.url+'" target="mainFrame" >'+menu.name+'</a></li>';
 			}
 			$("#ul_leftMenu").html(str);
 		}

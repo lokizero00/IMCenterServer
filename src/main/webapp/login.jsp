@@ -36,7 +36,7 @@ body {
 		<!--下面是密码输入框-->
 		<div class="input-group">
 			<span class="input-group-addon" id="basic-addon1">@</span> <input
-				id="password" type="text" class="form-control" placeholder="密码"
+				id="password" type="password" class="form-control" placeholder="密码"
 				aria-describedby="basic-addon1">
 		</div>
 		<br>

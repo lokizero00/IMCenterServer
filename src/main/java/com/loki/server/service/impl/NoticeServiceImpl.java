@@ -63,20 +63,17 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ServiceResult<NoticeComplex> getNotice(int noticeId) {
-		ServiceResult<NoticeComplex> returnValue=new ServiceResult<>();
+	public NoticeComplex getNotice(int noticeId) throws ServiceException{
 		if(noticeId>0) {
 			NoticeComplex noticeComplex=noticeComplexDao.findById(noticeId);
 			if(noticeComplex!=null) {
-				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(noticeComplex);
+				return noticeComplex;
 			}else {
-				returnValue.setResultCode(ResultCodeEnums.NOTICE_NOT_EXIST);
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
 		}else {
-			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
-		return returnValue;
 	}
 
 	@Override
@@ -102,10 +99,10 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public PagedResult<NoticeComplex> getNoticeList(Map<String, Object> map,Integer pageNo,Integer pageSize) throws ServiceException{
+	public PagedResult<NoticeComplex> getNoticeList(Map<String, Object> map) throws ServiceException{
 		if(map!=null) {
-			pageNo = pageNo == null? 1:pageNo;  
-		    pageSize = pageSize == null? 10:pageSize; 
+			int pageNo = map.get("pageNo") == null? 1:(int) map.get("pageNo");  
+		    int pageSize = map.get("pageSize") == null? 10:(int) map.get("pageSize");
 		    PageHelper.startPage(pageNo,pageSize);
 			PagedResult<NoticeComplex> pageResult=BeanUtil.toPagedResult(noticeComplexDao.findByParam(map));
 			if(pageResult!=null) {
