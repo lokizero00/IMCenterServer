@@ -96,8 +96,8 @@ public class AdminServiceImpl implements AdminService {
 						if(resources.getType().equals("menu")) {
 							menuList.add(resources);
 						}else if(resources.getType().equals("action")||resources.getType().equals("page")) {
-							resources.setUrl(urlContext+resources.getUrl());
-							permissionList.add(resources.getUrl());
+							String p_url=urlContext+resources.getUrl();
+							permissionList.add(p_url);
 						}
 						else {}
 					}

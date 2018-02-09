@@ -14,7 +14,7 @@ public class Article implements Serializable{
 	private String title;
 	private String content;
 	private int sort;
-	private boolean isShow;
+	private String status;
 	private int readCount;
 	public int getId() {
 		return id;
@@ -64,16 +64,16 @@ public class Article implements Serializable{
 	public void setSort(int sort) {
 		this.sort = sort;
 	}
-	public boolean isShow() {
-		return isShow;
-	}
-	public void setShow(boolean isShow) {
-		this.isShow = isShow;
-	}
 	public int getReadCount() {
 		return readCount;
 	}
 	public void setReadCount(int readCount) {
 		this.readCount = readCount;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

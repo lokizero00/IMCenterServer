@@ -13,5 +13,5 @@ public interface UserNoticeDao {
 	boolean delete(int id);
 	UserNotice findByParam(Map<String, Object> map);
 	List<UserNotice> findListByParam(Map<String, Object> map);
-	
+	List<Integer> findOmittedUserId(int noticeId);
 }

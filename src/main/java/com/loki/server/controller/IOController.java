@@ -1,9 +1,13 @@
 package com.loki.server.controller;
 
+
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,21 +19,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.loki.server.entity.UploadFile;
 import com.loki.server.service.IOService;
 import com.loki.server.utils.ServiceException;
 
 @Controller
-@RequestMapping("/s/api/io")
-public class IOController {
-	
+@RequestMapping("/s/io")
+public class IOController extends BaseController{
+	private static final Logger logger = Logger.getLogger(IOController.class);
 	@Autowired
 	public IOService ioService;
 	
+	@RequestMapping("/uploadImage")
+    public void uploadImage(HttpServletRequest request,HttpServletResponse response,PrintWriter out) {
+        logger.debug("获取上传文件...");
+        try {
+            UploadFile uploadFiles = ioService.uploadImage(request);
+            response.setContentType("application/json;charset=UTF-8");
+            response.setHeader("pragma", "no-cache");
+            response.setHeader("cache-control", "no-cache");
+            out.write(responseSuccess(uploadFiles));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
+            out.write(responseFail("文件上传失败"));
+        }
+    }
+	
 	//图片上传
-	@RequestMapping(value="/imageUpload",method=RequestMethod.POST)
-	public String imageUpload(HttpServletRequest request,ModelMap mm) {
+	@RequestMapping(value="/imageUploadMobile",method=RequestMethod.POST)
+	public String imageUploadMobile(HttpServletRequest request,ModelMap mm) {
 		MultipartHttpServletRequest multipartHttpServletRequest=(MultipartHttpServletRequest) request;
-//		System.out.println("获取到的 parameter id=:"+multipartHttpServletRequest.getParameter("id"));
 		try {
 			String fileName=ioService.uploadImage(request,multipartHttpServletRequest.getFile("file"));
 			if(null!=fileName && ""!=fileName) {
@@ -50,7 +70,7 @@ public class IOController {
 		
 		return "mobileResultJson";
 	}
-	
+		
 	//获取图片
 	@RequestMapping(value = "/getImage", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> image(HttpServletRequest request,String name){

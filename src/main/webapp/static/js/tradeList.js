@@ -137,6 +137,13 @@ var TableInit = function() {
 			columns : [ {
 				checkbox : true
 			}, {
+				title : '序号',// 标题
+				formatter : function(value, row, index) {  
+	                //return index + 1;  
+	                var page = $('#table_tradeList').bootstrapTable("getPage");  
+	                return page.pageSize * (page.pageNumber - 1) + index + 1;  
+	            } 
+			}, {
 				title : '贸易编号',
 				field : 'sn',
 				sortable : true,

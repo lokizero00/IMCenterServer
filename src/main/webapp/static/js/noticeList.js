@@ -23,7 +23,7 @@ $(document).ready(function() {
 
 	// 初始化页面上面的按钮事件
 	$("#btn_add").click(function() {
-
+		window.location.href = path + 's/notice/addNoticePage';
 	});
 	$("#queryButton").click(function() {
 		saveSearchParam();
@@ -35,45 +35,48 @@ $(document).ready(function() {
 		var $table = $('#table_noticeList');
 		$table.bootstrapTable('selectPage', 1);
 	});
-	
+
 	$('.form_datetime').datetimepicker({
-	    //language:  'fr',
-	    weekStart: 1,
-	    todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-	    showMeridian: 1
+		// language: 'fr',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		forceParse : 0,
+		showMeridian : 1
 	});
 	$('.form_date').datetimepicker({
-	    language:  'fr',
-	    weekStart: 1,
-	    todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0
+		language : 'fr',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		minView : 2,
+		forceParse : 0
 	});
 	$('.form_time').datetimepicker({
-	    language:  'fr',
-	    weekStart: 1,
-	    todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 1,
-		minView: 0,
-		maxView: 1,
-		forceParse: 0
+		language : 'fr',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 1,
+		minView : 0,
+		maxView : 1,
+		forceParse : 0
 	});
 });
 
 function saveSearchParam() {
 	saveInStorage("#noticeList_queryTitle", $("#noticeList_queryTitle").val());
-	saveInStorage("#noticeList_queryRelationType", $("#noticeList_queryRelationType").val());
-	saveInStorage("#noticeList_queryCreateTimeStart", $("#noticeList_queryCreateTimeStart").val());
-	saveInStorage("#noticeList_queryCreateTimeEnd", $("#noticeList_queryCreateTimeEnd").val());
+	saveInStorage("#noticeList_queryRelationType", $(
+			"#noticeList_queryRelationType").val());
+	saveInStorage("#noticeList_queryCreateTimeStart", $(
+			"#noticeList_queryCreateTimeStart").val());
+	saveInStorage("#noticeList_queryCreateTimeEnd", $(
+			"#noticeList_queryCreateTimeEnd").val());
 }
 function clearSearchParam() {
 	storage.clear();
@@ -158,6 +161,13 @@ var TableInit = function() {
 			columns : [ {
 				checkbox : true
 			}, {
+				title : '序号',// 标题
+				formatter : function(value, row, index) {  
+	                //return index + 1;  
+	                var page = $('#table_noticeList').bootstrapTable("getPage");  
+	                return page.pageSize * (page.pageNumber - 1) + index + 1;  
+	            }  
+			}, {
 				title : '标题',
 				field : 'title',
 				sortable : true,
@@ -167,7 +177,7 @@ var TableInit = function() {
 				field : 'createTime',
 				sortable : true,
 				sortName : 'create_time',
-				formatter:operateDateFormatter
+				formatter : operateDateFormatter
 			}, {
 				title : '创建人',
 				field : 'adminCreatorName',
@@ -177,7 +187,7 @@ var TableInit = function() {
 				field : 'updateTime',
 				sortable : true,
 				sortName : 'update_time',
-				formatter:operateDateFormatter
+				formatter : operateDateFormatter
 			}, {
 				title : '更新人',
 				field : 'adminUpdaterName',
@@ -191,7 +201,7 @@ var TableInit = function() {
 				title : '通知人数',
 				field : 'userCount',
 				sortable : false
-			},{
+			}, {
 				title : '操作',
 				field : 'operate',
 				width : '5%',
@@ -222,12 +232,13 @@ var TableInit = function() {
 	// 表格-操作 - 格式化
 	function operateFormatter(value, row, index) {
 		var operate = '<a class="view" href="'
-				+ (path + 's/notice/noticeDetail?id=') + row.id + '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
-		if (row.status == 'trade_verify') {
-			operate += ' <a class="verify" href="'
-					+ (path + 's/trade/tradeVerify?id=') + row.id
-					+ '" title="审核"><span class="glyphicon glyphicon-wrench"></span></a>';
-		}
+				+ (path + 's/notice/noticeDetail?id=')
+				+ row.id
+				+ '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
+		operate += ' <a class="edit" href="'
+				+ (path + 's/trade/tradeVerify?id=')
+				+ row.id
+				+ '" title="编辑"><span class="glyphicon glyphicon-pencil"></span></a>';
 		return operate;
 	}
 };

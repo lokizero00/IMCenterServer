@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import net.sf.json.util.CycleDetectionStrategy;
 
 public class BaseController {
 	protected Logger logger = Logger.getLogger(BaseController.class);
@@ -32,6 +33,7 @@ public class BaseController {
 			logger.debug("后端返回对象：{ " + obj + "}");
 			JsonConfig jsonConfig = new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
+			jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 			jsonObj = JSONObject.fromObject(obj, jsonConfig);
 			logger.debug("后端返回数据：" + jsonObj);
 			if (HttpConstants.SERVICE_RESPONSE_SUCCESS_CODE
@@ -62,6 +64,7 @@ public class BaseController {
 			logger.debug("后端返回对象：{" + obj + "}");
 			JsonConfig jsonConfig = new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
+			jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 			jsonObj = JSONObject.fromObject(obj, jsonConfig);
 			logger.debug("后端返回数据：" + jsonObj);
 			jsonObj.element(HttpConstants.RESPONSE_RESULT_FLAG_ISERROR, false);
@@ -84,6 +87,7 @@ public class BaseController {
 			logger.debug("后端返回对象：{" + obj + "}");
 			JsonConfig jsonConfig = new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
+			jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 			jsonObj = JSONArray.fromObject(obj, jsonConfig);
 			logger.debug("后端返回数据：" + jsonObj);
 		}
@@ -104,6 +108,7 @@ public class BaseController {
 			logger.debug("后端返回对象：{" + obj + "}");
 			JsonConfig jsonConfig = new JsonConfig();
 			jsonConfig.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
+			jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 			jsonObj = JSONObject.fromObject(obj, jsonConfig);
 			logger.debug("后端返回数据：" + jsonObj);
 			jsonObj.element(HttpConstants.RESPONSE_RESULT_FLAG_ISERROR, false);

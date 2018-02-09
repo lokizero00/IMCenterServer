@@ -7,9 +7,11 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.loki.server.dao.AdminDao;
 import com.loki.server.dao.DictionariesDao;
 import com.loki.server.dao.IntentionLogDao;
 import com.loki.server.dao.TradeLogDao;
+import com.loki.server.dao.UserDao;
 import com.loki.server.entity.IntentionLog;
 import com.loki.server.entity.TradeLog;
 
@@ -22,6 +24,10 @@ public class BaseServiceImpl {
 	IntentionLogDao intentionLogDao;
 	@Resource
 	DictionariesDao dictionariesDao;
+	@Resource
+	UserDao userDao;
+	@Resource
+	AdminDao adminDao;
 
 	protected void addTradeLog(int tradeId, String logRole, int logOperatorId, String logState, String logContent) {
 		TradeLog tradeLog = new TradeLog();
@@ -50,6 +56,22 @@ public class BaseServiceImpl {
 	protected String getDictionariesValue(String type, String code) {
 		if (type != null && !(type.equals("")) && code != null && !(code.equals(""))) {
 			return dictionariesDao.findValueByParam(type, code);
+		}else {
+			return null;
+		}
+	}
+	
+	protected String getUserNickName(int userId) {
+		if(userId>0) {
+			return userDao.findNickNameById(userId);
+		}else {
+			return null;
+		}
+	}
+	
+	protected String getAdminName(int adminId) {
+		if(adminId>0) {
+			return adminDao.findAdminNameById(adminId);
 		}else {
 			return null;
 		}

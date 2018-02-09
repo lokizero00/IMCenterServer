@@ -13,4 +13,5 @@ public interface AdminDao {
 	List<Admin> findAll();
 	Admin findById(int id);
 	Admin loginCheck(@Param("userName") String userName,@Param("password") String password);
+	String findAdminNameById(int id);
 }

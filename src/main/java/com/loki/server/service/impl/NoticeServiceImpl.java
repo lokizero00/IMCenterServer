@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.NoticeComplexDao;
 import com.loki.server.dao.NoticeDao;
+import com.loki.server.dao.UserDao;
 import com.loki.server.dao.UserNoticeDao;
 import com.loki.server.entity.Notice;
 import com.loki.server.entity.NoticeComplex;
@@ -21,30 +22,47 @@ import com.loki.server.service.NoticeService;
 import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
+import com.loki.server.vo.NoticeVO;
 import com.loki.server.vo.ServiceResult;
 
 @Service
 @Transactional
-public class NoticeServiceImpl implements NoticeService {
+public class NoticeServiceImpl extends BaseServiceImpl implements NoticeService {
 	@Resource NoticeDao noticeDao;
 	@Resource UserNoticeDao userNoticeDao;
 	@Resource NoticeComplexDao noticeComplexDao;
+	@Resource UserDao userDao;
 
 	@Override
-	public ServiceResult<Void> addNotice(Notice notice) {
-		ServiceResult<Void> returnValue=new ServiceResult<Void>();
-		if(notice!=null) {
-			notice.setId(0);
+	public boolean addNotice(NoticeVO noticeVO) throws ServiceException{
+		if(noticeVO!=null) {
+			Notice notice=new Notice();
+			notice.setAdminCreatorId(noticeVO.getAdminCreatorId());
+			notice.setTitle(noticeVO.getTitle());
+			notice.setContent(noticeVO.getContent());
+			notice.setRelationType(noticeVO.getRelationType());
+			notice.setRelationId(noticeVO.getRelationId());
 			noticeDao.insert(notice);
 			if(notice.getId()>0) {
-				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				if(noticeVO.isSend()) {
+					//创建userNotice记录
+					List<Integer> userIdList=userDao.findIdList("on");
+					for(int userId:userIdList) {
+						UserNotice userNotice=new UserNotice();
+						userNotice.setUserId(userId);
+						userNotice.setNoticeId(notice.getId());
+						userNotice.setRead(false);
+						userNoticeDao.insert(userNotice);
+					}
+					//TODO 发送客户端notification
+				}
+				return true;
 			}else {
-				returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
+				throw new ServiceException(ResultCodeEnums.SAVE_FAIL);
 			}
 		}else {
-			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
-		return returnValue;
 	}
 
 	//TODO 对于for循环中，部分保存失败的情况暂时未处理
@@ -77,25 +95,23 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<UserNotice>> getUserNoticeList(int noticeId,Integer pageNo,Integer pageSize) {
-		ServiceResult<PagedResult<UserNotice>> returnValue=new ServiceResult<PagedResult<UserNotice>>();
-		if(noticeId>0) {
-			HashMap<String, Object> map=new HashMap<>();
-			map.put("noticeId", noticeId);
-			pageNo = pageNo == null? 1:pageNo;  
-		    pageSize = pageSize == null? 10:pageSize;
+	public PagedResult<UserNotice> getUserNoticeList(Map<String, Object> map) throws ServiceException{
+		if(map!=null) {
+			int pageNo = map.get("pageNo") == null? 1:(int) map.get("pageNo");  
+		    int pageSize = map.get("pageSize") == null? 10:(int) map.get("pageSize");
 		    PageHelper.startPage(pageNo,pageSize);
 		    PagedResult<UserNotice> pageResult=BeanUtil.toPagedResult(userNoticeDao.findListByParam(map));
 			if(pageResult!=null) {
-				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(pageResult);
+				for(int i=0;i<pageResult.getRows().size();i++) {
+					pageResult.getRows().get(i).setUserNickName(getUserNickName(pageResult.getRows().get(i).getUserId()));
+				}
+				return pageResult;
 			}else {
-				returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
 		}else {
-			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
-		return returnValue;
 	}
 
 	@Override
@@ -164,5 +180,23 @@ public class NoticeServiceImpl implements NoticeService {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
+	}
+
+	@Override
+	public boolean sendOmittedNotice(int noticeId) throws ServiceException {
+		if(noticeId>0) {
+			List<Integer> omittedUserIdList=userNoticeDao.findOmittedUserId(noticeId);
+			for(int userId:omittedUserIdList) {
+				UserNotice userNotice=new UserNotice();
+				userNotice.setNoticeId(noticeId);
+				userNotice.setUserId(userId);
+				userNotice.setRead(false);
+				userNoticeDao.insert(userNotice);
+			}
+			//TODO 发送客户端notification
+			return true;
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
 	}
 }

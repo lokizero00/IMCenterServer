@@ -2,45 +2,110 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.ArticleDao">
-  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="articleDO" type="com.loki.server.entity.Article">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
-    <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="is_show" jdbcType="BIT" property="isShow" />
-    <result column="read_count" jdbcType="INTEGER" property="readCount" />
-  </resultMap>
-  
-  <sql id="Base_Column_List">
-    id,create_time,update_time,admin_creator_id,admin_updater_id,title,content,sort,is_show,read_count
-  </sql>
-  
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Article">
-		insert into article(create_time,admin_creator_id,title,content,sort,is_show,read_count) 
-		values(now(),#{adminCreatorId},#{title},#{content},#{sort},#{isShow},#{readCount})
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="articleDO" type="com.loki.server.entity.Article">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
+		<result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+		<result column="sort" jdbcType="INTEGER" property="sort" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="read_count" jdbcType="INTEGER" property="readCount" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,create_time,update_time,admin_creator_id,admin_updater_id,title,content,sort,status,read_count
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.Article">
+		insert into
+		article(create_time,admin_creator_id,title,content,sort,status,read_count)
+		values(now(),#{adminCreatorId},#{title},#{content},#{sort},#{status},#{readCount})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.entity.Article">
-  	update article SET update_time=now(),admin_updater_id=#{adminUpdaterId},title=#{title},content=#{content},sort=#{sort},is_show=#{isShow},read_count=#{readCount} where id=#{id}
-  </update>
-  
-  <select id="findById" parameterType="int" resultMap="articleDO">
-		select <include refid="Base_Column_List" /> 
+	<update id="update" parameterType="com.loki.server.entity.Article">
+		update article SET
+		update_time=now(),admin_updater_id=#{adminUpdaterId},title=#{title},content=#{content},sort=#{sort},status=#{status},read_count=#{readCount}
+		where id=#{id}
+	</update>
+
+	<select id="findById" parameterType="int" resultMap="articleDO">
+		select
+		<include refid="Base_Column_List" />
 		from article
 		where id=#{_parameter}
-  </select>
-  
-  <select id="findAll" resultMap="articleDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findAll" resultMap="articleDO">
+		select
+		<include refid="Base_Column_List" />
 		from article
-  </select>
-  
-  <delete id="delete" parameterType="int">
-		delete from article where id=#{_parameter}
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from article where
+		id=#{_parameter}
 	</delete>
+
+	<select id="findByParam" resultMap="articleDO">
+		select
+		<include refid="Base_Column_List" />
+		from article
+		<where>
+			<if test="createTimeStart != null">
+			 	<![CDATA[
+					create_time>=#{createTimeStart}
+				]]>
+			</if>
+			<if test="createTimeEnd != null">
+			 	<![CDATA[
+					and create_time<=#{createTimeEnd}
+				]]>
+			</if>
+			<if test="updateTimeStart != null">
+			 	<![CDATA[
+					and update_time>=#{updateTimeStart}
+				]]>
+			</if>
+			<if test="updateTimeEnd != null">
+			 	<![CDATA[
+					and update_time<=#{updateTimeEnd}
+				]]>
+			</if>
+			<if test="adminCreatorId !=null">
+				and admin_creator_id=#{adminCreatorId}
+			</if>
+			<if test="adminUpdaterId !=null">
+				and admin_updater_id=#{adminUpdaterId}
+			</if>
+			<if test="title !=null and title!=''">
+				and title like CONCAT('%','${title}','%' )
+			</if>
+			<if test="content !=null and content!=''">
+				and content like CONCAT('%','${content}','%' )
+			</if>
+			<if test="status !=null and status!=''">
+				and relation_type=#{relationType}
+			</if>
+			<if test="relationId !=null">
+				and relation_id=#{relationId}
+			</if>
+		</where>
+		ORDER BY
+		 <choose>
+	        <when test="sortName!=null">
+	                ${sortName}
+	            <if test="sortOrder!=null">
+	                ${sortOrder}
+	            </if>
+	        </when>
+	        <otherwise>
+	            sort asc
+	        </otherwise>
+	     </choose>
+	</select>
 </mapper>

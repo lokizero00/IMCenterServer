@@ -21,6 +21,7 @@ public class User implements Serializable{
 	private int enterpriseId;
 	private String easeId;
 	private String easePwd;
+	private String status;
 	
 	public int getId() {
 		return id;
@@ -117,6 +118,12 @@ public class User implements Serializable{
 	}
 	public void setEasePwd(String easePwd) {
 		this.easePwd = easePwd;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

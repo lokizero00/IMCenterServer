@@ -21,7 +21,7 @@ public class UserBindCodeServiceImpl implements UserBindCodeService {
 	@Override
 	public ServiceResult<Integer> sendSmsAuthCode(String phone) {
 		ServiceResult<Integer> returnValue=new ServiceResult<Integer>();
-		if(null != phone && "" != phone) {
+		if(phone!=null && !(phone.equals(""))) {
 			String authCode=CommonUtil.getInstance().getRandomStr(6, 3);
 			UserBindCode ubc=new UserBindCode();
 			ubc.setAuthCode(authCode);
@@ -45,7 +45,7 @@ public class UserBindCodeServiceImpl implements UserBindCodeService {
 	@Override
 	public ServiceResult<Void> checkAuthCode(int authCodeId, String authCode) {
 		ServiceResult<Void> returnValue=new ServiceResult<Void>();
-		if (authCodeId>0 && null!=authCode && ""!=authCode) {
+		if (authCodeId>0 && authCode!=null && !(authCode.equals(""))) {
 			UserBindCode userBindCode=userBindCodeDao.findById(authCodeId);
 			if(null!=userBindCode && authCode.equals(userBindCode.getAuthCode())) {
 				//判断是否超过5分钟

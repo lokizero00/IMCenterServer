@@ -49,9 +49,13 @@ $(document).ready(function() {
 							window.location = path+'s/trade/';
 						}
 					},
-					error:function(data){  
-						alert(data.statusText);
-				    }  
+					error : function(data) {
+						if (data.statusText == 'OK') {
+							alert('您没有相关权限');
+						} else {
+							alert(data.statusText);
+						}
+					}  
 				});
 			}else{
 				alert("请选择一个审核结果");

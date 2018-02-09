@@ -86,6 +86,22 @@ public class LoginMobileController {
 		return "mobileResultJson";
 	}
 	
+	//找回密码
+	@RequestMapping(value="/findPassword",method=RequestMethod.POST)
+	public String findPassword(HttpServletRequest request,String phone,String newPassword,String authCode,int authCodeId,ModelMap mm) {
+		ServiceResult<Void> returnValue=userService.findPassword(phone, newPassword, authCode, authCodeId);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}
+		else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+		return "mobileResultJson";
+	}
+	
 	//token校验错误
 	@RequestMapping(value="/tokenInvalid")
 	public String tokenInvalid(HttpServletRequest request,ModelMap mm) {

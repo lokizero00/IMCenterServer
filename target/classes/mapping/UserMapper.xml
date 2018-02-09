@@ -21,15 +21,16 @@
     <result column="enterprise_id" jdbcType="INTEGER" property="enterpriseId" />
     <result column="ease_id" jdbcType="VARCHAR" property="easeId" />
     <result column="ease_pwd" jdbcType="VARCHAR" property="easePwd" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id, user_name,password,nick_name,phone,phone_bind,email,email_bind,avatar,pay_pwd,regist_time,regist_ip,identity_id,enterprise_id,ease_id,ease_pwd
+    id, user_name,password,nick_name,phone,phone_bind,email,email_bind,avatar,pay_pwd,regist_time,regist_ip,identity_id,enterprise_id,ease_id,ease_pwd,status
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.User">
 		insert into user(user_name,password,nick_name,phone,phone_bind,email,email_bind,avatar,pay_pwd,regist_time,regist_ip,identity_id,enterprise_id,ease_id,ease_pwd) 
-		values(#{userName},#{password},#{nickName},#{phone},#{phoneBind},#{email},#{emailBind},#{avatar},#{payPwd},now(),#{registIp},#{identityId},#{enterpriseId},#{easeId},#{easePwd})
+		values(#{userName},#{password},#{nickName},#{phone},#{phoneBind},#{email},#{emailBind},#{avatar},#{payPwd},now(),#{registIp},#{identityId},#{enterpriseId},#{easeId},#{easePwd},#{status})
 	</insert>
   
   <select id="findById" parameterType="int" resultMap="userDO">
@@ -49,8 +50,74 @@
 		from user
   </select>
   
+  <select id="findIdList" parameterType="String" resultType="int">
+		select id 
+		from user
+		<where>
+			<if test="status!=null and status!=''">
+				status = #{status}
+			</if>
+		</where>
+  </select>
+  
+  <select id="findByParam" resultMap="userDO">
+		select <include refid="Base_Column_List" /> 
+		from user
+		<where>
+			<if test="userName!=null and userName!=''">
+				user_name like CONCAT('%','${userName}','%' ) 
+			</if>
+			<if test="nickName!=null and nickName!=''">
+				and nick_name like CONCAT('%','${nickName}','%' ) 
+			</if>
+			<if test="phone!=null and phone!=''">
+				and phone like CONCAT('%','${phone}','%' ) 
+			</if>
+			<if test="phoneBind!=null">
+				and phone_bind=#{phoneBind}
+			</if>
+			<if test="email!=null and email!=''">
+				and email like CONCAT('%','${email}','%' ) 
+			</if>
+			<if test="emailBind!=null">
+				and email_bind=#{emailBind}
+			</if>
+			<if test="registTimeStart != null">
+			 	<![CDATA[
+					and regist_time>=#{registTimeStart}
+				]]>
+			</if>
+			<if test="registTimeEnd != null">
+			 	<![CDATA[
+					and regist_time<=#{registTimeEnd}
+				]]>
+			</if>
+			<if test="identityId!=null and identityId!=0">
+				and identity_id=#{identityId}
+			</if>
+			<if test="enterpriseId!=null and enterpriseId!=0">
+				and enterprise_id=#{enterpriseId}
+			</if>
+			<if test="status!=null and status!=''">
+				and status=#{status}
+			</if>
+		</where>
+		ORDER BY
+		 <choose>
+	        <when test="sortName!=null">
+	                ${sortName}
+	            <if test="sortOrder!=null">
+	                ${sortOrder}
+	            </if>
+	        </when>
+	        <otherwise>
+	            id desc
+	        </otherwise>
+	     </choose>
+  </select>
+  
   <update id="update" parameterType="com.loki.server.entity.User">
-  	update user SET user_name=#{userName},password=#{password},nick_name=#{nickName},phone=#{phone},phone_bind=#{phoneBind},email=#{email},email_bind=#{emailBind},avatar=#{avatar},pay_pwd=#{payPwd},identity_id=#{identityId},enterprise_id=#{enterpriseId},ease_id=#{easeId},ease_pwd=#{easePwd} where id=#{id}
+  	update user SET user_name=#{userName},password=#{password},nick_name=#{nickName},phone=#{phone},phone_bind=#{phoneBind},email=#{email},email_bind=#{emailBind},avatar=#{avatar},pay_pwd=#{payPwd},identity_id=#{identityId},enterprise_id=#{enterpriseId},ease_id=#{easeId},ease_pwd=#{easePwd},status=#{status} where id=#{id}
   </update>
   
   <delete id="delete" parameterType="int">
@@ -62,6 +129,13 @@
 		select <include refid="Base_Column_List" /> 
 		from user
 		where phone=#{phone} and password=#{password}
+  </select>
+  
+  <!-- 手机号查询用户 -->
+  <select id="findByPhone" parameterType="String" resultMap="userDO">
+		select <include refid="Base_Column_List" /> 
+		from user
+		where phone=#{_parameter}
   </select>
   
   <select id="userExistCheck" parameterType="String" resultType="int">

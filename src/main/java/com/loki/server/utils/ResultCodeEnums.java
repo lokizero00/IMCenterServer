@@ -26,7 +26,9 @@ public enum ResultCodeEnums {
 	INTENTION_AVAILABLE_NOT_ENOUGH(-23,"可用意向金不足"),
 	DATA_INVALID(-24,"数据校验错误"),
 	LOGIN_FAIL(-25,"登录失败"),
-	LOGIN_DATA_INVALID(-26,"用户名或密码错误")
+	LOGIN_DATA_INVALID(-26,"用户名或密码错误"),
+	USER_OUT_OF_SERVICE(-27,"账户已停用"),
+	DATA_CONVERT_FAIL(-28,"数据转换失败")
 	;
 
 	public int code;  

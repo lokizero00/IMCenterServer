@@ -31,6 +31,12 @@
 		where id=#{_parameter}
   </select>
   
+  <select id="findAdminNameById" parameterType="int" resultType="String">
+		select user_name 
+		from admin
+		where id=#{_parameter}
+  </select>
+  
   <select id="findAll" resultMap="adminDO">
 		select <include refid="Base_Column_List" /> 
 		from admin

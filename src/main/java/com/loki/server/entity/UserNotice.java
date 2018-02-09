@@ -9,6 +9,7 @@ public class UserNotice implements Serializable{
 	private int userId;
 	private int noticeId;
 	private boolean isRead;
+	private String  userNickName;
 	public int getId() {
 		return id;
 	}
@@ -32,6 +33,12 @@ public class UserNotice implements Serializable{
 	}
 	public void setRead(boolean isRead) {
 		this.isRead = isRead;
+	}
+	public String getUserNickName() {
+		return userNickName;
+	}
+	public void setUserNickName(String userNickName) {
+		this.userNickName = userNickName;
 	}
 	
 }

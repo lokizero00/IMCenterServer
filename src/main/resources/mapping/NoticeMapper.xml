@@ -64,25 +64,31 @@
 			<if test="adminUpdaterId !=null">
 				and admin_updater_id=#{adminUpdaterId}
 			</if>
-			<if test="title !=null">
+			<if test="title !=null and title!=''">
 				and title like CONCAT('%','${title}','%' ) 
 			</if>
-			<if test="content !=null">
+			<if test="content !=null and content!=''">
 				and content like CONCAT('%','${content}','%' ) 
 			</if>
 			<if test="relationType !=null">
 				and relation_type=#{relationType}
 			</if>
-			<if test="relationId !=null">
+			<if test="relationId !=null and relationId!=0">
 				and relation_id=#{relationId}
 			</if>
 		</where>
-		<if test="orderBy !=null">
-			order by #{orderBy}
-		</if>
-		<if test="orderByType !=null">
-			#{orderByType}
-		</if>
+		ORDER BY
+		 <choose>
+	        <when test="sortName!=null">
+	                ${sortName}
+	            <if test="sortOrder!=null">
+	                ${sortOrder}
+	            </if>
+	        </when>
+	        <otherwise>
+	            id desc
+	        </otherwise>
+	     </choose>
   </select>
   
   <select id="findAll" resultMap="noticeDO">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/loki/server/vo/IntentionLogVO.java|com/loki/server/vo/IntentionVO.java|com/loki/server/vo/NoticeVO.java|com/loki/server/vo/UserBankcardVO.java|com/loki/server/vo/UserNoticeVO.java|com/loki/server/vo/UserVO.java" kind="src" output="target/classes" path="src/main/java">
+	<classpathentry excluding="com/loki/server/vo/IntentionLogVO.java|com/loki/server/vo/IntentionVO.java|com/loki/server/vo/UserBankcardVO.java|com/loki/server/vo/UserNoticeVO.java|com/loki/server/vo/UserVO.java" kind="src" output="target/classes" path="src/main/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>

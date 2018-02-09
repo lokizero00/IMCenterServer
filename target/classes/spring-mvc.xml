@@ -154,6 +154,7 @@
 	         <!-- 配置登陆拦截器 -->
 	         <mvc:interceptor>
 	             <mvc:mapping path="/s/**"/>
+	             <mvc:exclude-mapping path="/s/io/getImage" />
 	             <mvc:exclude-mapping path="/static/**" />
 	             <mvc:exclude-mapping path="/s/dictionaries/**" />
 	             <mvc:exclude-mapping path="/s/session/**" />

@@ -1,6 +1,7 @@
 package com.loki.server.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -15,4 +16,7 @@ public interface UserDao {
 	User loginCheck(@Param("phone") String phone,@Param("password") String password);
 	int userExistCheck(String phone);
 	String findNickNameById(int id);
+	List<Integer> findIdList(@Param("status") String status);
+	List<User> findByParam(Map<String,Object> map);
+	User findByPhone(String phone);
 }
