@@ -71,8 +71,7 @@ public class IOServiceImpl implements IOService {
 		String savePath = request.getSession().getServletContext().getRealPath("/")
 				+ PropertyUtil.getInstance().getPropertyValue("common", "imageUploadPath");
 		String urlContext=settingDao.findByName("url_context");
-		String requestPath = request.getRequestURL().toString().substring(0,request.getRequestURL().lastIndexOf(urlContext)+(urlContext).length())
-				+ PropertyUtil.getInstance().getPropertyValue("common", "imageRequestParam");
+		String requestPath ="http://"+request.getHeader("host")+urlContext+PropertyUtil.getInstance().getPropertyValue("common", "imageRequestParam");
 		
 		while (fileIterator.hasNext()) {
 			String fileKey = fileIterator.next();
