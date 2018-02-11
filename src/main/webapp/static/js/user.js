@@ -16,9 +16,13 @@ $(document).ready(function() {
 			str+=data.nickName+"</td>";
 			str+="</tr>";
 			str+="<td>登录密码</td><td>";
-			str+=data.password+"</td>";
+			str+="********</td>";
 			str+="<td>支付密码</td><td>";
-			str+=data.payPwd+"</td>";
+			if(data.payPwd!=""){
+				str+="********</td>";
+			}else{
+				str+="未设置</td>";
+			}
 			str+="</tr>";
 			str+="<tr>";
 			str+="<td>手机号</td><td>";

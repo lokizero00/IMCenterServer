@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 
 
 /**
- * @Author Kulen
- * @CreateTime 2010-6-16下午05:28:11
+ * @Author lokizero00
+ * @CreateTime 2018-1-16下午05:22:11
  * @Version 1.0
  * @Explanation 用MD5对数据进行加密
  */
