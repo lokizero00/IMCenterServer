@@ -2,49 +2,79 @@ package com.loki.server.controller;
 
 
 
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.loki.server.dto.ArticleDTO;
+import com.loki.server.dto.UserDTO;
+import com.loki.server.entity.PagedResult;
+import com.loki.server.entity.TradeComplex;
+import com.loki.server.service.UserService;
 
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/s/user")
+public class UserController extends BaseController{
+	@Autowired UserService userService;
 	
-//	@Autowired
-//	private UserService userService;
-//	
-//	//返回单个json对象
-//	@RequestMapping(value="/getUserInJson",method=RequestMethod.GET)
-//	public @ResponseBody User getUserInJSON(int id) {
-//		User user=userService.findById(id);
-//		return user;
-//	}
+	/**
+     * 显示首页
+     * @return
+     */
+	@RequestMapping("/userListPage")  
+	public String userListPage(){
+		return "user/userList";
+	}
 	
-//	//返回复杂json对象集合
-//	@RequestMapping(value="/getUserListByJson",method=RequestMethod.GET)
-//	public String getUserListByJson(int id,ModelMap mm) {
-//		System.out.println("-----------id------------="+id);
-//		List<User> userList=userService.findAll();
-//		mm.addAttribute("userList", userList);
-//		mm.addAttribute("School", "SuZhou");
-//		mm.addAttribute("Work", "YanFa");
-//		return "userListJson";
-//	}
+	/**
+     * 分页查询
+     * @return
+     */
+    @RequestMapping(value="/userList.do", method= RequestMethod.GET)
+    @ResponseBody
+    public String getUserList(String phone,String status,Integer pageSize,Integer pageNo,String sortName,String sortOrder) {
+		try {
+			HashMap<String,Object> map=new HashMap<>();
+			map.put("phone", phone);
+			map.put("status", status);
+			map.put("sortName", sortName);
+			map.put("sortOrder", sortOrder);
+			map.put("pageNo",pageNo);
+			map.put("pageSize",pageSize);
+			PagedResult<UserDTO> list=userService.getUserList(map);
+    	    return responseSuccess(list);
+    	} catch (Exception e) {
+			return responseFail(e.getMessage());
+		}
+    }
+    
+    /**
+     * 显示详情页
+     * @return
+     */
+	@RequestMapping("/userDetailPage")  
+	public String userDetailPage(int id){
+		return "user/userDetail.jsp?id="+id;
+	}
 	
-//	@RequestMapping(value="/addUserMobile",method=RequestMethod.POST)
-//	public void addUserMobile(User user,HttpServletRequest request,HttpServletResponse response){
-//		userService.insert(user);
-//		try {
-//			PrintWriter writer = response.getWriter();
-//			JSONObject object = new JSONObject();
-//			object.put("status", "ok");
-//			object.put("msg", "新增User成功");
-//			writer.println(object.toString());
-//			writer.flush();
-//			writer.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
+	/**
+     * 获取用户
+     * @return
+     */
+	@RequestMapping(value="/userDetail.do",method=RequestMethod.GET)
+	@ResponseBody
+	public String getUser(HttpServletRequest request, int id) {
+		try {
+			UserDTO userDTO=userService.getUser(id);
+			return responseSuccess(userDTO);
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
 }

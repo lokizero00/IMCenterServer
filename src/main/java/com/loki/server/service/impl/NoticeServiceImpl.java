@@ -27,7 +27,7 @@ import com.loki.server.vo.ServiceResult;
 
 @Service
 @Transactional
-public class NoticeServiceImpl extends BaseServiceImpl implements NoticeService {
+public class NoticeServiceImpl extends BaseService implements NoticeService {
 	@Resource NoticeDao noticeDao;
 	@Resource UserNoticeDao userNoticeDao;
 	@Resource NoticeComplexDao noticeComplexDao;

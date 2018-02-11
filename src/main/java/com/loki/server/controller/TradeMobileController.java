@@ -72,7 +72,7 @@ public class TradeMobileController {
 		map.put("industryCode", industryCode);
 		map.put("payCode", payCode);
 		
-		ServiceResult<PagedResult<TradeComplex>> returnValue=tradeService.getTradeListMobile(map,pageNo,pageSize);
+		ServiceResult<PagedResult<TradeComplex>> returnValue=tradeService.getTradeList_mobile(map,pageNo,pageSize);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

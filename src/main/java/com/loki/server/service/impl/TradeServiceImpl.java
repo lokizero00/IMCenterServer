@@ -36,7 +36,7 @@ import com.loki.server.vo.TradeVO;
 
 @Service
 @Transactional
-public class TradeServiceImpl extends BaseServiceImpl implements TradeService {
+public class TradeServiceImpl extends BaseService implements TradeService {
 	@Resource TradeDao tradeDao;
 	@Resource TradeAttachmentDao tradeAttachmentDao;
 	@Resource TradeIndustryDao tradeIndustryDao;
@@ -145,7 +145,7 @@ public class TradeServiceImpl extends BaseServiceImpl implements TradeService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<TradeComplex>> getTradeListMobile(Map<String, Object> map,Integer pageNo,Integer pageSize) {
+	public ServiceResult<PagedResult<TradeComplex>> getTradeList_mobile(Map<String, Object> map,Integer pageNo,Integer pageSize) {
 		ServiceResult<PagedResult<TradeComplex>> returnValue=new ServiceResult<>();
 		if(map!=null) {
 			pageNo = pageNo == null? 1:pageNo;  

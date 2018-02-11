@@ -28,6 +28,6 @@ public interface TradeService {
 	ServiceResult<Integer> addTrade(TradeVO tradeVO);
 	//修改贸易
 	ServiceResult<Void> editTrade(TradeVO tradeVO);
-	ServiceResult<PagedResult<TradeComplex>> getTradeListMobile(Map<String, Object> map,Integer pageNo,Integer pageSize);
+	ServiceResult<PagedResult<TradeComplex>> getTradeList_mobile(Map<String, Object> map,Integer pageNo,Integer pageSize);
 	
 }

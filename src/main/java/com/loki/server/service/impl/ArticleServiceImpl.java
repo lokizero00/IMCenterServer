@@ -22,7 +22,7 @@ import com.loki.server.utils.ServiceException;
 
 @Service
 @Transactional
-public class ArticleServiceImpl extends BaseServiceImpl implements ArticleService {
+public class ArticleServiceImpl extends BaseService implements ArticleService {
 	@Resource
 	ArticleDao articleDao;
 

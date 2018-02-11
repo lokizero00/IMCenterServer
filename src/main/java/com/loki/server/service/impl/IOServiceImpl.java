@@ -25,7 +25,7 @@ import com.loki.server.utils.ServiceException;
 
 @Service
 @Transactional
-public class IOServiceImpl extends BaseServiceImpl implements IOService {
+public class IOServiceImpl extends BaseService implements IOService {
 	@Override
 	public String uploadImage(HttpServletRequest request, MultipartFile file) throws ServiceException, IOException {
 		if (!file.isEmpty()) {

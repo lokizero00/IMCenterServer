@@ -9,16 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.loki.server.dao.AdminDao;
 import com.loki.server.dao.DictionariesDao;
+import com.loki.server.dao.EnterpriseCertificationDao;
+import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.IntentionLogDao;
 import com.loki.server.dao.SettingDao;
 import com.loki.server.dao.TradeLogDao;
 import com.loki.server.dao.UserDao;
+import com.loki.server.entity.EnterpriseCertification;
+import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.IntentionLog;
 import com.loki.server.entity.TradeLog;
 
 @Service
 @Transactional
-public class BaseServiceImpl {
+public class BaseService {
 	@Resource
 	TradeLogDao tradeLogDao;
 	@Resource
@@ -31,6 +35,10 @@ public class BaseServiceImpl {
 	AdminDao adminDao;
 	@Resource
 	SettingDao settingDao;
+	@Resource
+	IdentityCertificationDao identityCertificationDao;
+	@Resource
+	EnterpriseCertificationDao enterpriseCertificationDao;
 
 	protected void addTradeLog(int tradeId, String logRole, int logOperatorId, String logState, String logContent) {
 		TradeLog tradeLog = new TradeLog();
@@ -79,10 +87,26 @@ public class BaseServiceImpl {
 			return null;
 		}
 	}
-	
+
 	protected String getSettingValue(String settingName) {
-		if(settingName!=null && !(settingName.equals(""))) {
+		if (settingName != null && !(settingName.equals(""))) {
 			return settingDao.findByName(settingName);
+		} else {
+			return null;
+		}
+	}
+	
+	protected IdentityCertification getIdentityCertification(int id) {
+		if(id>0) {
+			return identityCertificationDao.findById(id);
+		}else {
+			return null;
+		}
+	}
+	
+	protected EnterpriseCertification getEnterpriseCertification(int id) {
+		if(id>0) {
+			return enterpriseCertificationDao.findById(id);
 		}else {
 			return null;
 		}

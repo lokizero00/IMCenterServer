@@ -23,7 +23,7 @@ public class UserMobileController {
 	//获取用户信息
 	@RequestMapping(value="/getUser",method=RequestMethod.GET)
 	public String getUser(HttpServletRequest request,int userId,ModelMap mm) {
-		ServiceResult<User> returnValue=userService.getUser(userId);
+		ServiceResult<User> returnValue=userService.getUser_mobile(userId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

@@ -1,28 +1,40 @@
 package com.loki.server.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserBindCodeDao;
 import com.loki.server.dao.UserDao;
 import com.loki.server.dao.UserTokenDao;
+import com.loki.server.dto.UserDTO;
+import com.loki.server.dto.convertor.UserConvertor;
+import com.loki.server.entity.EnterpriseCertification;
+import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.Intention;
+import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.User;
 import com.loki.server.entity.UserBindCode;
 import com.loki.server.entity.UserToken;
 import com.loki.server.service.UserService;
+import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.MD5;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ServiceResult;
 import com.loki.server.vo.UserLoginVO;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseService implements UserService {
 
 	@Resource
 	UserDao userDao;
@@ -41,7 +53,7 @@ public class UserServiceImpl implements UserService {
 			// 用户登录验证
 			User user = userDao.loginCheck(phone, md5Password);
 			if (user != null) {
-				if(user.getStatus().equals("on")) {
+				if (user.getStatus().equals("on")) {
 					// 使旧的令牌过期
 					userTokenDao.expireByUserId(user.getId());
 
@@ -63,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 					returnValue.setResultObj(userLoginVO);
-				}else {
+				} else {
 					returnValue.setResultCode(ResultCodeEnums.USER_OUT_OF_SERVICE);
 				}
 			} else {
@@ -84,8 +96,8 @@ public class UserServiceImpl implements UserService {
 			if (userToken != null) {
 				// 获取用户信息
 				User user = userDao.findById(userToken.getUserId());
-				if(user!=null) {
-					if(user.getStatus().equals("on")) {
+				if (user != null) {
+					if (user.getStatus().equals("on")) {
 						// 返回登录信息
 						UserLoginVO userLoginVO = new UserLoginVO();
 						userLoginVO.setUser(user);
@@ -93,10 +105,10 @@ public class UserServiceImpl implements UserService {
 
 						returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 						returnValue.setResultObj(userLoginVO);
-					}else {
+					} else {
 						returnValue.setResultCode(ResultCodeEnums.USER_OUT_OF_SERVICE);
 					}
-				}else {
+				} else {
 					returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 				}
 			} else {
@@ -178,15 +190,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ServiceResult<User> getUser(int userId) {
+	public ServiceResult<User> getUser_mobile(int userId) {
 		ServiceResult<User> returnValue = new ServiceResult<User>();
 		if (userId > 0) {
 			User user = userDao.findById(userId);
-			if (user!=null) {
-				if(user.getStatus().equals("on")) {
+			if (user != null) {
+				if (user.getStatus().equals("on")) {
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 					returnValue.setResultObj(user);
-				}else {
+				} else {
 					returnValue.setResultCode(ResultCodeEnums.USER_OUT_OF_SERVICE);
 				}
 			} else {
@@ -292,8 +304,7 @@ public class UserServiceImpl implements UserService {
 							user.setPassword(newMd5Password);
 							userDao.update(user);
 							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-						}
-						else {
+						} else {
 							returnValue.setResultCode(ResultCodeEnums.USER_OUT_OF_SERVICE);
 						}
 					} else {
@@ -309,5 +320,77 @@ public class UserServiceImpl implements UserService {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
+	}
+
+	@Override
+	public PagedResult<UserDTO> getUserList(Map<String, Object> map) throws ServiceException {
+		if (map != null) {
+			int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
+			int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
+			PageHelper.startPage(pageNo, pageSize);
+			List<User> userList = userDao.findByParam(map);
+			List<UserDTO> userDTOList = new ArrayList<>();
+			for (User user : userList) {
+				UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
+				userDTO.setStatusName(getDictionariesValue("user_status", userDTO.getStatus()));
+				IdentityCertification ic = getIdentityCertification(userDTO.getIdentityId());
+				if (ic != null) {
+					userDTO.setIdentityStatusName(
+							getDictionariesValue("identity_certification_status", ic.getStatus()));
+				} else {
+					userDTO.setIdentityStatusName("未认证");
+				}
+				EnterpriseCertification ec = getEnterpriseCertification(userDTO.getEnterpriseId());
+				if (ec != null) {
+					userDTO.setEnterpriseStatusName(
+							getDictionariesValue("enterprise_certification_status", ec.getStatus()));
+				} else {
+					userDTO.setEnterpriseStatusName("未认证");
+				}
+				userDTOList.add(userDTO);
+			}
+			PagedResult<UserDTO> pageResult = BeanUtil.toPagedResult(userDTOList);
+			if (pageResult != null) {
+				return pageResult;
+			} else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		} else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public UserDTO getUser(int userId) throws ServiceException {
+		if(userId>0) {
+			User user=userDao.findById(userId);
+			if(user!=null) {
+				UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
+				if(userDTO!=null) {
+					userDTO.setStatusName(getDictionariesValue("user_status", userDTO.getStatus()));
+					IdentityCertification ic = getIdentityCertification(userDTO.getIdentityId());
+					if (ic != null) {
+						userDTO.setIdentityStatusName(
+								getDictionariesValue("identity_certification_status", ic.getStatus()));
+					} else {
+						userDTO.setIdentityStatusName("未认证");
+					}
+					EnterpriseCertification ec = getEnterpriseCertification(userDTO.getEnterpriseId());
+					if (ec != null) {
+						userDTO.setEnterpriseStatusName(
+								getDictionariesValue("enterprise_certification_status", ec.getStatus()));
+					} else {
+						userDTO.setEnterpriseStatusName("未认证");
+					}
+					return userDTO;
+				} else {
+					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
+				}
+			} else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		} else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
 	}
 }
