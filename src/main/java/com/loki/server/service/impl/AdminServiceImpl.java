@@ -67,7 +67,7 @@ public class AdminServiceImpl implements AdminService {
 
 	//TODO 这里有问题，第一行的loginCheck执行后，在RedisCache中的put方法中，value是null。很奇怪！
 	@Override
-	public AdminVO login(String userName, String password,String clientIP) throws ServiceException{
+	public AdminVO login(String userName, String password,String clientIP,String contextPath) throws ServiceException{
 		if(userName!=null && userName!="" && password!=null && password!="") {
 			Admin admin=adminDao.loginCheck(userName, password);
 			if(admin!=null) {
@@ -89,14 +89,13 @@ public class AdminServiceImpl implements AdminService {
 					
 					List<Resources> menuList=new ArrayList<Resources>();
 					List<String> permissionList=new ArrayList<String>();
-					String urlContext=settingDao.findByName("url_context");
 					//获取菜单/权限资源
 					for(RoleResources roleResource:roleResourcesList) {
 						Resources resources=resourcesDao.findById(roleResource.getResourcesId());
 						if(resources.getType().equals("menu")) {
 							menuList.add(resources);
 						}else if(resources.getType().equals("action")||resources.getType().equals("page")) {
-							String p_url=urlContext+resources.getUrl();
+							String p_url=contextPath+"/"+resources.getUrl();
 							permissionList.add(p_url);
 						}
 						else {}

@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.loki.server.dao.SettingDao;
 import com.loki.server.entity.UploadFile;
-import com.loki.server.listener.SessionListener;
 import com.loki.server.service.IOService;
 import com.loki.server.utils.CommonUtil;
 import com.loki.server.utils.FileUtil;
@@ -27,10 +25,7 @@ import com.loki.server.utils.ServiceException;
 
 @Service
 @Transactional
-public class IOServiceImpl implements IOService {
-	@Resource
-	SettingDao settingDao;
-
+public class IOServiceImpl extends BaseServiceImpl implements IOService {
 	@Override
 	public String uploadImage(HttpServletRequest request, MultipartFile file) throws ServiceException, IOException {
 		if (!file.isEmpty()) {
@@ -70,8 +65,7 @@ public class IOServiceImpl implements IOService {
 		Iterator<String> fileIterator = multipartRequest.getFileNames();
 		String savePath = request.getSession().getServletContext().getRealPath("/")
 				+ PropertyUtil.getInstance().getPropertyValue("common", "imageUploadPath");
-		String urlContext=settingDao.findByName("url_context");
-		String requestPath ="http://"+request.getHeader("host")+urlContext+PropertyUtil.getInstance().getPropertyValue("common", "imageRequestParam");
+		String requestPath =getSettingValue("transferProtocol")+"://"+request.getHeader("host")+request.getContextPath()+"/"+PropertyUtil.getInstance().getPropertyValue("common", "imageRequestParam");
 		
 		while (fileIterator.hasNext()) {
 			String fileKey = fileIterator.next();

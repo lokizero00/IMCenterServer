@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = "//" + request.getHeader("host") + path + "/";
 %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="contextPath" value="<%=basePath%>"></c:set>
@@ -23,7 +22,7 @@
 			<a class="navbar-brand" href="#">互联制造</a>
 		</div>
 		<ul class="nav navbar-nav navbar-right" id="ul_adminInfo">
-			
+
 		</ul>
 	</div>
 	</nav>

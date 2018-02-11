@@ -13,5 +13,5 @@ public interface AdminService {
 	boolean delete(int id);
 	Admin findById(int id);
 	List<Admin> findAll();
-	AdminVO login(String userName,String password,String clientIP) throws ServiceException;
+	AdminVO login(String userName, String password,String clientIP,String contextPath) throws ServiceException;
 }

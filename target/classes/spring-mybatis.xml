@@ -12,10 +12,12 @@
 
 	<!-- 自动扫描 -->
 	<context:component-scan base-package="com.loki.server" />
-	<!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册-->
-    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+	<!-- 以下 validator ConversionService 在使用 mvc:annotation-driven 会 自动注册 -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 	<!-- 引入配置文件 -->
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>classpath:configs/jdbc.properties</value>
@@ -25,7 +27,7 @@
 	</bean>
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
+	destroy-method="close">
 		<property name="driverClassName" value="${driver}" />
 		<property name="url" value="${url}" />
 		<property name="username" value="${username}" />
@@ -40,45 +42,49 @@
 		<property name="minIdle" value="${minIdle}"></property>
 		<!-- 获取连接最大等待时间 -->
 		<property name="maxWait" value="${maxWait}"></property>
+		<property name="validationQuery" value="${validationQuery}" />
+		<property name="testOnBorrow" value="${testOnBorrow}" />
 	</bean>
 
 	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- 自动扫描mapping.xml文件 -->
-		<property name="mapperLocations" value="classpath:mapping/*.xml"/>
+		<property name="mapperLocations" value="classpath:mapping/*.xml" />
 		<property name="configLocation" value="classpath:configs/mybatis-cache.xml" />
 	</bean>
 
 	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.loki.server.dao" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 
 	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	<!-- redis数据源 -->
-	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">  
-	    <property name="maxIdle" value="${redis.maxIdle}" />  
-	    <property name="maxTotal" value="${redis.maxActive}" />  
-	    <property name="maxWaitMillis" value="${redis.maxWait}" />  
-	    <property name="testOnBorrow" value="${redis.testOnBorrow}" />  
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<property name="maxTotal" value="${redis.maxActive}" />
+		<property name="maxWaitMillis" value="${redis.maxWait}" />
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
 	</bean>
-	
+
 	<!-- Spring-redis连接池管理工厂 -->
 	<bean id="jedisConnectionFactory"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
 		p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"
-		p:pool-config-ref="poolConfig" />  
+		p:pool-config-ref="poolConfig" />
 	<!-- 使用中间类解决RedisCache.jedisConnectionFactory的静态注入，从而使MyBatis实现第三方缓存 -->
 	<bean id="redisCacheTransfer" class="com.loki.server.cache.RedisCacheTransfer">
-	    <property name="jedisConnectionFactory" ref="jedisConnectionFactory"/>
+		<property name="jedisConnectionFactory" ref="jedisConnectionFactory" />
 	</bean>
-	
+
 	<!-- 类型转换及数据格式化 -->
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>	
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
 </beans>

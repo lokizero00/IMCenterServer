@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = "//" + request.getHeader("host") + path + "/";
 %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="contextPath" value="<%=basePath%>"></c:set>
@@ -29,7 +28,8 @@
 			<label for="name">请选择审核结果</label> <select class="form-control"
 				id="select_verifyResult"></select>
 		</div>
-		<div class="form-group" id="div_tradeRefuseReason" style="display:none;">
+		<div class="form-group" id="div_tradeRefuseReason"
+			style="display: none;">
 			<label for="name">拒绝原因</label>
 			<textarea class="form-control" id="ta_tradeRefuseReason" rows="3"></textarea>
 		</div>

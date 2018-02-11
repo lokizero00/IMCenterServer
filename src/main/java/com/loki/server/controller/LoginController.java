@@ -29,7 +29,8 @@ public class LoginController extends BaseController{
 			if(userName!=null&&password!=null) {
 				String md5_password=MD5.getMD5Str(password);
 				String ip=IpUtil.getIpFromRequest(request);
-				AdminVO adminVO=adminService.login(userName, md5_password,ip);
+				String contextPath=request.getContextPath();
+				AdminVO adminVO=adminService.login(userName, md5_password,ip,contextPath);
 				if(adminVO != null) {
 					//登录成功，保存登录信息
 					httpSession.setAttribute("adminId", adminVO.getAdmin().getId());

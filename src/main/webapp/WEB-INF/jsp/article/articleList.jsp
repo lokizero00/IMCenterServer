@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = "//" + request.getHeader("host") + path + "/";
 %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="contextPath" value="<%=basePath%>"></c:set>
@@ -16,7 +15,8 @@
 	rel="stylesheet">
 <link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css"
 	rel="stylesheet">
-<link href="<%=basePath%>static/bootstrap/css/bootstrap-datetimepicker.css"
+<link
+	href="<%=basePath%>static/bootstrap/css/bootstrap-datetimepicker.css"
 	rel="stylesheet">
 <style type="text/css">
 #queryDiv {
@@ -60,11 +60,12 @@
 				<td colspan="5">
 					<div class="form-group">
 						<label for="createTimeStart" class="col-md-2 control-label">从</label>
-						<div class="input-group date form_date col-md-5" data-date="" todayBtn="linked"
-							data-date-format="yyyy-mm-dd" data-link-field="createTimeStart"
-							data-link-format="yyyy-mm-dd">
-							<input class="form-control" id="articleList_queryCreateTimeStart" size="16" type="text" value=""
-								readonly> <span class="input-group-addon"><span
+						<div class="input-group date form_date col-md-5" data-date=""
+							todayBtn="linked" data-date-format="yyyy-mm-dd"
+							data-link-field="createTimeStart" data-link-format="yyyy-mm-dd">
+							<input class="form-control" id="articleList_queryCreateTimeStart"
+								size="16" type="text" value="" readonly> <span
+								class="input-group-addon"><span
 								class="glyphicon glyphicon-remove"></span></span> <span
 								class="input-group-addon"><span
 								class="glyphicon glyphicon-calendar"></span></span>
@@ -76,8 +77,9 @@
 						<div class="input-group date form_date col-md-5" data-date=""
 							data-date-format="yyyy-mm-dd" data-link-field="createTimeEnd"
 							data-link-format="yyyy-mm-dd">
-							<input class="form-control" id="articleList_queryCreateTimeEnd" size="16" type="text" value=""
-								readonly> <span class="input-group-addon"><span
+							<input class="form-control" id="articleList_queryCreateTimeEnd"
+								size="16" type="text" value="" readonly> <span
+								class="input-group-addon"><span
 								class="glyphicon glyphicon-remove"></span></span> <span
 								class="input-group-addon"><span
 								class="glyphicon glyphicon-calendar"></span></span>
@@ -115,6 +117,6 @@
 		src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="<%=basePath%>static/js/common.js"></script>
 	<script src="<%=basePath%>static/js/articleList.js"></script>
-	
+
 </body>
 </html>
