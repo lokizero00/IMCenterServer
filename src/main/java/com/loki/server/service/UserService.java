@@ -2,6 +2,8 @@ package com.loki.server.service;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.loki.server.dto.UserDTO;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.User;
@@ -22,5 +24,10 @@ public interface UserService {
 	
 	//web
 	PagedResult<UserDTO> getUserList(Map<String,Object> map) throws ServiceException;
-	UserDTO getUser(int userId) throws ServiceException;
+	UserDTO getUser(HttpServletRequest request,int userId) throws ServiceException;
+	UserDTO userVerify(HttpServletRequest request,int userId,String status) throws ServiceException;
+	UserDTO changeUserStatus(HttpServletRequest request,int userId) throws ServiceException;
+	boolean changePassword(int userId,String newPassword) throws ServiceException;
+	boolean changePayPwd(int userId,String newPayPwd) throws ServiceException; 
+	UserDTO rebindPhone(HttpServletRequest request,int userId,String newPhone) throws ServiceException;
 }

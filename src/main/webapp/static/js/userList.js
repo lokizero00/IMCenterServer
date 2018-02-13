@@ -198,10 +198,6 @@ var TableInit = function() {
 				+ (path + 's/user/userDetailPage?id=')
 				+ row.id
 				+ '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
-		operate += ' <a class="edit" href="'
-				+ (path + 's/trade/tradeVerify?id=')
-				+ row.id
-				+ '" title="编辑"><span class="glyphicon glyphicon-pencil"></span></a>';
 		return operate;
 	}
 };

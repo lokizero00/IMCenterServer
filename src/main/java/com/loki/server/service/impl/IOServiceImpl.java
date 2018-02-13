@@ -65,7 +65,8 @@ public class IOServiceImpl extends BaseService implements IOService {
 		Iterator<String> fileIterator = multipartRequest.getFileNames();
 		String savePath = request.getSession().getServletContext().getRealPath("/")
 				+ PropertyUtil.getInstance().getPropertyValue("common", "imageUploadPath");
-		String requestPath =getSettingValue("transferProtocol")+"://"+request.getHeader("host")+request.getContextPath()+"/"+PropertyUtil.getInstance().getPropertyValue("common", "imageRequestParam");
+		
+		String requestPath =getImageRequestPath(request);
 		
 		while (fileIterator.hasNext()) {
 			String fileKey = fileIterator.next();

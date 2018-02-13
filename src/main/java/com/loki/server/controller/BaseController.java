@@ -4,7 +4,6 @@ import com.loki.server.common.HttpConstants;
 import com.loki.server.json.JsonDateValueProcessor;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 

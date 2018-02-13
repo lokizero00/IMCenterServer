@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.loki.server.dto.ArticleDTO;
 import com.loki.server.dto.UserDTO;
 import com.loki.server.entity.PagedResult;
-import com.loki.server.entity.TradeComplex;
 import com.loki.server.service.UserService;
+import com.loki.server.utils.ResultCodeEnums;
 
 @Controller
 @RequestMapping("/s/user")
@@ -71,7 +70,75 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public String getUser(HttpServletRequest request, int id) {
 		try {
-			UserDTO userDTO=userService.getUser(id);
+			UserDTO userDTO=userService.getUser(request,id);
+			return responseSuccess(userDTO);
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 停用/启用
+     * @return
+     */
+	@RequestMapping(value="/changeUserStatus.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String changeUserStatus(HttpServletRequest request, int id) {
+		try {
+			UserDTO userDTO=userService.changeUserStatus(request,id);
+			return responseSuccess(userDTO);
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 修改登录密码
+     * @return
+     */
+	@RequestMapping(value="/changePassword.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String changePassword(HttpServletRequest request, int id, String newPassword) {
+		try {
+			boolean result=userService.changePassword(id, newPassword);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.UPDATE_FAIL.getMessage());
+			}
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 修改支付密码
+     * @return
+     */
+	@RequestMapping(value="/changePayPwd.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String changePayPwd(HttpServletRequest request, int id, String newPayPwd) {
+		try {
+			boolean result=userService.changePayPwd(id, newPayPwd);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.UPDATE_FAIL.getMessage());
+			}
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 换绑手机
+     * @return
+     */
+	@RequestMapping(value="/rebindPhone.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String rebindPhone(HttpServletRequest request, int id, String newPhone) {
+		try {
+			UserDTO userDTO=userService.rebindPhone(request, id, newPhone);
 			return responseSuccess(userDTO);
 		}catch(Exception e) {
 			return responseFail(e.getMessage());

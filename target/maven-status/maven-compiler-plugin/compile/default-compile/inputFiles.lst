@@ -100,7 +100,6 @@
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/vo/PersonalCenterVO.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/vo/NoticeVO.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/Dept.java
-/Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/utils/QueryParams.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/service/TradeService.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/utils/FileUtil.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/TradeDocking.java
@@ -135,7 +134,6 @@
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/utils/IpUtil.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/IntentionCashDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/ArticleDao.java
-/Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/utils/BTView.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/AdminDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/utils/BitMap.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/service/impl/TradeServiceImpl.java

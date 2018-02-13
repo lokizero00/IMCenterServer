@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.MD5;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
+import com.loki.server.utils.SessionContext;
 import com.loki.server.vo.ServiceResult;
 import com.loki.server.vo.UserLoginVO;
 
@@ -361,27 +363,35 @@ public class UserServiceImpl extends BaseService implements UserService {
 	}
 
 	@Override
-	public UserDTO getUser(int userId) throws ServiceException {
-		if(userId>0) {
-			User user=userDao.findById(userId);
-			if(user!=null) {
+	public UserDTO getUser(HttpServletRequest request, int userId) throws ServiceException {
+		if (userId > 0) {
+			User user = userDao.findById(userId);
+			if (user != null) {
 				UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
-				if(userDTO!=null) {
-					userDTO.setStatusName(getDictionariesValue("user_status", userDTO.getStatus()));
-					IdentityCertification ic = getIdentityCertification(userDTO.getIdentityId());
-					if (ic != null) {
-						userDTO.setIdentityStatusName(
-								getDictionariesValue("identity_certification_status", ic.getStatus()));
-					} else {
-						userDTO.setIdentityStatusName("未认证");
-					}
-					EnterpriseCertification ec = getEnterpriseCertification(userDTO.getEnterpriseId());
-					if (ec != null) {
-						userDTO.setEnterpriseStatusName(
-								getDictionariesValue("enterprise_certification_status", ec.getStatus()));
-					} else {
-						userDTO.setEnterpriseStatusName("未认证");
-					}
+				if (userDTO != null) {
+					// userDTO.setStatusName(getDictionariesValue("user_status",
+					// userDTO.getStatus()));
+					// IdentityCertification ic = getIdentityCertification(userDTO.getIdentityId());
+					// if (ic != null) {
+					// userDTO.setIdentityStatusName(
+					// getDictionariesValue("identity_certification_status", ic.getStatus()));
+					// } else {
+					// userDTO.setIdentityStatusName("未认证");
+					// }
+					// EnterpriseCertification ec =
+					// getEnterpriseCertification(userDTO.getEnterpriseId());
+					// if (ec != null) {
+					// userDTO.setEnterpriseStatusName(
+					// getDictionariesValue("enterprise_certification_status", ec.getStatus()));
+					// } else {
+					// userDTO.setEnterpriseStatusName("未认证");
+					// }
+					// if (userDTO.getAvatar() != null && !(userDTO.getAvatar().equals(""))) {
+					// String requestPath = getImageRequestPath(request);
+					// String avatarUrl = requestPath + "?name=" + userDTO.getAvatar();
+					// userDTO.setAvatarUrl(avatarUrl);
+					// }
+					userDTO = completeUserExtendsFields(request, userDTO);
 					return userDTO;
 				} else {
 					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
@@ -390,6 +400,147 @@ public class UserServiceImpl extends BaseService implements UserService {
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
 		} else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public UserDTO userVerify(HttpServletRequest request, int userId, String status) throws ServiceException {
+		// TODO web端用户审核
+		return null;
+	}
+
+	@Override
+	public UserDTO changeUserStatus(HttpServletRequest request, int userId) throws ServiceException {
+		if (userId > 0) {
+			User user = userDao.findById(userId);
+			if (user != null) {
+				int adminId=(int) SessionContext.getInstance().getSessionAttribute("adminId");
+				String adminLogContent="管理员 "+getAdminName(adminId);
+				if (user.getStatus().equals("us_on")) {
+					adminLogContent+=" 停用 ";
+					user.setStatus("us_off");
+				} else if (user.getStatus().equals("us_off")) {
+					adminLogContent+=" 启用 ";
+					user.setStatus("us_on");
+				} else {
+					throw new ServiceException(ResultCodeEnums.DATA_INVALID);
+				}
+				adminLogContent+="了用户 "+user.getUserName()+" 的账户";
+				if(userDao.update(user)) {
+					addAdminLog(adminLogContent);
+					UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
+					if (userDTO != null) {
+						userDTO = completeUserExtendsFields(request, userDTO);
+						return userDTO;
+					} else {
+						throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
+					}
+				}else {
+					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
+				}
+			} else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		} else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	private UserDTO completeUserExtendsFields(HttpServletRequest request, UserDTO userDTO) {
+		if (userDTO != null) {
+			userDTO.setStatusName(getDictionariesValue("user_status", userDTO.getStatus()));
+			IdentityCertification ic = getIdentityCertification(userDTO.getIdentityId());
+			if (ic != null) {
+				userDTO.setIdentityStatusName(getDictionariesValue("identity_certification_status", ic.getStatus()));
+			} else {
+				userDTO.setIdentityStatusName("未认证");
+			}
+			EnterpriseCertification ec = getEnterpriseCertification(userDTO.getEnterpriseId());
+			if (ec != null) {
+				userDTO.setEnterpriseStatusName(
+						getDictionariesValue("enterprise_certification_status", ec.getStatus()));
+			} else {
+				userDTO.setEnterpriseStatusName("未认证");
+			}
+			if (userDTO.getAvatar() != null && !(userDTO.getAvatar().equals(""))) {
+				String requestPath = getImageRequestPath(request);
+				String avatarUrl = requestPath + "?name=" + userDTO.getAvatar();
+				userDTO.setAvatarUrl(avatarUrl);
+			}
+			return userDTO;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public boolean changePassword(int userId, String newPassword) throws ServiceException {
+		if (userId > 0 && newPassword != null && !(newPassword.equals(""))) {
+			User user = userDao.findById(userId);
+			if (user != null) {
+				String newMd5Password = MD5.getMD5Str(newPassword);
+				user.setPassword(newMd5Password);
+				if (userDao.update(user)) {
+					int adminId=(int) SessionContext.getInstance().getSessionAttribute("adminId");
+					 addAdminLog("管理员 "+getAdminName(adminId)+" 修改了用户 "+user.getUserName()+" 的登录密码");
+					return true;
+				} else {
+					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
+				}
+			} else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		} else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public boolean changePayPwd(int userId, String newPayPwd) throws ServiceException {
+		if (userId > 0 && newPayPwd != null && !(newPayPwd.equals(""))) {
+			User user = userDao.findById(userId);
+			if (user != null) {
+				String newMd5PayPwd = MD5.getMD5Str(newPayPwd);
+				user.setPayPwd(newMd5PayPwd);
+				if (userDao.update(user)) {
+					int adminId=(int) SessionContext.getInstance().getSessionAttribute("adminId");
+					addAdminLog("管理员 "+getAdminName(adminId)+" 修改了用户 "+user.getUserName()+" 的支付密码");
+					return true;
+				} else {
+					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
+				}
+			} else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		} else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public UserDTO rebindPhone(HttpServletRequest request, int userId, String newPhone) throws ServiceException {
+		if(userId>0 && newPhone!=null && !(newPhone.equals("")) ) {
+			User user = userDao.findById(userId);
+			if (user != null) {
+				user.setPhone(newPhone);
+				if (userDao.update(user)) {
+					int adminId=(int) SessionContext.getInstance().getSessionAttribute("adminId");
+					addAdminLog("管理员 "+getAdminName(adminId)+" 重新绑定了 "+user.getUserName()+" 的手机号，新手机号为 "+newPhone);
+					UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
+					if (userDTO != null) {
+						userDTO = completeUserExtendsFields(request, userDTO);
+						return userDTO;
+					} else {
+						throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
+					}
+				} else {
+					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
+				}
+			} else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}

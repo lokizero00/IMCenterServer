@@ -22,9 +22,13 @@ $(document).ready(function() {
 						window.location = path + 's/article/articleListPage';
 					}
 				},
-				error : function(data) {
-					alert(data.statusText);
-				}
+                error : function(data) {
+					if (data.statusText == 'OK') {
+						alert('您没有相关权限');
+					} else {
+						alert(data.statusText);
+					}
+                }
 			});
 		}
 	});
@@ -121,6 +125,13 @@ function showSel(elementName, elementType,currentValue) {
 					}
 					// 查询界面
 					$(elementName).append(opts);
-				}
+				},
+                error : function(data) {
+					if (data.statusText == 'OK') {
+						alert('您没有相关权限');
+					} else {
+						alert(data.statusText);
+					}
+                }
 			});
 }

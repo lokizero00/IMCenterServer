@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.loki.server.entity.Admin;
 import com.loki.server.service.AdminService;
 import com.loki.server.utils.IpUtil;
 import com.loki.server.utils.MD5;
@@ -39,6 +38,7 @@ public class LoginController extends BaseController{
 					httpSession.setAttribute("clientAdmin", adminVO.getAdmin());
 					httpSession.setAttribute("menuList", adminVO.getMenuList());
 					httpSession.setAttribute("permissionList", adminVO.getPermissionList());
+					httpSession.setAttribute("loginIp", ip);
 					
 					return responseSuccess();
 				}else {

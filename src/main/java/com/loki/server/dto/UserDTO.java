@@ -24,6 +24,7 @@ public class UserDTO implements Serializable{
 	private String easePwd;
 	private String status;
 	
+	private String avatarUrl;
 	private String identityStatusName;
 	private String enterpriseStatusName;
 	private String statusName;
@@ -147,5 +148,11 @@ public class UserDTO implements Serializable{
 	}
 	public void setEnterpriseStatusName(String enterpriseStatusName) {
 		this.enterpriseStatusName = enterpriseStatusName;
+	}
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 }

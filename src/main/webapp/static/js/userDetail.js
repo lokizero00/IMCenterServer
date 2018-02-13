@@ -2,104 +2,35 @@
 var path = $("#contextPath").val();
 var paramId=getQueryString('id');
 $(document).ready(function() {
-	$.ajax({
-		"type" : 'get',
-		"url" : path + 's/user/userDetail.do?id='
-				+ paramId,
-		"dataType" : "json",
-		"success" : function(data) {
-			refreshUserData(data);
-		}
+	$("#btnVerify").click(function() {
+		alert("还没做，不要点我！");
+	});
+	$("#btnStatus").click(function() {
+		var param = {};
+		param.id=paramId;
+		$.ajax({
+			"type" : 'post',
+			"url" : path + 's/user/changeUserStatus.do',
+			"data" : param,
+			"dataType" : "json",
+			"success" : function(data) {
+				if(data.isError){
+					alert("修改失败，原因："+data.errorMsg);
+				}else{
+					alert("执行成功");
+				}
+				refreshUserData(data);
+			},
+	        error : function(data) {
+				if (data.statusText == 'OK') {
+					alert('您没有相关权限');
+				} else {
+					alert(data.statusText);
+				}
+	        }
+		});
 	});
 });
-
-function rebindPhone(){
-	var param = {};
-	param.id=paramId;
-	param.newPhone=$("#rpm_newPhone").val();
-	$.ajax({
-		"type" : 'post',
-		"url" : path + 's/user/rebindPhone.do',
-		"data" : param,
-		"dataType" : "json",
-		"success" : function(data) {
-			if(data.isError){
-				alert("修改失败，原因："+data.errorMsg);
-			}else{
-				alert("修改成功");
-			}
-			refreshUserData(data);
-			$('#rebindPhoneModal').modal('hide');
-		},
-        error : function(data) {
-			if (data.statusText == 'OK') {
-				alert('您没有相关权限');
-			} else {
-				alert(data.statusText);
-			}
-        }
-	});
-}
-
-function changePassword(){
-	var param = {};
-	param.id=paramId;
-	param.newPassword=$("#cpm_newPassword").val();
-	$.ajax({
-		"type" : 'post',
-		"url" : path + 's/user/changePassword.do',
-		"data" : param,
-		"dataType" : "json",
-		"success" : function(data) {
-			if(data.isError){
-				alert("修改失败，原因："+data.errorMsg);
-			}else{
-				alert("修改成功");
-			}
-			$('#changePasswordModal').modal('hide');
-		},
-        error : function(data) {
-			if (data.statusText == 'OK') {
-				alert('您没有相关权限');
-			} else {
-				alert(data.statusText);
-			}
-        }
-	});
-}
-
-function changePayPwd(){
-	var param = {};
-	param.id=paramId;
-	param.newPayPwd=$("#cppm_newPayPwd").val();
-	$.ajax({
-		"type" : 'post',
-		"url" : path + 's/user/changePayPwd.do',
-		"data" : param,
-		"dataType" : "json",
-		"success" : function(data) {
-			if(data.isError){
-				alert("修改失败，原因："+data.errorMsg);
-			}else{
-				alert("修改成功");
-			}
-			$('#changePayPwdModal').modal('hide');
-		},
-        error : function(data) {
-			if (data.statusText == 'OK') {
-				alert('您没有相关权限');
-			} else {
-				alert(data.statusText);
-			}
-        }
-	});
-}
-
-function clearModalInput(){
-	$("#cpm_newPassword").val('');
-	$("#rpm_newPhone").val('');
-	$("#cppm_newPayPwd").val('');
-}
 
 function refreshUserData(data){
 	var str="";

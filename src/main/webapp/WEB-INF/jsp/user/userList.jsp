@@ -67,9 +67,9 @@
 	<input type="hidden" id="contextPath" value="${contextPath}" />
 	<div class="container-fluid">
 		<div id="toolbar" class="btn-group">
-			<button id="btn_add" type="button" class="btn btn-default">
+			<!-- <button id="btn_add" type="button" class="btn btn-default">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-			</button>
+			</button> -->
 		</div>
 		<table id="table_userList"></table>
 	</div>
