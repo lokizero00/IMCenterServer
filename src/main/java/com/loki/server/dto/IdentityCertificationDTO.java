@@ -1,11 +1,11 @@
-package com.loki.server.entity;
+package com.loki.server.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class IdentityCertification implements Serializable{
+public class IdentityCertificationDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
+
 	private int id;
 	private Timestamp createTime;
 	private Timestamp updateTime;
@@ -18,6 +18,12 @@ public class IdentityCertification implements Serializable{
 	private int adminVerifierId;
 	private String status;
 	private String refuseReason;
+	
+	private String userNickName;
+	private String adminVerifierName;
+	private String statusName;
+	private String identityFrontUrl;
+	private String identityBackUrl;
 	public int getId() {
 		return id;
 	}
@@ -35,6 +41,12 @@ public class IdentityCertification implements Serializable{
 	}
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	public String getTrueName() {
 		return trueName;
@@ -84,11 +96,34 @@ public class IdentityCertification implements Serializable{
 	public void setRefuseReason(String refuseReason) {
 		this.refuseReason = refuseReason;
 	}
-	public int getUserId() {
-		return userId;
+	public String getAdminVerifierName() {
+		return adminVerifierName;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setAdminVerifierName(String adminVerifierName) {
+		this.adminVerifierName = adminVerifierName;
 	}
-
+	public String getStatusName() {
+		return statusName;
+	}
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+	public String getIdentityFrontUrl() {
+		return identityFrontUrl;
+	}
+	public void setIdentityFrontUrl(String identityFrontUrl) {
+		this.identityFrontUrl = identityFrontUrl;
+	}
+	public String getIdentityBackUrl() {
+		return identityBackUrl;
+	}
+	public void setIdentityBackUrl(String identityBackUrl) {
+		this.identityBackUrl = identityBackUrl;
+	}
+	public String getUserNickName() {
+		return userNickName;
+	}
+	public void setUserNickName(String userNickName) {
+		this.userNickName = userNickName;
+	}
 }

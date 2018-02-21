@@ -9,8 +9,6 @@ public class EnterpriseCertification implements Serializable{
 	private int id;
 	private Timestamp createTime;
 	private Timestamp updateTime;
-	private int creatorId;
-	private int updaterId;
 	private int userId;
 	private String position;
 	private String enterpriseName;
@@ -37,24 +35,6 @@ public class EnterpriseCertification implements Serializable{
 	}
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
-	}
-	public int getCreatorId() {
-		return creatorId;
-	}
-	public void setCreatorId(int creatorId) {
-		this.creatorId = creatorId;
-	}
-	public int getUpdaterId() {
-		return updaterId;
-	}
-	public void setUpdaterId(int updaterId) {
-		this.updaterId = updaterId;
-	}
-	public int getUserId() {
-		return userId;
-	}
-	public void setUserId(int userId) {
-		this.userId = userId;
 	}
 	public String getPosition() {
 		return position;
@@ -103,6 +83,12 @@ public class EnterpriseCertification implements Serializable{
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 }

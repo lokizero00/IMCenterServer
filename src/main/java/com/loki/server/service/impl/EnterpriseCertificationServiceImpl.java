@@ -51,7 +51,6 @@ public class EnterpriseCertificationServiceImpl implements EnterpriseCertificati
 					}
 				}
 				EnterpriseCertification newCertification=new EnterpriseCertification();
-				newCertification.setCreatorId(enterpriseCertificationVO.getUserId());
 				newCertification.setUserId(enterpriseCertificationVO.getUserId());
 				newCertification.setPosition(enterpriseCertificationVO.getPosition());
 				newCertification.setEnterpriseName(enterpriseCertificationVO.getEnterpriseName());
@@ -80,7 +79,6 @@ public class EnterpriseCertificationServiceImpl implements EnterpriseCertificati
 			EnterpriseCertification enterpriseCertification=enterpriseCertificationDao.findCurrentByUserId(enterpriseCertificationVO.getUserId());
 			if(enterpriseCertification!=null) {
 				if(enterpriseCertification.getId()==enterpriseCertificationVO.getId() && enterpriseCertification.getStatus().equals("ec_refuse")) {
-					enterpriseCertification.setUpdaterId(enterpriseCertificationVO.getUserId());
 					enterpriseCertification.setPosition(enterpriseCertificationVO.getPosition());
 					enterpriseCertification.setEnterpriseName(enterpriseCertificationVO.getEnterpriseName());
 					enterpriseCertification.setLicensePic(enterpriseCertificationVO.getLicensePic());

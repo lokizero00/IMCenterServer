@@ -2,60 +2,134 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.IdentityCertificationDao">
-  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="identityCertificationDO" type="com.loki.server.entity.IdentityCertification">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
-    <result column="updater_id" jdbcType="INTEGER" property="updaterId" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="true_name" jdbcType="VARCHAR" property="trueName" />
-    <result column="identity_number" jdbcType="VARCHAR" property="identityNumber" />
-    <result column="identity_front" jdbcType="VARCHAR" property="identityFront" />
-    <result column="identity_back" jdbcType="VARCHAR" property="identityBack" />
-    <result column="verify_time" jdbcType="TIMESTAMP" property="verifyTime" />
-    <result column="admin_verifier_id" jdbcType="INTEGER" property="adminVerifierId" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
-  </resultMap>
-  
-  <sql id="Base_Column_List">
-    id,create_time,update_time,creator_id,updater_id,user_id,true_name,identity_number,identity_front,identity_back,verify_time,admin_verifier_id,status,refuse_reason
-  </sql>
-  
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.IdentityCertification">
-		insert into identity_certification (create_time,creator_id,user_id,true_name,identity_number,identity_front,identity_back,status,admin_verifier_id) values(now(),#{creatorId},#{userId},#{trueName},#{identityNumber},#{identityFront},#{identityBack},#{status},0)
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="identityCertificationDO" type="com.loki.server.entity.IdentityCertification">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="true_name" jdbcType="VARCHAR" property="trueName" />
+		<result column="identity_number" jdbcType="VARCHAR" property="identityNumber" />
+		<result column="identity_front" jdbcType="VARCHAR" property="identityFront" />
+		<result column="identity_back" jdbcType="VARCHAR" property="identityBack" />
+		<result column="verify_time" jdbcType="TIMESTAMP" property="verifyTime" />
+		<result column="admin_verifier_id" jdbcType="INTEGER" property="adminVerifierId" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,create_time,update_time,user_id,true_name,identity_number,identity_front,identity_back,verify_time,admin_verifier_id,status,refuse_reason
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.IdentityCertification">
+		insert into identity_certification
+		(create_time,user_id,true_name,identity_number,identity_front,identity_back,status,admin_verifier_id)
+		values(now(),#{userId},#{trueName},#{identityNumber},#{identityFront},#{identityBack},#{status},0)
 	</insert>
-  
-  <select id="findById" parameterType="int" resultMap="identityCertificationDO">
-		select <include refid="Base_Column_List" /> 
+
+	<select id="findById" parameterType="int" resultMap="identityCertificationDO">
+		select
+		<include refid="Base_Column_List" />
 		from identity_certification
 		where id=#{_parameter}
-  </select>
-  
-  <select id="findByUserId" parameterType="int" resultMap="identityCertificationDO">
-		select <include refid="Base_Column_List" />
+	</select>
+
+	<select id="findByUserId" parameterType="int"
+		resultMap="identityCertificationDO">
+		select
+		<include refid="Base_Column_List" />
 		from identity_certification
 		where user_id=#{_parameter} limit 1
-  </select>
-  
-  <select id="findByIdAndUserId" resultMap="identityCertificationDO">
-		select <include refid="Base_Column_List" />
+	</select>
+
+	<select id="findByIdAndUserId" resultMap="identityCertificationDO">
+		select
+		<include refid="Base_Column_List" />
 		from identity_certification
 		where id=#{id} and user_id=#{userId}
-  </select>
-  
-  <select id="findAll" resultMap="identityCertificationDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findAll" resultMap="identityCertificationDO">
+		select
+		<include refid="Base_Column_List" />
 		from identity_certification
-  </select>
-  
-  <update id="update" parameterType="com.loki.server.entity.IdentityCertification">
-  	update identity_certification SET update_time=#{updateTime},updater_id=#{updaterId},user_id=#{userId},true_name=#{trueName},identity_number=#{identityNumber},identity_front=#{identityFront},identity_back=#{identityBack},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},status=#{status},refuse_reason=#{refuseReason} where id=#{id}
-  </update>
-  
-  <delete id="delete" parameterType="int">
-		delete from identity_certification where id=#{_parameter}
+	</select>
+
+	<update id="update" parameterType="com.loki.server.entity.IdentityCertification">
+		update identity_certification SET
+		update_time=#{updateTime},true_name=#{trueName},identity_number=#{identityNumber},identity_front=#{identityFront},identity_back=#{identityBack},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},status=#{status},refuse_reason=#{refuseReason}
+		where id=#{id}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		delete from
+		identity_certification where id=#{_parameter}
 	</delete>
+
+	<select id="findByParam" resultMap="identityCertificationDO">
+		select
+		<include refid="Base_Column_List" />
+		from identity_certification
+		<where>
+			<if test="createTimeStart != null">
+			 	<![CDATA[
+					create_time>=#{createTimeStart}
+				]]>
+			</if>
+			<if test="createTimeEnd != null">
+			 	<![CDATA[
+					and create_time<=#{createTimeEnd}
+				]]>
+			</if>
+			<if test="updateTimeStart != null">
+			 	<![CDATA[
+					and update_time>=#{updateTimeStart}
+				]]>
+			</if>
+			<if test="updateTimeEnd != null">
+			 	<![CDATA[
+					and update_time<=#{updateTimeEnd}
+				]]>
+			</if>
+			<if test="userId !=null and userId!=0">
+				and user_id=#{userId}
+			</if>
+			<if test="trueName !=null and trueName!=''">
+				and true_name like CONCAT('%','${trueName}','%' )
+			</if>
+			<if test="identityNumber !=null and identityNumber!=''">
+				and identity_number like CONCAT('%','${identityNumber}','%' )
+			</if>
+			<if test="verifyTimeStart != null">
+			 	<![CDATA[
+					and verify_time>=#{verifyTimeStart}
+				]]>
+			</if>
+			<if test="verifyTimeEnd != null">
+			 	<![CDATA[
+					and verify_time<=#{verifyTimeEnd}
+				]]>
+			</if>
+			<if test="adminVerifierId !=null and adminVerifierId!=0">
+				and admin_verifier_id=#{adminVerifierId}
+			</if>
+			<if test="status !=null and status!=''">
+				and status=#{status}
+			</if>
+		</where>
+		ORDER BY
+		<choose>
+			<when test="sortName!=null">
+				${sortName}
+				<if test="sortOrder!=null">
+					${sortOrder}
+				</if>
+			</when>
+			<otherwise>
+				id desc
+			</otherwise>
+		</choose>
+	</select>
 </mapper>

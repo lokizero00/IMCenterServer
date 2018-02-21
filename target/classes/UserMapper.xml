@@ -29,7 +29,7 @@
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.User">
-		insert into user(user_name,password,nick_name,phone,phone_bind,email,email_bind,avatar,pay_pwd,regist_time,regist_ip,identity_id,enterprise_id,ease_id,ease_pwd) 
+		insert into user(user_name,password,nick_name,phone,phone_bind,email,email_bind,avatar,pay_pwd,regist_time,regist_ip,identity_id,enterprise_id,ease_id,ease_pwd,status) 
 		values(#{userName},#{password},#{nickName},#{phone},#{phoneBind},#{email},#{emailBind},#{avatar},#{payPwd},now(),#{registIp},#{identityId},#{enterpriseId},#{easeId},#{easePwd},#{status})
 	</insert>
   

@@ -2,64 +2,77 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.EnterpriseCertificationDao">
-  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="enterpriseCertificationDO" type="com.loki.server.entity.EnterpriseCertification">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
-    <result column="updater_id" jdbcType="INTEGER" property="updaterId" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="position" jdbcType="VARCHAR" property="position" />
-    <result column="enterprise_name" jdbcType="VARCHAR" property="enterpriseName" />
-    <result column="license_pic" jdbcType="VARCHAR" property="licensePic" />
-    <result column="verify_time" jdbcType="TIMESTAMP" property="verifyTime" />
-    <result column="admin_verifier_id" jdbcType="INTEGER" property="adminVerifierId" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
-    <result column="deleted" jdbcType="BIT" property="deleted"/>
-  </resultMap>
-  
-  <sql id="Base_Column_List">
-    id,create_time,update_time,creator_id,updater_id,user_id,position,enterprise_name,license_pic,verify_time,admin_verifier_id,status,refuse_reason,deleted
-  </sql>
-  
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.EnterpriseCertification">
-		insert into enterprise_certification (create_time,creator_id,user_id,position,enterprise_name,license_pic,status,admin_verifier_id) values(now(),#{creatorId},#{userId},#{position},#{enterpriseName},#{licensePic},#{status},0)
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="enterpriseCertificationDO"
+		type="com.loki.server.entity.EnterpriseCertification">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="position" jdbcType="VARCHAR" property="position" />
+		<result column="enterprise_name" jdbcType="VARCHAR" property="enterpriseName" />
+		<result column="license_pic" jdbcType="VARCHAR" property="licensePic" />
+		<result column="verify_time" jdbcType="TIMESTAMP" property="verifyTime" />
+		<result column="admin_verifier_id" jdbcType="INTEGER" property="adminVerifierId" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+		<result column="deleted" jdbcType="BIT" property="deleted" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,create_time,update_time,user_id,position,enterprise_name,license_pic,verify_time,admin_verifier_id,status,refuse_reason,deleted
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.EnterpriseCertification">
+		insert into enterprise_certification
+		(create_time,user_id,position,enterprise_name,license_pic,status,admin_verifier_id)
+		values(now(),#{userId},#{position},#{enterpriseName},#{licensePic},#{status},0)
 	</insert>
-  
-  <select id="findById" parameterType="int" resultMap="enterpriseCertificationDO">
-		select <include refid="Base_Column_List" /> 
+
+	<select id="findById" parameterType="int" resultMap="enterpriseCertificationDO">
+		select
+		<include refid="Base_Column_List" />
 		from enterprise_certification
 		where id=#{_parameter}
-  </select>
-  
-  <select id="findCurrentByUserId" parameterType="int" resultMap="enterpriseCertificationDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findCurrentByUserId" parameterType="int"
+		resultMap="enterpriseCertificationDO">
+		select
+		<include refid="Base_Column_List" />
 		from enterprise_certification
-		where user_id=#{_parameter} and deleted=0 limit 1
-  </select>
-  
-  <select id="findAllByUserId" parameterType="int" resultMap="enterpriseCertificationDO">
-		select <include refid="Base_Column_List" /> 
+		where user_id=#{_parameter} and deleted=0
+		limit 1
+	</select>
+
+	<select id="findAllByUserId" parameterType="int"
+		resultMap="enterpriseCertificationDO">
+		select
+		<include refid="Base_Column_List" />
 		from enterprise_certification
 		where user_id=#{_parameter}
-  </select>
-  
-  <select id="findAll" resultMap="enterpriseCertificationDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findAll" resultMap="enterpriseCertificationDO">
+		select
+		<include refid="Base_Column_List" />
 		from enterprise_certification
-  </select>
-  
-  <update id="nullifyByUserId" parameterType="int">
-  	update enterprise_certification set deleted=1 where user_id=#{_parameter} and deleted=0
-  </update>
-  
-  <update id="update" parameterType="com.loki.server.entity.EnterpriseCertification">
-  	update enterprise_certification SET update_time=#{updateTime},updater_id=#{updaterId},user_id=#{userId},position=#{position},enterprise_name=#{enterpriseName},license_pic=#{licensePic},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},status=#{status},refuse_reason=#{refuseReason},deleted=#{deleted} where id=#{id}
-  </update>
-  
-  <delete id="delete" parameterType="int">
-		delete from enterprise_certification where id=#{_parameter}
+	</select>
+
+	<update id="nullifyByUserId" parameterType="int">
+		update enterprise_certification set deleted=1 where user_id=#{_parameter}
+		and deleted=0
+	</update>
+
+	<update id="update" parameterType="com.loki.server.entity.EnterpriseCertification">
+		update enterprise_certification SET
+		update_time=#{updateTime},position=#{position},enterprise_name=#{enterpriseName},license_pic=#{licensePic},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},status=#{status},refuse_reason=#{refuseReason},deleted=#{deleted}
+		where id=#{id}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		delete from
+		enterprise_certification where id=#{_parameter}
 	</delete>
 </mapper>

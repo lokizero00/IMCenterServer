@@ -24,6 +24,7 @@
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/TradeComplex.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/IntentionLog.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/service/UserService.java
+/Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/controller/CertificationController.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/AdminLogDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/controller/BaseController.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/ResourcesDao.java
@@ -98,6 +99,7 @@
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/TradeReportAttachmentDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/IntentionRechargeDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/vo/PersonalCenterVO.java
+/Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dto/convertor/IdentityCertificationConvertor.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/vo/NoticeVO.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/Dept.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/service/TradeService.java
@@ -136,6 +138,7 @@
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/ArticleDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/AdminDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/utils/BitMap.java
+/Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dto/IdentityCertificationDTO.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/service/impl/TradeServiceImpl.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/vo/UserLoginVO.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/UploadFile.java

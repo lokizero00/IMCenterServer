@@ -29,7 +29,7 @@ public class CertificationMobileController {
 	//添加实名认证
 	@RequestMapping(value="/addIdentityCertification",method=RequestMethod.POST)
 	public String addIdentityCertification(HttpServletRequest request,@RequestBody IdentityCertificationVO identityCertificationVO,ModelMap mm) {
-		ServiceResult<Integer> returnValue=identityCertificationService.addIdentityCertification(identityCertificationVO);
+		ServiceResult<Integer> returnValue=identityCertificationService.addIdentityCertification_mobile(identityCertificationVO);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
@@ -44,7 +44,7 @@ public class CertificationMobileController {
 	//修改实名认证
 	@RequestMapping(value="/editIdentityCertification",method=RequestMethod.POST)
 	public String editIdentityCertification(HttpServletRequest request,@RequestBody IdentityCertificationVO identityCertificationVO,ModelMap mm) {
-		ServiceResult<Void> returnValue=identityCertificationService.editIdentityCertification(identityCertificationVO);
+		ServiceResult<Void> returnValue=identityCertificationService.editIdentityCertification_mobile(identityCertificationVO);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
@@ -89,7 +89,7 @@ public class CertificationMobileController {
 	//获取实名认证
 	@RequestMapping(value="/getIdentityCertification",method=RequestMethod.GET)
 	public String getIdentityCertification(HttpServletRequest request,int userId,ModelMap mm) {
-		ServiceResult<IdentityCertification> returnValue=identityCertificationService.getIdentityCertification(userId);
+		ServiceResult<IdentityCertification> returnValue=identityCertificationService.getIdentityCertification_mobile(userId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
@@ -119,7 +119,7 @@ public class CertificationMobileController {
 	//获取实名认证状态
 	@RequestMapping(value="/getIdentityCertificationStatus",method=RequestMethod.GET)
 	public String getIdentityCertificationStatus(HttpServletRequest request,int userId,ModelMap mm) {
-		ServiceResult<String> returnValue=identityCertificationService.getIdentityCertificationStatus(userId);
+		ServiceResult<String> returnValue=identityCertificationService.getIdentityCertificationStatus_mobile(userId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

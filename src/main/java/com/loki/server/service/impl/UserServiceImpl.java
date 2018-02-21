@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
+import com.loki.server.dao.EnterpriseCertificationDao;
+import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserBindCodeDao;
 import com.loki.server.dao.UserDao;
@@ -46,6 +48,10 @@ public class UserServiceImpl extends BaseService implements UserService {
 	private IntentionDao intentionDao;
 	@Resource
 	private UserBindCodeDao userBindCodeDao;
+	@Resource
+	IdentityCertificationDao identityCertificationDao;
+	@Resource
+	EnterpriseCertificationDao enterpriseCertificationDao;
 
 	@Override
 	public ServiceResult<UserLoginVO> loginCheck(String phone, String password, String clientIp, String clientType) {
@@ -55,7 +61,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 			// 用户登录验证
 			User user = userDao.loginCheck(phone, md5Password);
 			if (user != null) {
-				if (user.getStatus().equals("on")) {
+				if (user.getStatus().equals("us_on")) {
 					// 使旧的令牌过期
 					userTokenDao.expireByUserId(user.getId());
 
@@ -99,7 +105,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 				// 获取用户信息
 				User user = userDao.findById(userToken.getUserId());
 				if (user != null) {
-					if (user.getStatus().equals("on")) {
+					if (user.getStatus().equals("us_on")) {
 						// 返回登录信息
 						UserLoginVO userLoginVO = new UserLoginVO();
 						userLoginVO.setUser(user);
@@ -150,6 +156,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 						user.setRegistIp(clientIp);
 						user.setEaseId(user.getUserName());
 						user.setEasePwd(md5Password);
+						user.setStatus("us_on");
 						userDao.insert(user);
 
 						// 写入登录令牌
@@ -197,7 +204,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 		if (userId > 0) {
 			User user = userDao.findById(userId);
 			if (user != null) {
-				if (user.getStatus().equals("on")) {
+				if (user.getStatus().equals("us_on")) {
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 					returnValue.setResultObj(user);
 				} else {
@@ -301,7 +308,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 				if ((nowTime - codeTime) <= 300000) {
 					User user = userDao.findByPhone(phone);
 					if (user != null) {
-						if (user.getStatus().equals("on")) {
+						if (user.getStatus().equals("us_on")) {
 							String newMd5Password = MD5.getMD5Str(newPassword);
 							user.setPassword(newMd5Password);
 							userDao.update(user);
@@ -335,14 +342,14 @@ public class UserServiceImpl extends BaseService implements UserService {
 			for (User user : userList) {
 				UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
 				userDTO.setStatusName(getDictionariesValue("user_status", userDTO.getStatus()));
-				IdentityCertification ic = getIdentityCertification(userDTO.getIdentityId());
+				IdentityCertification ic =identityCertificationDao.findById(userDTO.getIdentityId());
 				if (ic != null) {
 					userDTO.setIdentityStatusName(
 							getDictionariesValue("identity_certification_status", ic.getStatus()));
 				} else {
 					userDTO.setIdentityStatusName("未认证");
 				}
-				EnterpriseCertification ec = getEnterpriseCertification(userDTO.getEnterpriseId());
+				EnterpriseCertification ec = enterpriseCertificationDao.findById(userDTO.getEnterpriseId());
 				if (ec != null) {
 					userDTO.setEnterpriseStatusName(
 							getDictionariesValue("enterprise_certification_status", ec.getStatus()));
@@ -369,28 +376,6 @@ public class UserServiceImpl extends BaseService implements UserService {
 			if (user != null) {
 				UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
 				if (userDTO != null) {
-					// userDTO.setStatusName(getDictionariesValue("user_status",
-					// userDTO.getStatus()));
-					// IdentityCertification ic = getIdentityCertification(userDTO.getIdentityId());
-					// if (ic != null) {
-					// userDTO.setIdentityStatusName(
-					// getDictionariesValue("identity_certification_status", ic.getStatus()));
-					// } else {
-					// userDTO.setIdentityStatusName("未认证");
-					// }
-					// EnterpriseCertification ec =
-					// getEnterpriseCertification(userDTO.getEnterpriseId());
-					// if (ec != null) {
-					// userDTO.setEnterpriseStatusName(
-					// getDictionariesValue("enterprise_certification_status", ec.getStatus()));
-					// } else {
-					// userDTO.setEnterpriseStatusName("未认证");
-					// }
-					// if (userDTO.getAvatar() != null && !(userDTO.getAvatar().equals(""))) {
-					// String requestPath = getImageRequestPath(request);
-					// String avatarUrl = requestPath + "?name=" + userDTO.getAvatar();
-					// userDTO.setAvatarUrl(avatarUrl);
-					// }
 					userDTO = completeUserExtendsFields(request, userDTO);
 					return userDTO;
 				} else {
@@ -415,19 +400,19 @@ public class UserServiceImpl extends BaseService implements UserService {
 		if (userId > 0) {
 			User user = userDao.findById(userId);
 			if (user != null) {
-				int adminId=(int) SessionContext.getInstance().getSessionAttribute("adminId");
-				String adminLogContent="管理员 "+getAdminName(adminId);
+				int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
+				String adminLogContent = "管理员 " + getAdminName(adminId);
 				if (user.getStatus().equals("us_on")) {
-					adminLogContent+=" 停用 ";
+					adminLogContent += " 停用 ";
 					user.setStatus("us_off");
 				} else if (user.getStatus().equals("us_off")) {
-					adminLogContent+=" 启用 ";
+					adminLogContent += " 启用 ";
 					user.setStatus("us_on");
 				} else {
 					throw new ServiceException(ResultCodeEnums.DATA_INVALID);
 				}
-				adminLogContent+="了用户 "+user.getUserName()+" 的账户";
-				if(userDao.update(user)) {
+				adminLogContent += "了用户 " + user.getUserName() + " 的账户";
+				if (userDao.update(user)) {
 					addAdminLog(adminLogContent);
 					UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
 					if (userDTO != null) {
@@ -436,7 +421,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 					} else {
 						throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
 					}
-				}else {
+				} else {
 					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
 				}
 			} else {
@@ -450,13 +435,13 @@ public class UserServiceImpl extends BaseService implements UserService {
 	private UserDTO completeUserExtendsFields(HttpServletRequest request, UserDTO userDTO) {
 		if (userDTO != null) {
 			userDTO.setStatusName(getDictionariesValue("user_status", userDTO.getStatus()));
-			IdentityCertification ic = getIdentityCertification(userDTO.getIdentityId());
+			IdentityCertification ic = identityCertificationDao.findById(userDTO.getIdentityId());
 			if (ic != null) {
 				userDTO.setIdentityStatusName(getDictionariesValue("identity_certification_status", ic.getStatus()));
 			} else {
 				userDTO.setIdentityStatusName("未认证");
 			}
-			EnterpriseCertification ec = getEnterpriseCertification(userDTO.getEnterpriseId());
+			EnterpriseCertification ec = enterpriseCertificationDao.findById(userDTO.getEnterpriseId());
 			if (ec != null) {
 				userDTO.setEnterpriseStatusName(
 						getDictionariesValue("enterprise_certification_status", ec.getStatus()));
@@ -482,8 +467,8 @@ public class UserServiceImpl extends BaseService implements UserService {
 				String newMd5Password = MD5.getMD5Str(newPassword);
 				user.setPassword(newMd5Password);
 				if (userDao.update(user)) {
-					int adminId=(int) SessionContext.getInstance().getSessionAttribute("adminId");
-					 addAdminLog("管理员 "+getAdminName(adminId)+" 修改了用户 "+user.getUserName()+" 的登录密码");
+					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
+					addAdminLog("管理员 " + getAdminName(adminId) + " 修改了用户 " + user.getUserName() + " 的登录密码");
 					return true;
 				} else {
 					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
@@ -504,8 +489,8 @@ public class UserServiceImpl extends BaseService implements UserService {
 				String newMd5PayPwd = MD5.getMD5Str(newPayPwd);
 				user.setPayPwd(newMd5PayPwd);
 				if (userDao.update(user)) {
-					int adminId=(int) SessionContext.getInstance().getSessionAttribute("adminId");
-					addAdminLog("管理员 "+getAdminName(adminId)+" 修改了用户 "+user.getUserName()+" 的支付密码");
+					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
+					addAdminLog("管理员 " + getAdminName(adminId) + " 修改了用户 " + user.getUserName() + " 的支付密码");
 					return true;
 				} else {
 					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
@@ -520,13 +505,14 @@ public class UserServiceImpl extends BaseService implements UserService {
 
 	@Override
 	public UserDTO rebindPhone(HttpServletRequest request, int userId, String newPhone) throws ServiceException {
-		if(userId>0 && newPhone!=null && !(newPhone.equals("")) ) {
+		if (userId > 0 && newPhone != null && !(newPhone.equals(""))) {
 			User user = userDao.findById(userId);
 			if (user != null) {
 				user.setPhone(newPhone);
 				if (userDao.update(user)) {
-					int adminId=(int) SessionContext.getInstance().getSessionAttribute("adminId");
-					addAdminLog("管理员 "+getAdminName(adminId)+" 重新绑定了 "+user.getUserName()+" 的手机号，新手机号为 "+newPhone);
+					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
+					addAdminLog("管理员 " + getAdminName(adminId) + " 重新绑定了 " + user.getUserName() + " 的手机号，新手机号为 "
+							+ newPhone);
 					UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
 					if (userDTO != null) {
 						userDTO = completeUserExtendsFields(request, userDTO);
@@ -540,7 +526,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 			} else {
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
-		}else {
+		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}

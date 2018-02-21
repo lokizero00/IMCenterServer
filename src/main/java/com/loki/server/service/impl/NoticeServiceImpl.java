@@ -46,7 +46,7 @@ public class NoticeServiceImpl extends BaseService implements NoticeService {
 			if(notice.getId()>0) {
 				if(noticeVO.isSend()) {
 					//创建userNotice记录
-					List<Integer> userIdList=userDao.findIdList("on");
+					List<Integer> userIdList=userDao.findIdList("us_on");
 					for(int userId:userIdList) {
 						UserNotice userNotice=new UserNotice();
 						userNotice.setUserId(userId);

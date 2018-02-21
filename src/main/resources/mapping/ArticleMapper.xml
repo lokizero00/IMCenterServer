@@ -89,10 +89,7 @@
 				and content like CONCAT('%','${content}','%' )
 			</if>
 			<if test="status !=null and status!=''">
-				and relation_type=#{relationType}
-			</if>
-			<if test="relationId !=null">
-				and relation_id=#{relationId}
+				and status=#{status}
 			</if>
 		</where>
 		ORDER BY
