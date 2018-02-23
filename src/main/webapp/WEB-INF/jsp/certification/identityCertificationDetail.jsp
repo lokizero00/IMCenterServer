@@ -23,7 +23,8 @@
 	<jsp:include page="identityCertification.jsp" />
 	<div class="form-group">
 		<div>
-			<button type="button" id="btnVerify" data-toggle='modal' data-target='#icVerifyModal' class="btn btn-primary">审核</button>
+			<button type="button" id="btnVerify" data-toggle='modal'
+				data-target='#icVerifyModal' class="btn btn-primary">审核</button>
 			<button type="button" id="btnBack" onclick="window.history.go(-1);"
 				class="btn btn-primary">返回</button>
 		</div>
@@ -39,11 +40,19 @@
 					<h4 class="modal-title" id="myModalLabel">实名认证审核</h4>
 				</div>
 				<div class="modal-body">
-					审核结果：
-					<select id="identityCertificationDetail_verifyResult">
-						<option value="pass">通过</option>
-						<option value="refuse">不通过</option>
-					</select>
+					<div>
+						<label for="name">请选择审核结果</label> <select
+							id="identityCertificationDetail_verifyResult">
+							<option value="verify_pass">通过</option>
+							<option value="verify_refuse">不通过</option>
+						</select>
+					</div>
+					<div class="form-group" id="div_identityCertificationRefuseReason"
+						style="display: none;">
+						<label for="name">拒绝原因</label>
+						<textarea class="form-control"
+							id="ta_identityCertificationRefuseReason" rows="3"></textarea>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>

@@ -17,3 +17,12 @@ function operateRegionFormatter(value, row, index) {
 	var html = ('<span>' + row.provinceName+'-'+row.cityName+'-'+row.townName + '</span>');
 	return html;
 }
+
+function refreshTable(tableId){
+	var $table = $(tableId);
+	if($table.bootstrapTable('getData').length>0){
+		$table.bootstrapTable('selectPage', 1);
+	}else{
+		$table.bootstrapTable(('refresh'));
+	}
+}

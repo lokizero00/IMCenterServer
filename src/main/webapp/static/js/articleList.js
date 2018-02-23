@@ -25,13 +25,11 @@ $(document).ready(function() {
 	});
 	$("#queryButton").click(function() {
 		saveSearchParam();
-		var $table = $('#table_articleList');
-		$table.bootstrapTable('selectPage', 1);
+		refreshTable('#table_articleList');
 	});
 	$("#resetButton").click(function() {
 		clearSearchParam();
-		var $table = $('#table_articleList');
-		$table.bootstrapTable('selectPage', 1);
+		refreshTable('#table_articleList');
 	});
 
 	$('.form_datetime').datetimepicker({
@@ -89,32 +87,32 @@ function saveInStorage(elementName, elementValue) {
 	return storage.setItem(elementName, elementValue);
 }
 
-//// 配置下拉框
-//function showSel(elementName, elementType) {
-//	$
-//			.ajax({
-//				"type" : 'get',
-//				"url" : path + 's/dictionaries/dictionariesList.do?type='
-//						+ elementType,
-//				"dataType" : "json",
-//				"success" : function(data) {
-//					var data_list = data;
-//					var opts = "<option value=''>全部</option>";
-//					for (var data_index = 0; data_index < data_list.length; data_index++) {
-//						var data = data_list[data_index];
-//						opts += "<option value='" + data.code + "'";
-//						if (getFromStorage(elementName) == data.code) {
-//							opts += " selected='selected'>";
-//						} else {
-//							opts += " >";
-//						}
-//						opts += data.value + "</option>";
-//					}
-//					// 查询界面
-//					$(elementName).append(opts);
-//				}
-//			});
-//}
+// 配置下拉框
+function showSel(elementName, elementType) {
+	$
+			.ajax({
+				"type" : 'get',
+				"url" : path + 's/dictionaries/dictionariesList.do?type='
+						+ elementType,
+				"dataType" : "json",
+				"success" : function(data) {
+					var data_list = data;
+					var opts = "<option value=''>全部</option>";
+					for (var data_index = 0; data_index < data_list.length; data_index++) {
+						var data = data_list[data_index];
+						opts += "<option value='" + data.code + "'";
+						if (getFromStorage(elementName) == data.code) {
+							opts += " selected='selected'>";
+						} else {
+							opts += " >";
+						}
+						opts += data.value + "</option>";
+					}
+					// 查询界面
+					$(elementName).append(opts);
+				}
+			});
+}
 
 // 配置文本框
 function showInput(elementName) {

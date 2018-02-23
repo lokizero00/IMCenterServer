@@ -75,6 +75,15 @@ $(document).ready(function() {
 			
 			pmStr+="<a class='carousel-control left' href='#myCarousel' data-slide='prev'>&lsaquo;</a> <a class='carousel-control right' href='#myCarousel' data-slide='next'>&rsaquo;</a>";
 			$("#myCarousel").html(pmStr);
+			
+			//控制审核按钮显示与隐藏
+			if($('#btnVerify').length>0){
+				if(data.status=='ic_verify'){
+					$('#btnVerify').removeAttr("disabled");
+				}else{
+					$('#btnVerify').attr('disabled',"true");
+				}
+			}
 		}
 	});
 });

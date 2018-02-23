@@ -75,4 +75,72 @@
 		delete from
 		enterprise_certification where id=#{_parameter}
 	</delete>
+	
+	<select id="findByParam" resultMap="enterpriseCertificationDO">
+		select
+		<include refid="Base_Column_List" />
+		from enterprise_certification
+		<where>
+			<if test="createTimeStart != null">
+			 	<![CDATA[
+					create_time>=#{createTimeStart}
+				]]>
+			</if>
+			<if test="createTimeEnd != null">
+			 	<![CDATA[
+					and create_time<=#{createTimeEnd}
+				]]>
+			</if>
+			<if test="updateTimeStart != null">
+			 	<![CDATA[
+					and update_time>=#{updateTimeStart}
+				]]>
+			</if>
+			<if test="updateTimeEnd != null">
+			 	<![CDATA[
+					and update_time<=#{updateTimeEnd}
+				]]>
+			</if>
+			<if test="userId !=null and userId!=0">
+				and user_id=#{userId}
+			</if>
+			<if test="position !=null and position !=''">
+				and position like CONCAT('%','${position}','%' )
+			</if>
+			<if test="enterpriseName !=null and enterpriseName !=''">
+				and enterprise_name like CONCAT('%','${enterpriseName}','%' )
+			</if>
+			<if test="verifyTimeStart != null">
+			 	<![CDATA[
+					and verify_time>=#{verifyTimeStart}
+				]]>
+			</if>
+			<if test="verifyTimeEnd != null">
+			 	<![CDATA[
+					and verify_time<=#{verifyTimeEnd}
+				]]>
+			</if>
+			<if test="adminVerifierId !=null and adminVerifierId!=0">
+				and admin_verifier_id=#{adminVerifierId}
+			</if>
+			<if test="status !=null and status!=''">
+				and status=#{status}
+			</if>
+			<if test="deleted !=null">
+				and deleted=#{deleted}
+			</if>
+		</where>
+		ORDER BY
+		<choose>
+			<when test="sortName!=null">
+				${sortName}
+				<if test="sortOrder!=null">
+					${sortOrder}
+				</if>
+			</when>
+			<otherwise>
+				id desc
+			</otherwise>
+		</choose>
+	</select>
 </mapper>

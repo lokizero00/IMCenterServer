@@ -59,7 +59,7 @@ public class CertificationMobileController {
 	//添加企业认证
 	@RequestMapping(value="/addEnterpriseCertification",method=RequestMethod.POST)
 	public String addEnterpriseCertification(HttpServletRequest request,@RequestBody EnterpriseCertificationVO enterpriseCertificationVO,ModelMap mm) {
-		ServiceResult<Integer> returnValue=enterpriseCertificationService.addEnterpriseCertification(enterpriseCertificationVO);
+		ServiceResult<Integer> returnValue=enterpriseCertificationService.addEnterpriseCertification_mobile(enterpriseCertificationVO);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
@@ -74,7 +74,7 @@ public class CertificationMobileController {
 	//修改企业认证
 	@RequestMapping(value="/editEnterpriseCertification",method=RequestMethod.POST)
 	public String editEnterpriseCertification(HttpServletRequest request,@RequestBody EnterpriseCertificationVO enterpriseCertificationVO,ModelMap mm) {
-		ServiceResult<Void> returnValue=enterpriseCertificationService.editEnterpriseCertification(enterpriseCertificationVO);
+		ServiceResult<Void> returnValue=enterpriseCertificationService.editEnterpriseCertification_mobile(enterpriseCertificationVO);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
@@ -104,7 +104,7 @@ public class CertificationMobileController {
 	//获取企业认证
 	@RequestMapping(value="/getEnterpriseCertification",method=RequestMethod.GET)
 	public String getEnterpriseCertification(HttpServletRequest request,int userId,ModelMap mm) {
-		ServiceResult<EnterpriseCertification> returnValue=enterpriseCertificationService.getEnterpriseCertification(userId);
+		ServiceResult<EnterpriseCertification> returnValue=enterpriseCertificationService.getEnterpriseCertification_mobile(userId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

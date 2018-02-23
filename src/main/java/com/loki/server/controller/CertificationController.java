@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loki.server.dto.EnterpriseCertificationDTO;
 import com.loki.server.dto.IdentityCertificationDTO;
 import com.loki.server.entity.PagedResult;
+import com.loki.server.service.EnterpriseCertificationService;
 import com.loki.server.service.IdentityCertificationService;
 import com.loki.server.utils.CommonUtil;
 import com.loki.server.utils.ResultCodeEnums;
@@ -20,6 +22,7 @@ import com.loki.server.utils.ResultCodeEnums;
 @RequestMapping("/s/certification")
 public class CertificationController extends BaseController{
 	@Autowired IdentityCertificationService identityCertificationService;
+	@Autowired EnterpriseCertificationService enterpriseCertificationService;
 	
 	
 	/**
@@ -98,4 +101,38 @@ public class CertificationController extends BaseController{
 			return responseFail(e.getMessage());
 		}
 	}
+	
+	/**
+     * 显示企业认证首页
+     * @return
+     */
+	@RequestMapping("/enterpriseCertificationListPage")  
+	public String enterpriseCertificationListPage(){
+		return "certification/enterpriseCertificationList";
+	}
+	
+	/**
+     * 企业认证分页查询
+     * @return
+     */
+    @RequestMapping(value="/enterpriseCertificationList.do", method= RequestMethod.GET)
+    @ResponseBody
+    public String getEnterpriseCertificationList(String createTimeStart_str,String createTimeEnd_str,String status,Integer pageSize,Integer pageNo,String sortName,String sortOrder) {
+		try {
+			HashMap<String,Object> map=new HashMap<>();
+			map.put("createTimeStart", CommonUtil.getInstance().getDate(createTimeStart_str, "start"));
+			map.put("createTimeEnd", CommonUtil.getInstance().getDate(createTimeEnd_str, "end"));
+			map.put("updateTimeStart", null);
+			map.put("updateTimeEnd", null);
+			map.put("status", status);
+			map.put("sortName", sortName);
+			map.put("sortOrder", sortOrder);
+			map.put("pageNo",pageNo);
+			map.put("pageSize",pageSize);
+			PagedResult<EnterpriseCertificationDTO> list=enterpriseCertificationService.getEnterpriseCertificationList(map);
+    	    return responseSuccess(list);
+    	} catch (Exception e) {
+			return responseFail(e.getMessage());
+		}
+    }
 }

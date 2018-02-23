@@ -15,19 +15,19 @@ $(document).ready(function() {
 	oTable.Init();
 
 	// 填充文本框
-	showInput('#identityCertificationList_queryCreateTimeStart');
-	showInput('#identityCertificationList_queryCreateTimeEnd');
+	showInput('#enterpriseCertificationList_queryCreateTimeStart');
+	showInput('#enterpriseCertificationList_queryCreateTimeEnd');
 	
 	//填充下拉框
-	showSel("#identityCertificationList_queryStatus", "identity_certification_status");
+	showSel("#enterpriseCertificationList_queryStatus", "enterprise_certification_status");
 
 	$("#queryButton").click(function() {
 		saveSearchParam();
-		refreshTable('#table_identityCertificationList');
+		refreshTable('#table_enterpriseCertificationList');
 	});
 	$("#resetButton").click(function() {
 		clearSearchParam();
-		refreshTable('#table_identityCertificationList');
+		refreshTable('#table_enterpriseCertificationList');
 	});
 
 	$('.form_datetime').datetimepicker({
@@ -64,17 +64,17 @@ $(document).ready(function() {
 });
 
 function saveSearchParam() {
-	saveInStorage("#identityCertificationList_queryStatus", $("#identityCertificationList_queryStatus").val());
-	saveInStorage("#identityCertificationList_queryCreateTimeStart", $(
-			"#identityCertificationList_queryCreateTimeStart").val());
-	saveInStorage("#identityCertificationList_queryCreateTimeEnd", $(
-			"#identityCertificationList_queryCreateTimeEnd").val());
+	saveInStorage("#enterpriseCertificationList_queryStatus", $("#enterpriseCertificationList_queryStatus").val());
+	saveInStorage("#enterpriseCertificationList_queryCreateTimeStart", $(
+			"#enterpriseCertificationList_queryCreateTimeStart").val());
+	saveInStorage("#enterpriseCertificationList_queryCreateTimeEnd", $(
+			"#enterpriseCertificationList_queryCreateTimeEnd").val());
 }
 function clearSearchParam() {
 	storage.clear();
-	$("#identityCertificationList_queryStatus").val('');
-	$("#identityCertificationList_queryCreateTimeStart").val('');
-	$("#identityCertificationList_queryCreateTimeEnd").val('');
+	$("#enterpriseCertificationList_queryStatus").val('');
+	$("#enterpriseCertificationList_queryCreateTimeStart").val('');
+	$("#enterpriseCertificationList_queryCreateTimeEnd").val('');
 }
 
 function getFromStorage(elementName) {
@@ -121,8 +121,8 @@ var TableInit = function() {
 	var oTableInit = new Object();
 	// 初始化Table
 	oTableInit.Init = function() {
-		$('#table_identityCertificationList').bootstrapTable({
-			url : path + 's/certification/identityCertificationList.do', // 请求后台的URL（*）
+		$('#table_enterpriseCertificationList').bootstrapTable({
+			url : path + 's/certification/enterpriseCertificationList.do', // 请求后台的URL（*）
 			method : 'get', // 请求方式（*）
 			toolbar : '#toolbar', // 工具按钮用哪个容器
 			striped : true, // 是否显示行间隔色
@@ -155,14 +155,9 @@ var TableInit = function() {
 				title : '序号',// 标题
 				formatter : function(value, row, index) {  
 	                //return index + 1;  
-	                var page = $('#table_identityCertificationList').bootstrapTable("getPage");  
+	                var page = $('#table_enterpriseCertificationList').bootstrapTable("getPage");  
 	                return page.pageSize * (page.pageNumber - 1) + index + 1;  
 	            }  
-			}, {
-				title : '真实姓名',
-				field : 'trueName',
-				sortable : true,
-				sortName : 'true_name'
 			}, {
 				title : '用户',
 				field : 'userNickName',
@@ -174,10 +169,15 @@ var TableInit = function() {
 				sortName : 'create_time',
 				formatter : operateDateFormatter
 			}, {
-				title : '身份证号',
-				field : 'identityNumber',
+				title : '企业名称',
+				field : 'enterpriseName',
 				sortable : true,
-				sortName : 'identity_number'
+				sortName : 'enterprise_name'
+			}, {
+				title : '职位',
+				field : 'position',
+				sortable : true,
+				sortName : 'position'
 			}, {
 				title : '状态',
 				field : 'statusName',
@@ -195,6 +195,14 @@ var TableInit = function() {
 				sortable : true,
 				sortName : 'admin_verifier_id'
 			}, {
+				title : '当前关联',
+				field : 'deleted',
+				sortable : true,
+				sortName : 'deleted',
+				formatter : function(value, row, index) { 
+					return value? '否':'是';
+	            }  
+			}, {
 				title : '操作',
 				field : 'operate',
 				width : '5%',
@@ -211,9 +219,9 @@ var TableInit = function() {
 			pageNo : params.pageNumber, // 页码
 			sortName : params.sortName, // 排序列名
 			sortOrder : params.sortOrder, // 排序方式
-			status : getFromStorage('#identityCertificationList_queryStatus'),
-			createTimeStart_str : getFromStorage('#identityCertificationList_queryCreateTimeStart'),
-			createTimeEnd_str : getFromStorage('#identityCertificationList_queryCreateTimeEnd')
+			status : getFromStorage('#enterpriseCertificationList_queryStatus'),
+			createTimeStart_str : getFromStorage('#enterpriseCertificationList_queryCreateTimeStart'),
+			createTimeEnd_str : getFromStorage('#enterpriseCertificationList_queryCreateTimeEnd')
 		};
 		return temp;
 	};
@@ -224,7 +232,7 @@ var TableInit = function() {
 	// 表格-操作 - 格式化
 	function operateFormatter(value, row, index) {
 		var operate = '<a class="view" href="'
-				+ (path + 's/certification/identityCertificationDetailPage?id=')
+				+ (path + 's/certification/enterpriseCertificationDetailPage?id=')
 				+ row.id
 				+ '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
 		return operate;

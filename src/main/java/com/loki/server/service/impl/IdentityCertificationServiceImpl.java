@@ -207,19 +207,23 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 		if (id > 0 && verify != null && !(verify.equals(""))) {
 			IdentityCertification identityCertification = identityCertificationDao.findById(id);
 			if (identityCertification != null) {
-				int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
-				identityCertification.setAdminVerifierId(adminId);
-				identityCertification.setVerifyTime(new Timestamp(System.currentTimeMillis()));
-				if (verify.equals("pass")) {
-					identityCertification.setStatus("ic_pass");
-				} else {
-					identityCertification.setStatus("ic_refuse");
-					identityCertification.setRefuseReason(refuseReason);
-				}
-				if (identityCertificationDao.update(identityCertification)) {
-					return true;
-				} else {
-					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
+				if(identityCertification.getStatus().equals("ic_verify")) {
+					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
+					identityCertification.setAdminVerifierId(adminId);
+					identityCertification.setVerifyTime(new Timestamp(System.currentTimeMillis()));
+					if (verify.equals("verify_pass")) {
+						identityCertification.setStatus("ic_pass");
+					} else {
+						identityCertification.setStatus("ic_refuse");
+						identityCertification.setRefuseReason(refuseReason);
+					}
+					if (identityCertificationDao.update(identityCertification)) {
+						return true;
+					} else {
+						throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
+					}
+				}else {
+					throw new ServiceException(ResultCodeEnums.DATA_INVALID);
 				}
 			} else {
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);

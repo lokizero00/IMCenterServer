@@ -27,13 +27,11 @@ $(document).ready(function() {
 	});
 	$("#queryButton").click(function() {
 		saveSearchParam();
-		var $table = $('#table_noticeList');
-		$table.bootstrapTable('selectPage', 1);
+		refreshTable('#table_noticeList');
 	});
 	$("#resetButton").click(function() {
 		clearSearchParam();
-		var $table = $('#table_noticeList');
-		$table.bootstrapTable('selectPage', 1);
+		refreshTable('#table_noticeList');
 	});
 
 	$('.form_datetime').datetimepicker({

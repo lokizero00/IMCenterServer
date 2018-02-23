@@ -2,13 +2,21 @@
 var path = $("#contextPath").val();
 var paramId=getQueryString('id');
 $(document).ready(function() {
+	$("#identityCertificationDetail_verifyResult").change(function(){
+		var currentValue=$(this).children('option:selected').val();
+		if(currentValue==='verify_refuse'){
+			$("#div_identityCertificationRefuseReason").show();
+		}else{
+			$("#div_identityCertificationRefuseReason").hide();
+		}
+	});
 });
 
 function identityCertificationVerify(){
 	var param = {};
 	param.id=paramId;
 	param.verifyResult=$("#identityCertificationDetail_verifyResult").val();
-	param.refuseReason="2222222";
+	param.refuseReason=$("#ta_identityCertificationRefuseReason").val();
 	$.ajax({
 		"type" : 'post',
 		"url" : path + 's/certification/verifyIdentityCertification.do',
