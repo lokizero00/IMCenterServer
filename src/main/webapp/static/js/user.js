@@ -146,9 +146,19 @@ function refreshUserData(data){
 	str+="</tr>";
 	str+="<tr>";
 	str+="<td>实名认证</td><td>";
-	str+=data.identityStatusName+"</td>";
+	var identity_href="#";
+	if(data.identityId>0){
+		identity_href=path + "s/certification/identityCertificationDetailPage?id="+data.identityId;
+	}
+	str+="<a class='view' href='"+identity_href+"' title='点击查看'><span class='glyphicon glyphicon-info-sign'></span>"+data.identityStatusName+"</a>";
+	str+="</td>";
 	str+="<td>企业认证</td><td>";
-	str+=data.enterpriseStatusName+"</td>";
+	var enterprise_href="#";
+	if(data.enterpriseId>0){
+		enterprise_href=path + "s/certification/enterpriseCertificationDetailPage?id="+data.enterpriseId;
+	}
+	str+="<a class='view' href='"+enterprise_href+"' title='点击查看'><span class='glyphicon glyphicon-info-sign'></span>"+data.enterpriseStatusName+"</a>";
+	str+="</td>";
 	str+="</tr>";
 	str+="<tr>";
 	str+="<td>环信id</td><td>";
