@@ -79,19 +79,28 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 	public ServiceResult<Integer> addIdentityCertification_mobile(IdentityCertificationVO identityCertificationVO) {
 		ServiceResult<Integer> returnValue = new ServiceResult<>();
 		if (identityCertificationVO != null && identityCertificationVO.getUserId() > 0) {
-			IdentityCertification identityCertification = new IdentityCertification();
-			identityCertification.setUserId(identityCertificationVO.getUserId());
-			identityCertification.setTrueName(identityCertificationVO.getTrueName());
-			identityCertification.setIdentityNumber(identityCertificationVO.getIdentityNumber());
-			identityCertification.setIdentityFront(identityCertificationVO.getIdentityFront());
-			identityCertification.setIdentityBack(identityCertificationVO.getIdentityBack());
-			identityCertification.setStatus("ic_verify");
-			identityCertificationDao.insert(identityCertification);
-			if (identityCertification.getId() > 0) {
-				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-				returnValue.setResultObj(identityCertification.getId());
+			User user = userDao.findById(identityCertificationVO.getUserId());
+			if (user != null) {
+				IdentityCertification identityCertification = new IdentityCertification();
+				identityCertification.setUserId(identityCertificationVO.getUserId());
+				identityCertification.setTrueName(identityCertificationVO.getTrueName());
+				identityCertification.setIdentityNumber(identityCertificationVO.getIdentityNumber());
+				identityCertification.setIdentityFront(identityCertificationVO.getIdentityFront());
+				identityCertification.setIdentityBack(identityCertificationVO.getIdentityBack());
+				identityCertification.setStatus("ic_verify");
+				identityCertificationDao.insert(identityCertification);
+				if (identityCertification.getId() > 0) {
+					// 关联到用户表
+					user.setIdentityId(identityCertification.getId());
+					userDao.update(user);
+
+					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+					returnValue.setResultObj(identityCertification.getId());
+				} else {
+					returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
+				}
 			} else {
-				returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
+				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}
 		} else {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
@@ -145,11 +154,7 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 			for (IdentityCertification identityCertification : identityCertificationList) {
 				IdentityCertificationDTO identityCertificationDTO = IdentityCertificationConvertor
 						.convertIdentityCertification2IdentityCertificationDTO(identityCertification);
-				identityCertificationDTO.setUserNickName(getUserNickName(identityCertificationDTO.getUserId()));
-				identityCertificationDTO
-						.setAdminVerifierName(getAdminName(identityCertificationDTO.getAdminVerifierId()));
-				identityCertificationDTO.setStatusName(
-						getDictionariesValue("identity_certification_status", identityCertificationDTO.getStatus()));
+				identityCertificationDTO=setDTOExtendFields(identityCertificationDTO, null);
 				identityCertificationDTOList.add(identityCertificationDTO);
 			}
 			PagedResult<IdentityCertificationDTO> pageResult = BeanUtil.toPagedResult(identityCertificationDTOList);
@@ -172,19 +177,7 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 				IdentityCertificationDTO identityCertificationDTO = IdentityCertificationConvertor
 						.convertIdentityCertification2IdentityCertificationDTO(identityCertification);
 				if (identityCertificationDTO != null) {
-					identityCertificationDTO.setUserNickName(getUserNickName(identityCertificationDTO.getUserId()));
-					identityCertificationDTO
-							.setAdminVerifierName(getAdminName(identityCertificationDTO.getAdminVerifierId()));
-					identityCertificationDTO.setStatusName(getDictionariesValue("identity_certification_status",
-							identityCertificationDTO.getStatus()));
-					if (identityCertificationDTO.getIdentityFront() != null
-							&& !(identityCertificationDTO.getIdentityFront().equals(""))) {
-						identityCertificationDTO.setIdentityFrontUrl(getImageRequestUrl(request,identityCertificationDTO.getIdentityFront()));
-					}
-					if (identityCertificationDTO.getIdentityBack() != null
-							&& !(identityCertificationDTO.getIdentityBack().equals(""))) {
-						identityCertificationDTO.setIdentityBackUrl(getImageRequestUrl(request,identityCertificationDTO.getIdentityBack()));
-					}
+					identityCertificationDTO=setDTOExtendFields(identityCertificationDTO,request);
 					return identityCertificationDTO;
 				} else {
 					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
@@ -198,12 +191,12 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 	}
 
 	@Override
-	public boolean verifyIdentityCertification(HttpServletRequest request, int id, String verify,
-			String refuseReason) throws ServiceException {
+	public boolean verifyIdentityCertification(HttpServletRequest request, int id, String verify, String refuseReason)
+			throws ServiceException {
 		if (id > 0 && verify != null && !(verify.equals(""))) {
 			IdentityCertification identityCertification = identityCertificationDao.findById(id);
 			if (identityCertification != null) {
-				if(identityCertification.getStatus().equals("ic_verify")) {
+				if (identityCertification.getStatus().equals("ic_verify")) {
 					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
 					identityCertification.setAdminVerifierId(adminId);
 					identityCertification.setVerifyTime(new Timestamp(System.currentTimeMillis()));
@@ -218,7 +211,7 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 					} else {
 						throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
 					}
-				}else {
+				} else {
 					throw new ServiceException(ResultCodeEnums.DATA_INVALID);
 				}
 			} else {
@@ -227,6 +220,28 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
+	}
+
+	protected IdentityCertificationDTO setDTOExtendFields(IdentityCertificationDTO identityCertificationDTO,
+			HttpServletRequest request) {
+		if (identityCertificationDTO != null) {
+			identityCertificationDTO.setUserNickName(getUserNickName(identityCertificationDTO.getUserId()));
+			identityCertificationDTO.setAdminVerifierName(getAdminName(identityCertificationDTO.getAdminVerifierId()));
+			identityCertificationDTO.setStatusName(
+					getDictionariesValue("identity_certification_status", identityCertificationDTO.getStatus()));
+			
+			if (request!=null && identityCertificationDTO.getIdentityFront() != null
+					&& !(identityCertificationDTO.getIdentityFront().equals(""))) {
+				identityCertificationDTO
+						.setIdentityFrontUrl(getImageRequestUrl(request, identityCertificationDTO.getIdentityFront()));
+			}
+			if (request!=null && identityCertificationDTO.getIdentityBack() != null
+					&& !(identityCertificationDTO.getIdentityBack().equals(""))) {
+				identityCertificationDTO
+						.setIdentityBackUrl(getImageRequestUrl(request, identityCertificationDTO.getIdentityBack()));
+			}
+		}
+		return identityCertificationDTO;
 	}
 
 }

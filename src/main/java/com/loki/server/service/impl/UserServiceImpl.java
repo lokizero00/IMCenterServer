@@ -20,8 +20,6 @@ import com.loki.server.dao.UserDao;
 import com.loki.server.dao.UserTokenDao;
 import com.loki.server.dto.UserDTO;
 import com.loki.server.dto.convertor.UserConvertor;
-import com.loki.server.entity.EnterpriseCertification;
-import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.Intention;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.User;
@@ -341,21 +339,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 			List<UserDTO> userDTOList = new ArrayList<>();
 			for (User user : userList) {
 				UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
-				userDTO.setStatusName(getDictionariesValue("user_status", userDTO.getStatus()));
-				IdentityCertification ic =identityCertificationDao.findById(userDTO.getIdentityId());
-				if (ic != null) {
-					userDTO.setIdentityStatusName(
-							getDictionariesValue("identity_certification_status", ic.getStatus()));
-				} else {
-					userDTO.setIdentityStatusName("未认证");
-				}
-				EnterpriseCertification ec = enterpriseCertificationDao.findById(userDTO.getEnterpriseId());
-				if (ec != null) {
-					userDTO.setEnterpriseStatusName(
-							getDictionariesValue("enterprise_certification_status", ec.getStatus()));
-				} else {
-					userDTO.setEnterpriseStatusName("未认证");
-				}
+				userDTO = setDTOExtendFields(userDTO,null);
 				userDTOList.add(userDTO);
 			}
 			PagedResult<UserDTO> pageResult = BeanUtil.toPagedResult(userDTOList);
@@ -376,7 +360,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 			if (user != null) {
 				UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
 				if (userDTO != null) {
-					userDTO = completeUserExtendsFields(request, userDTO);
+					userDTO = setDTOExtendFields(userDTO,request);
 					return userDTO;
 				} else {
 					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
@@ -416,7 +400,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 					addAdminLog(adminLogContent);
 					UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
 					if (userDTO != null) {
-						userDTO = completeUserExtendsFields(request, userDTO);
+						userDTO = setDTOExtendFields(userDTO,request);
 						return userDTO;
 					} else {
 						throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
@@ -432,23 +416,26 @@ public class UserServiceImpl extends BaseService implements UserService {
 		}
 	}
 
-	private UserDTO completeUserExtendsFields(HttpServletRequest request, UserDTO userDTO) {
+	protected UserDTO setDTOExtendFields(UserDTO userDTO,HttpServletRequest request) {
 		if (userDTO != null) {
 			userDTO.setStatusName(getDictionariesValue("user_status", userDTO.getStatus()));
-			IdentityCertification ic = identityCertificationDao.findById(userDTO.getIdentityId());
-			if (ic != null) {
-				userDTO.setIdentityStatusName(getDictionariesValue("identity_certification_status", ic.getStatus()));
-			} else {
-				userDTO.setIdentityStatusName("未认证");
+			userDTO.setIdentityStatusName("未认证");
+			if(userDTO.getIdentityId()>0) {
+				String identityStatus=identityCertificationDao.findStatusById(userDTO.getIdentityId());
+				if (identityStatus != null) {
+					userDTO.setIdentityStatusName(
+							getDictionariesValue("identity_certification_status", identityStatus));
+				} 
 			}
-			EnterpriseCertification ec = enterpriseCertificationDao.findById(userDTO.getEnterpriseId());
-			if (ec != null) {
-				userDTO.setEnterpriseStatusName(
-						getDictionariesValue("enterprise_certification_status", ec.getStatus()));
-			} else {
-				userDTO.setEnterpriseStatusName("未认证");
+			userDTO.setEnterpriseStatusName("未认证");
+			if(userDTO.getEnterpriseId()>0) {
+				String enterpriseStatus = enterpriseCertificationDao.findStatusById(userDTO.getEnterpriseId());
+				if (enterpriseStatus != null) {
+					userDTO.setEnterpriseStatusName(
+							getDictionariesValue("enterprise_certification_status", enterpriseStatus));
+				} 
 			}
-			if (userDTO.getAvatar() != null && !(userDTO.getAvatar().equals(""))) {
+			if (request!=null && userDTO.getAvatar() != null && !(userDTO.getAvatar().equals(""))) {
 				userDTO.setAvatarUrl(getImageRequestUrl(request, userDTO.getAvatar()));
 			}
 			return userDTO;
@@ -513,7 +500,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 							+ newPhone);
 					UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
 					if (userDTO != null) {
-						userDTO = completeUserExtendsFields(request, userDTO);
+						userDTO = setDTOExtendFields(userDTO,request);
 						return userDTO;
 					} else {
 						throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);

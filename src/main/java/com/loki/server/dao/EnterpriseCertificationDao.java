@@ -15,4 +15,5 @@ public interface EnterpriseCertificationDao {
 	EnterpriseCertification findCurrentByUserId(int userId);
 	boolean nullifyByUserId(int userId);
 	List<EnterpriseCertification> findByParam(Map<String,Object> map);
+	String findStatusById(int id);
 }

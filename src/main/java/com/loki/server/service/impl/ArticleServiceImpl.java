@@ -57,9 +57,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 			List<ArticleDTO> articleDTOList = new ArrayList<>();
 			for (Article article : articleList) {
 				ArticleDTO articleDTO = ArticleConvertor.convertArticle2ArticleDTO(article);
-				articleDTO.setAdminCreatorName(getAdminName(articleDTO.getAdminCreatorId()));
-				articleDTO.setAdminUpdaterName(getAdminName(articleDTO.getAdminUpdaterId()));
-				articleDTO.setStatusName(getDictionariesValue("article_status", articleDTO.getStatus()));
+				articleDTO=setDTOExtendFields(articleDTO);
 				articleDTOList.add(articleDTO);
 			}
 			PagedResult<ArticleDTO> pageResult = BeanUtil.toPagedResult(articleDTOList);
@@ -80,9 +78,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 			if (article != null) {
 				ArticleDTO articleDTO = ArticleConvertor.convertArticle2ArticleDTO(article);
 				if (articleDTO != null) {
-					articleDTO.setAdminCreatorName(getAdminName(articleDTO.getAdminCreatorId()));
-					articleDTO.setAdminUpdaterName(getAdminName(articleDTO.getAdminUpdaterId()));
-					articleDTO.setStatusName(getDictionariesValue("article_status", articleDTO.getStatus()));
+					articleDTO=setDTOExtendFields(articleDTO);
 					return articleDTO;
 				} else {
 					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
@@ -113,5 +109,13 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
-
+	
+	protected ArticleDTO setDTOExtendFields(ArticleDTO articleDTO) {
+		if(articleDTO!=null) {
+			articleDTO.setAdminCreatorName(getAdminName(articleDTO.getAdminCreatorId()));
+			articleDTO.setAdminUpdaterName(getAdminName(articleDTO.getAdminUpdaterId()));
+			articleDTO.setStatusName(getDictionariesValue("article_status", articleDTO.getStatus()));
+		}
+		return articleDTO;
+	}
 }

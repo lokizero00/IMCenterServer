@@ -28,7 +28,7 @@ $(document).ready(function() {
 			str+=data.updateTime+"</td>";
 			str+="</tr>";
 			str+="<tr>";
-			str+="<td>附件</td><td>";
+			str+="<td>营业执照附件</td><td>";
 			str+="<button type='button' id='btnViewEnterprisePic' data-toggle='modal' data-target='#viewEnterprisePicModal' class='btn btn-primary'>查看</button>";
 			str+="</td>";
 			str+="<td></td><td>";

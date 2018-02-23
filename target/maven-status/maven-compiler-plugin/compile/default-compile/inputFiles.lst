@@ -55,6 +55,7 @@
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/RoleAdminDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/utils/BeanUtil.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/service/impl/DictionariesServiceImpl.java
+/Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dto/convertor/EnterpriseCertificationConvertor.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/utils/MD5.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/Trade.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/UserBankcard.java
@@ -120,6 +121,7 @@
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/common/HttpConstants.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/UserBindCode.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/TradeAttachmentDao.java
+/Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dto/EnterpriseCertificationDTO.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/dao/TradeComplexDao.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/TradeReportAttachment.java
 /Users/lokizero00/Documents/eclipse-workspace-redis/IMCenterServer/src/main/java/com/loki/server/entity/BaseEntity.java

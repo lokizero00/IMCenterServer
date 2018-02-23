@@ -36,6 +36,13 @@
 		from enterprise_certification
 		where id=#{_parameter}
 	</select>
+	
+	<select id="findStatusById" parameterType="int" resultType="String">
+		select
+			status
+		from enterprise_certification
+		where id=#{_parameter}
+	</select>
 
 	<select id="findCurrentByUserId" parameterType="int"
 		resultMap="enterpriseCertificationDO">

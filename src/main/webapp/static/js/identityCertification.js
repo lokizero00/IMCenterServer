@@ -24,7 +24,7 @@ $(document).ready(function() {
 			str+="<tr>";
 			str+="<td>身份证号</td><td>";
 			str+=data.identityNumber+"</td>";
-			str+="<td>附件</td><td>";
+			str+="<td>身份证附件</td><td>";
 			
 			str+="<button type='button' id='btnViewIdentityPic' data-toggle='modal' data-target='#viewIdentityPicModal' class='btn btn-primary'>查看</button>";
 			

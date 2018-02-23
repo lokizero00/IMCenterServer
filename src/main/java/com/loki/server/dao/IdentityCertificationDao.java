@@ -16,4 +16,5 @@ public interface IdentityCertificationDao {
 	IdentityCertification findByUserId(int userId);
 	IdentityCertification findByIdAndUserId(@Param("id") int id,@Param("userId") int userId);
 	List<IdentityCertification> findByParam(Map<String,Object> map);
+	String findStatusById(int id);
 }

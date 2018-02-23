@@ -36,6 +36,13 @@
 		where id=#{_parameter}
 	</select>
 
+	<select id="findStatusById" parameterType="int" resultType="String">
+		select
+			status
+		from identity_certification
+		where id=#{_parameter}
+	</select>
+
 	<select id="findByUserId" parameterType="int"
 		resultMap="identityCertificationDO">
 		select
@@ -58,7 +65,8 @@
 	</select>
 
 	<update id="update" parameterType="com.loki.server.entity.IdentityCertification">
-		update identity_certification SET
+		update identity_certification
+		SET
 		update_time=#{updateTime},true_name=#{trueName},identity_number=#{identityNumber},identity_front=#{identityFront},identity_back=#{identityBack},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},status=#{status},refuse_reason=#{refuseReason}
 		where id=#{id}
 	</update>
@@ -100,7 +108,8 @@
 				and true_name like CONCAT('%','${trueName}','%' )
 			</if>
 			<if test="identityNumber !=null and identityNumber!=''">
-				and identity_number like CONCAT('%','${identityNumber}','%' )
+				and identity_number like
+				CONCAT('%','${identityNumber}','%' )
 			</if>
 			<if test="verifyTimeStart != null">
 			 	<![CDATA[
