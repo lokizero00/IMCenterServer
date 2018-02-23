@@ -95,6 +95,16 @@ public class BaseService {
 		}
 	}
 
+	protected String getImageRequestUrl(HttpServletRequest request,String name) {
+		if (request != null) {
+			String path=getSettingValue("transferProtocol") + "://" + request.getHeader("host") + request.getContextPath()
+					+ "/" + PropertyUtil.getInstance().getPropertyValue("common", "imageRequestParam");
+			return path + "?name=" + name;
+		} else {
+			return null;
+		}
+	}
+	
 	protected String getImageRequestPath(HttpServletRequest request) {
 		if (request != null) {
 			return getSettingValue("transferProtocol") + "://" + request.getHeader("host") + request.getContextPath()

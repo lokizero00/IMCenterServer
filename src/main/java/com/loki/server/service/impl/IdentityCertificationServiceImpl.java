@@ -179,15 +179,11 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 							identityCertificationDTO.getStatus()));
 					if (identityCertificationDTO.getIdentityFront() != null
 							&& !(identityCertificationDTO.getIdentityFront().equals(""))) {
-						String requestPath = getImageRequestPath(request);
-						String identityFrontUrl = requestPath + "?name=" + identityCertificationDTO.getIdentityFront();
-						identityCertificationDTO.setIdentityFrontUrl(identityFrontUrl);
+						identityCertificationDTO.setIdentityFrontUrl(getImageRequestUrl(request,identityCertificationDTO.getIdentityFront()));
 					}
 					if (identityCertificationDTO.getIdentityBack() != null
 							&& !(identityCertificationDTO.getIdentityBack().equals(""))) {
-						String requestPath = getImageRequestPath(request);
-						String identityBackUrl = requestPath + "?name=" + identityCertificationDTO.getIdentityBack();
-						identityCertificationDTO.setIdentityBackUrl(identityBackUrl);
+						identityCertificationDTO.setIdentityBackUrl(getImageRequestUrl(request,identityCertificationDTO.getIdentityBack()));
 					}
 					return identityCertificationDTO;
 				} else {

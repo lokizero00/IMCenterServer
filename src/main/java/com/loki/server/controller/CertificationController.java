@@ -135,4 +135,48 @@ public class CertificationController extends BaseController{
 			return responseFail(e.getMessage());
 		}
     }
+    
+    /**
+     * 显示企业认证详情页
+     * @return
+     */
+	@RequestMapping("/enterpriseCertificationDetailPage")  
+	public String enterpriseCertificationDetailPage(int id){
+		return "certification/enterpriseCertificationDetail.jsp?id="+id;
+	}
+	
+	/**
+     * 获取企业认证
+     * @return
+     */
+	@RequestMapping(value="/enterpriseCertificationDetail.do",method=RequestMethod.GET)
+	@ResponseBody
+	public String getEnterpriseCertification(HttpServletRequest request, int id) {
+		try {
+			EnterpriseCertificationDTO enterpriseCertificationDTO=enterpriseCertificationService.getEnterpriseCertification(request, id);
+			return responseSuccess(enterpriseCertificationDTO);
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 企业认证审核
+     * @return
+     */
+	@RequestMapping(value="/verifyEnterpriseCertification.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String verifyEnterpriseCertification(HttpServletRequest request, int id,String verifyResult,String refuseReason) {
+		try {
+			boolean result=enterpriseCertificationService.verifyEnterpriseCertification(request, id, verifyResult, refuseReason);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.UPDATE_FAIL.getMessage());
+			}
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+    
 }

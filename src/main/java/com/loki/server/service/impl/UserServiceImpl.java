@@ -449,9 +449,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 				userDTO.setEnterpriseStatusName("未认证");
 			}
 			if (userDTO.getAvatar() != null && !(userDTO.getAvatar().equals(""))) {
-				String requestPath = getImageRequestPath(request);
-				String avatarUrl = requestPath + "?name=" + userDTO.getAvatar();
-				userDTO.setAvatarUrl(avatarUrl);
+				userDTO.setAvatarUrl(getImageRequestUrl(request, userDTO.getAvatar()));
 			}
 			return userDTO;
 		} else {

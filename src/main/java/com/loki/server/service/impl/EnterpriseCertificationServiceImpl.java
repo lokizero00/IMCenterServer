@@ -1,10 +1,12 @@
 package com.loki.server.service.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import com.loki.server.service.EnterpriseCertificationService;
 import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
+import com.loki.server.utils.SessionContext;
 import com.loki.server.vo.EnterpriseCertificationVO;
 import com.loki.server.vo.ServiceResult;
 
@@ -136,6 +139,65 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
 		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public EnterpriseCertificationDTO getEnterpriseCertification(HttpServletRequest request, int id)
+			throws ServiceException {
+		if(id>0) {
+			EnterpriseCertification enterpriseCertification=enterpriseCertificationDao.findById(id);
+			if(enterpriseCertification!=null) {
+				EnterpriseCertificationDTO enterpriseCertificationDTO=EnterpriseCertificationConvertor.convertEnterpriseCertification2EnterpriseCertificationDTO(enterpriseCertification);
+				if(enterpriseCertificationDTO!=null) {
+					enterpriseCertificationDTO.setUserNickName(getUserNickName(enterpriseCertificationDTO.getUserId()));
+					enterpriseCertificationDTO.setAdminVerifierName(getAdminName(enterpriseCertificationDTO.getAdminVerifierId()));
+					enterpriseCertificationDTO.setStatusName(getDictionariesValue("enterprise_certification_status", enterpriseCertificationDTO.getStatus()));
+					if (enterpriseCertificationDTO.getLicensePic() != null
+							&& !(enterpriseCertificationDTO.getLicensePic().equals(""))) {
+						enterpriseCertificationDTO.setLicensePicUrl(getImageRequestUrl(request,enterpriseCertificationDTO.getLicensePic()));
+					}
+					return enterpriseCertificationDTO;
+				}else {
+					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
+				}
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public boolean verifyEnterpriseCertification(HttpServletRequest request, int id, String verify, String refuseReason)
+			throws ServiceException {
+		if (id > 0 && verify != null && !(verify.equals(""))) {
+			EnterpriseCertification enterpriseCertification = enterpriseCertificationDao.findById(id);
+			if (enterpriseCertification != null) {
+				if(enterpriseCertification.getStatus().equals("ec_verify")) {
+					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
+					enterpriseCertification.setAdminVerifierId(adminId);
+					enterpriseCertification.setVerifyTime(new Timestamp(System.currentTimeMillis()));
+					if (verify.equals("verify_pass")) {
+						enterpriseCertification.setStatus("ec_pass");
+					} else {
+						enterpriseCertification.setStatus("ec_refuse");
+						enterpriseCertification.setRefuseReason(refuseReason);
+					}
+					if (enterpriseCertificationDao.update(enterpriseCertification)) {
+						return true;
+					} else {
+						throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
+					}
+				}else {
+					throw new ServiceException(ResultCodeEnums.DATA_INVALID);
+				}
+			} else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
