@@ -16,6 +16,7 @@ public interface UserDao {
 	User loginCheck(@Param("phone") String phone,@Param("password") String password);
 	int userExistCheck(String phone);
 	String findNickNameById(int id);
+	String findUserNameById(int id);
 	List<Integer> findIdList(@Param("status") String status);
 	List<User> findByParam(Map<String,Object> map);
 	User findByPhone(String phone);

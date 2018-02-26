@@ -16,7 +16,7 @@ public interface UserService {
 	ServiceResult<UserLoginVO> loginCheck(String phone,String password,String clientIp,String clientType);
 	ServiceResult<UserLoginVO> loginCheckByToken(String userToken);
 	ServiceResult<UserLoginVO> regist(String phone,String password,String authCode,int authCodeId,String clientIp,String clientType);
-	ServiceResult<User> getUser_mobile(int user);
+	ServiceResult<User> getUser_mobile(int userId);
 	ServiceResult<Void> updateNickName(int userId,String nickName);
 	ServiceResult<Void> updateAvatar(int userId,String avatar);
 	ServiceResult<Void> updatePhone(int userId,String phone,String authCode,int authCodeId);

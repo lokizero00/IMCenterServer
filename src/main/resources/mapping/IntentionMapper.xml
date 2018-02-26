@@ -2,52 +2,83 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.IntentionDao">
-  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="intentionDO" type="com.loki.server.entity.Intention">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="total" jdbcType="DECIMAL" property="total" />
-    <result column="available" jdbcType="DECIMAL" property="available" />
-    <result column="freeze" jdbcType="DECIMAL" property="freeze" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-  </resultMap>
-  
-  <sql id="Base_Column_List">
-    id,total,available,freeze,user_id
-  </sql>
-  
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.loki.server.entity.Intention">
-		insert into intention(total,available,freeze,user_id) 
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="intentionDO" type="com.loki.server.entity.Intention">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="total" jdbcType="DECIMAL" property="total" />
+		<result column="available" jdbcType="DECIMAL" property="available" />
+		<result column="freeze" jdbcType="DECIMAL" property="freeze" />
+		<result column="user_id" jdbcType="VARCHAR" property="userId" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,total,available,freeze,user_id
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.Intention">
+		insert into intention(total,available,freeze,user_id)
 		values(#{total},#{available},#{freeze},#{userId})
 	</insert>
-  
-  <select id="findById" parameterType="int" resultMap="intentionDO">
-		select <include refid="Base_Column_List" /> 
+
+	<select id="findById" parameterType="int" resultMap="intentionDO">
+		select
+		<include refid="Base_Column_List" />
 		from intention
 		where id=#{_parameter}
-  </select>
-  
-  <select id="findByUserId" parameterType="int" resultMap="intentionDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findByUserId" parameterType="int" resultMap="intentionDO">
+		select
+		<include refid="Base_Column_List" />
 		from intention
 		where user_id=#{_parameter}
-  </select>
-  
-  <select id="findAvailableByUserId" parameterType="int" resultType="BigDecimal">
-		select available 
+	</select>
+
+	<select id="findAvailableByUserId" parameterType="int"
+		resultType="BigDecimal">
+		select available
 		from intention
 		where user_id=#{_parameter}
-  </select>
-  
-  <select id="findAll" resultMap="intentionDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findAll" resultMap="intentionDO">
+		select
+		<include refid="Base_Column_List" />
 		from intention
-  </select>
-  
-  <update id="update" parameterType="com.loki.server.entity.Intention">
-  	update intention SET total=#{total},available=#{available},freeze=#{freeze},user_id=#{userId} where id=#{id}
-  </update>
-  
-  <delete id="delete" parameterType="int">
-		delete from intention where id=#{_parameter}
+	</select>
+
+	<update id="update" parameterType="com.loki.server.entity.Intention">
+		update intention SET
+		total=#{total},available=#{available},freeze=#{freeze},user_id=#{userId}
+		where id=#{id}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		delete from intention where
+		id=#{_parameter}
 	</delete>
+
+	<select id="findByParam" resultMap="intentionDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention
+		<where>
+			<if test="userId !=null and userId !=0">
+				user_id=#{userId}
+			</if>
+		</where>
+		ORDER BY
+		<choose>
+			<when test="sortName!=null">
+				${sortName}
+				<if test="sortOrder!=null">
+					${sortOrder}
+				</if>
+			</when>
+			<otherwise>
+				id desc
+			</otherwise>
+		</choose>
+	</select>
 </mapper>

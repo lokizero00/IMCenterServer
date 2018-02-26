@@ -2,6 +2,7 @@ package com.loki.server.dao;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import com.loki.server.entity.Intention;
 
@@ -13,4 +14,5 @@ public interface IntentionDao {
 	Intention findById(int id);
 	Intention findByUserId(int userId);
 	BigDecimal findAvailableByUserId(int userId);
+	List<Intention> findByParam(Map<String,Object> map);
 }

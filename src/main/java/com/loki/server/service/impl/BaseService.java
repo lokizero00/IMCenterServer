@@ -78,6 +78,14 @@ public class BaseService {
 			return null;
 		}
 	}
+	
+	protected String getUserName(int userId) {
+		if (userId > 0) {
+			return userDao.findUserNameById(userId);
+		} else {
+			return null;
+		}
+	}
 
 	protected String getAdminName(int adminId) {
 		if (adminId > 0) {

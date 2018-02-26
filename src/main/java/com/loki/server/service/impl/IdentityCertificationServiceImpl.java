@@ -200,13 +200,18 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
 					identityCertification.setAdminVerifierId(adminId);
 					identityCertification.setVerifyTime(new Timestamp(System.currentTimeMillis()));
+					String adminLogContent="管理员 "+getAdminName(adminId)+" 审核";
 					if (verify.equals("verify_pass")) {
+						adminLogContent+="通过了 用户 "+getUserName(identityCertification.getUserId())+" 的实名认证";
 						identityCertification.setStatus("ic_pass");
 					} else {
+						adminLogContent+="拒绝了 用户 "+getUserName(identityCertification.getUserId())+" 的实名认证，原因："+refuseReason;
 						identityCertification.setStatus("ic_refuse");
 						identityCertification.setRefuseReason(refuseReason);
 					}
 					if (identityCertificationDao.update(identityCertification)) {
+						//管理员日志
+						addAdminLog(adminLogContent);
 						return true;
 					} else {
 						throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);

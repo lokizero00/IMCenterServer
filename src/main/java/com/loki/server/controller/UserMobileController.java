@@ -50,6 +50,21 @@ public class UserMobileController {
 		return "mobileResultJson";
 	}
 	
+	//更新头像
+	@RequestMapping(value="/updateAvatar",method=RequestMethod.POST)
+	public String updateAvatar(HttpServletRequest request,int userId,String avatar,ModelMap mm) {
+		ServiceResult<Void> returnValue=userService.updateAvatar(userId, avatar);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+		return "mobileResultJson";
+	}
+	
 	//验证码校验，绑定手机时使用
 	@RequestMapping(value="/checkAuthCode",method=RequestMethod.GET)
 	public String checkAuthCode(HttpServletRequest request,int authCodeId, String authCode,ModelMap mm) {

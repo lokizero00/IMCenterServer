@@ -10,25 +10,22 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>用户详情</title>
+<title>意向金日志</title>
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
+<link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css"
+	rel="stylesheet">
 </head>
-
 <body>
+	<div id="queryDiv"></div>
+	<div class="container-fluid">
+		<table id="tb_intentionLog"></table>
+	</div>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
+	<script src="<%=basePath%>static/bootstrap/js/bootstrap-table.js"></script>
+	<script src="<%=basePath%>static/bootstrap/js/bootstrap-table-zh-CN.js"></script>
 	<script src="<%=basePath%>static/js/common.js"></script>
-	<script src="<%=basePath%>static/js/userDetail.js"></script>
-	<jsp:include page="user.jsp" />
-	<jsp:include page="userIntention.jsp" />
-	<div class="form-group">
-		<div>
-			<button type="button" id="btnVerify" class="btn btn-primary">审核</button>
-			<button type="button" id="btnStatus" class="btn btn-primary">停用</button>
-			<button type="button" id="btnBack" onclick="window.history.go(-1);"
-				class="btn btn-primary">返回</button>
-		</div>
-	</div>
+	<script src="<%=basePath%>static/js/intentionLog.js"></script>
 </body>
 </html>

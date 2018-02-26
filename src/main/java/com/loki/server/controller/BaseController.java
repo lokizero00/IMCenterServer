@@ -120,7 +120,7 @@ public class BaseController {
 	/**
 	 * 返回成功
 	 * 
-	 * @return 输出失败的JSON格式数据
+	 * @return 输出成功的JSON格式数据
 	 */
 	public String responseSuccess() {
 		JSONObject jsonObj = new JSONObject();

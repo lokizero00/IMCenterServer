@@ -7,7 +7,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="available_amount" jdbcType="DECIMAL" property="availableAmount" />
-    <result column="change_amount" jdbcType="DECIMAL" property="freezeAmount" />
+    <result column="change_amount" jdbcType="DECIMAL" property="changeAmount" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="relation_type" jdbcType="VARCHAR" property="relationType" />
     <result column="relation_id" jdbcType="INTEGER" property="relationId" />
@@ -63,9 +63,6 @@
 			<if test="logOperatorId != null and logOperatorId != 0">
 				and log_operator_id=#{logOperatorId}
 			</if>
-			<if test="type != null and type != ''">
-				and type=#{type}
-			</if>
 			<if test="relationType != null and relationType != ''">
 				and relation_type=#{relationType}
 			</if>
@@ -73,7 +70,18 @@
 				and relation_id=#{relationId}
 			</if>
 		</where>
-		order by id desc
+		ORDER BY
+		<choose>
+			<when test="sortName!=null">
+				${sortName}
+				<if test="sortOrder!=null">
+					${sortOrder}
+				</if>
+			</when>
+			<otherwise>
+				id desc
+			</otherwise>
+		</choose>
   </select>
   
   <delete id="delete" parameterType="int">

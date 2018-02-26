@@ -1,5 +1,6 @@
 package com.loki.server.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,10 @@ import com.loki.server.dao.DictionariesDao;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.IntentionLogDao;
 import com.loki.server.dao.UserBankcardDao;
+import com.loki.server.dto.IntentionDTO;
+import com.loki.server.dto.IntentionLogDTO;
+import com.loki.server.dto.convertor.IntentionConvertor;
+import com.loki.server.dto.convertor.IntentionLogConvertor;
 import com.loki.server.entity.Intention;
 import com.loki.server.entity.IntentionLog;
 import com.loki.server.entity.PagedResult;
@@ -21,11 +26,12 @@ import com.loki.server.entity.UserBankcard;
 import com.loki.server.service.IntentionService;
 import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ServiceResult;
 
 @Service
 @Transactional
-public class IntentionServiceImpl implements IntentionService {
+public class IntentionServiceImpl extends BaseService implements IntentionService {
 	@Resource IntentionDao intentionDao;
 	@Resource IntentionLogDao intentionLogDao;
 	@Resource UserBankcardDao userBankcardDao;
@@ -34,7 +40,7 @@ public class IntentionServiceImpl implements IntentionService {
 	DozerBeanMapper mapper = new DozerBeanMapper();
 	
 	@Override
-	public ServiceResult<Intention> getIntention(int userId) {
+	public ServiceResult<Intention> getIntention_mobile(int userId) {
 		ServiceResult<Intention> returnValue=new ServiceResult<Intention>();
 		if(userId>0) {
 			Intention intention=intentionDao.findByUserId(userId);
@@ -51,7 +57,7 @@ public class IntentionServiceImpl implements IntentionService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<IntentionLog>> getIntentionLog(Map<String,Object> map,Integer pageNo, Integer pageSize) {
+	public ServiceResult<PagedResult<IntentionLog>> getIntentionLog_mobile(Map<String,Object> map,Integer pageNo, Integer pageSize) {
 		pageNo = pageNo == null? 1:pageNo;  
 	    pageSize = pageSize == null? 10:pageSize; 
 	    ServiceResult<PagedResult<IntentionLog>> returnValue=new ServiceResult<PagedResult<IntentionLog>>();
@@ -72,7 +78,7 @@ public class IntentionServiceImpl implements IntentionService {
 	}
 
 	@Override
-	public ServiceResult<List<UserBankcard>> getUserBankcard(int userId) {
+	public ServiceResult<List<UserBankcard>> getUserBankcard_mobile(int userId) {
 		ServiceResult<List<UserBankcard>> returnValue=new ServiceResult<List<UserBankcard>>();
 		if(userId>0) {
 			List<UserBankcard> userBankcardList=userBankcardDao.findByParam(userId, null, null, null);
@@ -89,7 +95,7 @@ public class IntentionServiceImpl implements IntentionService {
 	}
 
 	@Override
-	public ServiceResult<Void> addUserBankcard(UserBankcard userBankcard) {
+	public ServiceResult<Void> addUserBankcard_mobile(UserBankcard userBankcard) {
 		ServiceResult<Void> returnValue=new ServiceResult<Void>();
 		if(userBankcard!=null && userBankcard.getUserId()>0 && userBankcard.getCardNumber()!=null && userBankcard.getCardNumber()!="" && userBankcard.getBankCode()!=null && userBankcard.getBankCode()!="" && userBankcard.getCardTypeCode()!=null && userBankcard.getCardTypeCode()!="") {
 			String bankName=dictionariesDao.findValueByParam("bank", userBankcard.getBankCode());
@@ -115,7 +121,7 @@ public class IntentionServiceImpl implements IntentionService {
 	}
 
 	@Override
-	public ServiceResult<Void> deleteUserBankcard(int userBankcardId) {
+	public ServiceResult<Void> deleteUserBankcard_mobile(int userBankcardId) {
 		ServiceResult<Void> returnValue=new ServiceResult<Void>();
 		if(userBankcardId>0) {
 			if(userBankcardDao.delete(userBankcardId)) {
@@ -127,6 +133,97 @@ public class IntentionServiceImpl implements IntentionService {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
+	}
+
+	@Override
+	public PagedResult<IntentionDTO> getIntentionList(Map<String, Object> map) throws ServiceException {
+		if (map != null) {
+			int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
+			int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
+			PageHelper.startPage(pageNo, pageSize);
+			List<Intention> intentionList=intentionDao.findByParam(map);
+			List<IntentionDTO> intentionDTOList=new ArrayList<>();
+			for(Intention intention:intentionList) {
+				IntentionDTO intentionDTO=IntentionConvertor.convertIntention2IntentionDTO(intention);
+				intentionDTO.setUserNickName(getUserNickName(intentionDTO.getUserId()));
+				intentionDTOList.add(intentionDTO);
+			}
+			PagedResult<IntentionDTO> pageResult=BeanUtil.toPagedResult(intentionDTOList);
+			if(pageResult!=null) {
+				return pageResult;
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public IntentionDTO getUserIntention(int userId) throws ServiceException {
+		if(userId>0) {
+			Intention intention=intentionDao.findByUserId(userId);
+			if(intention!=null) {
+				IntentionDTO intentionDTO=IntentionConvertor.convertIntention2IntentionDTO(intention);
+				if(intentionDTO!=null) {
+					intentionDTO.setUserNickName(getUserNickName(intentionDTO.getUserId()));
+					return intentionDTO;
+				}else {
+					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
+				}
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public IntentionDTO getIntention(int intentionId) throws ServiceException {
+		if(intentionId>0) {
+			Intention intention=intentionDao.findById(intentionId);
+			if(intention!=null) {
+				IntentionDTO intentionDTO=IntentionConvertor.convertIntention2IntentionDTO(intention);
+				if(intentionDTO!=null) {
+					intentionDTO.setUserNickName(getUserNickName(intentionDTO.getUserId()));
+					return intentionDTO;
+				}else {
+					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
+				}
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public PagedResult<IntentionLogDTO> getIntentionLog(Map<String, Object> map) {
+		if (map != null) {
+			int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
+			int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
+			PageHelper.startPage(pageNo, pageSize);
+			List<IntentionLog> intentionLogList=intentionLogDao.findByParam(map);
+			List<IntentionLogDTO> intentionLogDTOList=new ArrayList<>();
+			for(IntentionLog intentionLog:intentionLogList) {
+				IntentionLogDTO intentionLogDTO=IntentionLogConvertor.convertIntentionLog2IntentionLogDTO(intentionLog);
+				intentionLogDTO.setLogRoleName(getDictionariesValue("operator_role", intentionLogDTO.getLogRole()));
+				intentionLogDTO.setRelationTypeName(getDictionariesValue("intention_change_type", intentionLogDTO.getRelationType()));
+				String logOperatorName=intentionLogDTO.getLogRole().equals("user") ? getUserName(intentionLogDTO.getLogOperatorId()) : getAdminName(intentionLogDTO.getLogOperatorId());
+				intentionLogDTO.setLogOperatorName(logOperatorName);
+				intentionLogDTOList.add(intentionLogDTO);
+			}
+			PagedResult<IntentionLogDTO> pageResult=BeanUtil.toPagedResult(intentionLogDTOList);
+			if(pageResult!=null) {
+				return pageResult;
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
 	}
 
 }

@@ -24,13 +24,13 @@ import com.loki.server.service.IOService;
 import com.loki.server.utils.ServiceException;
 
 @Controller
-@RequestMapping("/s/io")
+@RequestMapping("/s")
 public class IOController extends BaseController{
 	private static final Logger logger = Logger.getLogger(IOController.class);
 	@Autowired
 	public IOService ioService;
 	
-	@RequestMapping("/uploadImage")
+	@RequestMapping(value={"/io/uploadImage","/api/io/uploadImage"})
     public void uploadImage(HttpServletRequest request,HttpServletResponse response,PrintWriter out) {
         logger.debug("获取上传文件...");
         try {
@@ -47,7 +47,7 @@ public class IOController extends BaseController{
     }
 	
 	//图片上传
-	@RequestMapping(value="/imageUploadMobile",method=RequestMethod.POST)
+	@RequestMapping(value="/io/imageUploadMobile",method=RequestMethod.POST)
 	public String imageUploadMobile(HttpServletRequest request,ModelMap mm) {
 		MultipartHttpServletRequest multipartHttpServletRequest=(MultipartHttpServletRequest) request;
 		try {
@@ -72,7 +72,7 @@ public class IOController extends BaseController{
 	}
 		
 	//获取图片
-	@RequestMapping(value = "/getImage", method = RequestMethod.GET)
+	@RequestMapping(value = "/io/getImage", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> image(HttpServletRequest request,String name){
 		byte[] zp=null;
 		try {
