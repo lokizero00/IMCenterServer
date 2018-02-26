@@ -30,7 +30,7 @@ public class IOController extends BaseController{
 	@Autowired
 	public IOService ioService;
 	
-	@RequestMapping(value={"/io/uploadImage","/api/io/uploadImage"})
+	@RequestMapping(value="/io/uploadImage",method=RequestMethod.POST)
     public void uploadImage(HttpServletRequest request,HttpServletResponse response,PrintWriter out) {
         logger.debug("获取上传文件...");
         try {
@@ -47,7 +47,7 @@ public class IOController extends BaseController{
     }
 	
 	//图片上传
-	@RequestMapping(value="/io/imageUploadMobile",method=RequestMethod.POST)
+	@RequestMapping(value="/api/io/uploadImageMobile",method=RequestMethod.POST)
 	public String imageUploadMobile(HttpServletRequest request,ModelMap mm) {
 		MultipartHttpServletRequest multipartHttpServletRequest=(MultipartHttpServletRequest) request;
 		try {
