@@ -6,20 +6,20 @@
   <resultMap id="tradeReportAttachmentDO" type="com.loki.server.entity.TradeReportAttachment">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="trade_report_information_id" jdbcType="INTEGER" property="tradeReportInformationId" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,trade_report_information_id,url
+    id,trade_report_information_id,name
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeReportAttachment">
-		insert into trade_report_attachment(trade_report_information_id,url) 
-		values(#{tradeReportInformationId},#{url})
+		insert into trade_report_attachment(trade_report_information_id,name) 
+		values(#{tradeReportInformationId},#{name})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.TradeReportAttachment">
-  	update trade_report_attachment SET trade_report_information_id=#{tradeReportInformationId},url=#{url} where id=#{id}
+  	update trade_report_attachment SET trade_report_information_id=#{tradeReportInformationId},name=#{name} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="tradeReportAttachmentDO">

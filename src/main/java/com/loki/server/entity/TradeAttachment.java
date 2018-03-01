@@ -7,7 +7,8 @@ public class TradeAttachment implements Serializable{
 	
 	private int id;
 	private int tradeId;
-	private String url;
+	private String name;
+	private boolean preview;
 	public int getId() {
 		return id;
 	}
@@ -20,10 +21,16 @@ public class TradeAttachment implements Serializable{
 	public void setTradeId(int tradeId) {
 		this.tradeId = tradeId;
 	}
-	public String getUrl() {
-		return url;
+	public String getName() {
+		return name;
 	}
-	public void setUrl(String url) {
-		this.url = url;
+	public void setName(String name) {
+		this.name = name;
+	}
+	public boolean isPreview() {
+		return preview;
+	}
+	public void setPreview(boolean preview) {
+		this.preview = preview;
 	}
 }

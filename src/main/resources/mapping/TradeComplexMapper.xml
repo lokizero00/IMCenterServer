@@ -31,16 +31,16 @@
     <result column="industry_name" jdbcType="VARCHAR" property="industryName" />
     <result column="invoice_name" jdbcType="VARCHAR" property="invoiceName" />
     <result column="paycode_name" jdbcType="VARCHAR" property="paycodeName" />
-    <result column="attachment_url" jdbcType="VARCHAR" property="attachmentUrl" />
+    <result column="preview_image_name" jdbcType="VARCHAR" property="previewImageName" />
   </resultMap>
   
   <select id="findByParam" resultMap="tradeComplexDO">
-		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.attachment_url,_user.nick_name as user_nick_name
+		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.preview_image_name,_user.nick_name as user_nick_name
 		from trade 
 		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
 		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
 		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
-		left join(select trade_id,group_concat(url) as attachment_url from trade_attachment group by trade_id) _attachment on _attachment.trade_id=trade.id
+		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id) _attachment on _attachment.trade_id=trade.id
 		left join user as _user on _user.id=trade.user_id
 		<where>
 			<if test="sn!=null and sn!=''">
@@ -95,13 +95,13 @@
   </select>
   
   <select id="findById" parameterType="int" resultMap="tradeComplexDO">
-		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.attachment_url,_user.nick_name as user_nick_name
+		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.preview_image_name,_user.nick_name as user_nick_name
 		from trade 
 		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
 		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
 		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
-		left join(select trade_id,group_concat(url) as attachment_url from trade_attachment group by trade_id) _attachment on _attachment.trade_id=trade.id
-		left join user as _user on _user.id=trade.user_id	
+		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id) _attachment on _attachment.trade_id=trade.id
+		left join user as _user on _user.id=trade.user_id
 		where trade.id=#{_parameter}
   </select>
 </mapper>

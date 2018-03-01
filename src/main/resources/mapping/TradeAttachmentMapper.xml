@@ -6,20 +6,21 @@
   <resultMap id="tradeAttachmentDO" type="com.loki.server.entity.TradeAttachment">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="trade_id" jdbcType="INTEGER" property="tradeId" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="preview" jdbcType="BIT" property="preview" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,trade_id,url
+    id,trade_id,name,preview
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeAttachment">
-		insert into trade_attachment(trade_id,url) 
-		values(#{tradeId},#{url})
+		insert into trade_attachment(trade_id,name,preview) 
+		values(#{tradeId},#{name},#{preview})
 	</insert>
 	
   <update id="update" parameterType="com.loki.server.entity.User">
-  	update trade_attachment SET trade_id=#{tradeId},url=#{url} where id=#{id}
+  	update trade_attachment SET trade_id=#{tradeId},name=#{name},preview=#{preview} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="tradeAttachmentDO">

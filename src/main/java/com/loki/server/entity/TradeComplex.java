@@ -36,7 +36,7 @@ public class TradeComplex implements Serializable{
 	private String industryName;
 	private String invoiceName;
 	private String paycodeName;
-	private String attachmentUrl;
+	private String previewImageName;
 	private List<TradeIndustry> tradeIndustryList;
 	private List<TradeInvoice> tradeInvoiceList;
 	private List<TradePaycode> tradePaycodeList;
@@ -191,12 +191,6 @@ public class TradeComplex implements Serializable{
 	public void setPaycodeName(String paycodeName) {
 		this.paycodeName = paycodeName;
 	}
-	public String getAttachmentUrl() {
-		return attachmentUrl;
-	}
-	public void setAttachmentUrl(String attachmentUrl) {
-		this.attachmentUrl = attachmentUrl;
-	}
 	public String getTypeName() {
 		return typeName;
 	}
@@ -238,5 +232,11 @@ public class TradeComplex implements Serializable{
 	}
 	public void setTradeAttachmentList(List<TradeAttachment> tradeAttachmentList) {
 		this.tradeAttachmentList = tradeAttachmentList;
+	}
+	public String getPreviewImageName() {
+		return previewImageName;
+	}
+	public void setPreviewImageName(String previewImageName) {
+		this.previewImageName = previewImageName;
 	}
 }
