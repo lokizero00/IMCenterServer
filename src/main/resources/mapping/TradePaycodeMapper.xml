@@ -29,6 +29,12 @@
 		where id=#{_parameter}
   </select>
   
+  <select id="findByTradeId" parameterType="int" resultMap="tradePaycodeDO">
+		select <include refid="Base_Column_List" /> 
+		from trade_paycode
+		where trade_id=#{_parameter}
+  </select>
+  
   <select id="findAll" resultMap="tradePaycodeDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_paycode

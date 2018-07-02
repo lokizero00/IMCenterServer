@@ -256,6 +256,20 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
+		
+		<!--阿里支付-->
+        <dependency>
+            <groupId>com.aliyun.alipay</groupId>
+            <artifactId>aliyun-sdk-alipay</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!--微信支付-->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>2.9.0</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<finalName>IMCenterServer</finalName>

@@ -159,6 +159,7 @@
 	             <mvc:exclude-mapping path="/s/dictionaries/**" />
 	             <mvc:exclude-mapping path="/s/session/**" />
 	             <mvc:exclude-mapping path="/error/**" />
+	             <mvc:exclude-mapping path="/payNotify/**" />
 	             <bean class="com.loki.server.filter.LoginHandlerIntercepter"></bean>
 	         </mvc:interceptor>
 	    </mvc:interceptors>

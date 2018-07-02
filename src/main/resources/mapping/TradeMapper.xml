@@ -26,19 +26,29 @@
     <result column="enterprise_id" jdbcType="INTEGER" property="enterpriseId" />
     <result column="docking_id" jdbcType="INTEGER" property="dockingId" />
     <result column="read_count" jdbcType="INTEGER" property="readCount" />
+    <result column="docking_count" jdbcType="INTEGER" property="dockingCount" />
+    <result column="collection_count" jdbcType="INTEGER" property="collectionCount"/>
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,update_time,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,identity_id,enterprise_id,docking_id,read_count
+    id,create_time,update_time,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,identity_id,enterprise_id,docking_id,read_count,docking_count,collection_count
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Trade">
-		insert into trade(create_time,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,identity_id,enterprise_id,docking_id,read_count) 
-		values(now(),#{userId},#{sn},#{title},#{content},#{type},#{provinceName},#{cityName},#{townName},#{quantity},#{deliveryTime},#{budget},#{resourceName},#{capacity},#{status},#{intention},#{identityId},#{enterpriseId},#{dockingId},#{readCount})
+		insert into trade(create_time,user_id,sn,title,content,type,province_name,city_name,town_name,quantity,delivery_time,budget,resource_name,capacity,status,intention,identity_id,enterprise_id,docking_id,read_count,docking_count,collection_count) 
+		values(now(),#{userId},#{sn},#{title},#{content},#{type},#{provinceName},#{cityName},#{townName},#{quantity},#{deliveryTime},#{budget},#{resourceName},#{capacity},#{status},#{intention},#{identityId},#{enterpriseId},#{dockingId},#{readCount},#{dockingCount},#{collectionCount})
 	</insert>
 	
   <update id="update" parameterType="com.loki.server.entity.User">
-  	update trade SET update_time=now(),user_id=#{userId},sn=#{sn},title=#{title},content=#{content},type=#{type},province_name=#{provinceName},city_name=#{cityName},town_name=#{townName},quantity=#{quantity},delivery_time=#{deliveryTime},budget=#{budget},resource_name=#{resourceName},capacity=#{capacity},status=#{status},intention=#{intention},identity_id=#{identityId},enterprise_id=#{enterpriseId},docking_id=#{dockingId},read_count=#{readCount} where id=#{id}
+  	update trade SET update_time=now(),user_id=#{userId},sn=#{sn},title=#{title},content=#{content},type=#{type},province_name=#{provinceName},city_name=#{cityName},town_name=#{townName},quantity=#{quantity},delivery_time=#{deliveryTime},budget=#{budget},resource_name=#{resourceName},capacity=#{capacity},status=#{status},intention=#{intention},identity_id=#{identityId},enterprise_id=#{enterpriseId},docking_id=#{dockingId},read_count=#{readCount},docking_count=#{dockingCount},collection_count=#{collectionCount} where id=#{id}
+  </update>
+  
+  <update id="updateCollectionCountAdd" parameterType="int">
+  	update trade SET collection_count=collection_count+1 where id=#{id}
+  </update>
+  
+  <update id="updateCollectionCountSub" parameterType="int">
+  	update trade SET collection_count=collection_count-1 where id=#{id}
   </update>
 	
   <select id="findById" parameterType="int" resultMap="tradeDO">

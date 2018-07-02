@@ -29,6 +29,8 @@ public class Trade implements Serializable{
 	private int enterpriseId;
 	private int dockingId;
 	private int readCount;
+	private int dockingCount;
+	private int collectionCount;
 	public int getId() {
 		return id;
 	}
@@ -160,5 +162,17 @@ public class Trade implements Serializable{
 	}
 	public void setReadCount(int readCount) {
 		this.readCount = readCount;
+	}
+	public int getDockingCount() {
+		return dockingCount;
+	}
+	public void setDockingCount(int dockingCount) {
+		this.dockingCount = dockingCount;
+	}
+	public int getCollectionCount() {
+		return collectionCount;
+	}
+	public void setCollectionCount(int collectionCount) {
+		this.collectionCount = collectionCount;
 	}
 }

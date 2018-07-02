@@ -19,6 +19,8 @@ import com.loki.server.vo.ServiceResult;
 public class NoticeMobileController {
 	@Autowired NoticeService noticeService;
 	
+	//TODO 增加未读条数
+	
 	//获取消息列表
 	@RequestMapping(value="/getNoticeList",method=RequestMethod.GET)
 	public String getNoticeList(HttpServletRequest request,int userId,Integer pageNo, Integer pageSize,ModelMap mm) {

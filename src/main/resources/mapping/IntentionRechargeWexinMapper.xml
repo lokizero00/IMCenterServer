@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.IntentionRechargeWexinDao">
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="intentionRechargeWexinDO" type="com.loki.server.entity.IntentionRechargeWexin">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="journal_id" jdbcType="INTEGER" property="journalId" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="return_code" jdbcType="VARCHAR" property="returnCode" />
+		<result column="return_msg" jdbcType="VARCHAR" property="returnMsg" />
+		<result column="appid" jdbcType="VARCHAR" property="appid" />
+		<result column="mch_id" jdbcType="VARCHAR" property="mchId" />
+		<result column="device_info" jdbcType="VARCHAR" property="deviceInfo" />
+		<result column="nonce_str" jdbcType="VARCHAR" property="nonceStr" />
+		<result column="sign" jdbcType="VARCHAR" property="sign" />
+		<result column="result_code" jdbcType="VARCHAR" property="resultCode" />
+		<result column="err_code" jdbcType="VARCHAR" property="errCode" />
+		<result column="err_code_desc" jdbcType="VARCHAR" property="errCodeDes" />
+		<result column="openid" jdbcType="VARCHAR" property="openid" />
+		<result column="is_subscribe" jdbcType="VARCHAR" property="isSubscribe" />
+		<result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
+		<result column="bank_type" jdbcType="VARCHAR" property="bankType" />
+		<result column="total_fee" jdbcType="DECIMAL" property="totalFee" />
+		<result column="fee_type" jdbcType="VARCHAR" property="feeType" />
+		<result column="cash_fee" jdbcType="DECIMAL" property="cashFee" />
+		<result column="cash_fee_type" jdbcType="VARCHAR" property="cashFeeType" />
+		<result column="coupon_fee" jdbcType="DECIMAL" property="couponFee" />
+		<result column="coupon_count" jdbcType="INTEGER" property="couponCount" />
+		<result column="coupon_id_wx" jdbcType="VARCHAR" property="couponIdWx" />
+		<result column="coupon_fee_wx" jdbcType="VARCHAR" property="couponFeeWx" />
+		<result column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
+		<result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+		<result column="attach" jdbcType="VARCHAR" property="attach" />
+		<result column="time_end" jdbcType="VARCHAR" property="timeEnd" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,journal_id,user_id,return_code,return_msg,appid,mch_id,device_info,nonce_str,sign,result_code,err_code,err_code_desc,openid,is_subscribe,trade_type,bank_type,total_fee,fee_type,cash_fee,cash_fee_type,coupon_fee,coupon_count,coupon_id_wx,coupon_fee_wx,transaction_id,out_trade_no,attach,time_end,create_time
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.IntentionRechargeWexin">
+		insert into
+		intention_recharge_wexin(journal_id,user_id,return_code,return_msg,appid,mch_id,device_info,nonce_str,sign,result_code,err_code,err_code_desc,openid,is_subscribe,trade_type,bank_type,total_fee,fee_type,cash_fee,cash_fee_type,coupon_fee,coupon_count,coupon_id_wx,coupon_fee_wx,transaction_id,out_trade_no,attach,time_end,create_time)
+		values(#{journalId},#{userId},#{returnCode},#{returnMsg},#{appid},#{mchId},#{deviceInfo},#{nonceStr},#{sign},#{resultCode},#{errCode},#{errCodeDesc},#{openid},#{isSubscribe},#{tradeType},#{bankType},#{totalFee},#{feeType},#{cashFee},#{cashFeeType},#{couponFee},#{couponCount},#{couponIdWx},#{couponFeeWx},#{transactionId},#{outTradeNo},#{attach},#{timeEnd},now())
+	</insert>
+
+	<update id="update" parameterType="com.loki.server.entity.IntentionRechargeWexin">
+		update intention_recharge_wexin SET
+		journal_id=#{journalId},user_id=#{userId},return_code=#{returnCode},return_msg=#{returnMsg},appid=#{appid},mch_id=#{mchId},device_info=#{deviceInfo},nonce_str=#{nonceStr},sign=#{sign},result_code=#{resultCode},err_code=#{errCode},err_code_desc=#{errCodeDesc},openid=#{openid},is_subscribe=#{isSubscribe},trade_type=#{tradeType},bank_type=#{bankType},total_fee=#{totalFee},fee_type=#{feeType},cash_fee=#{cashFee},cash_fee_type=#{cashFeeType},coupon_fee=#{couponFee},coupon_count=#{couponCount},coupon_id_wx=#{couponIdWx},coupon_fee_wx=#{couponFeeWx},transaction_id=#{transactionId},out_trade_no=#{outTradeNo},attach=#{attach},time_end=#{timeEnd}
+		where id=#{id}
+	</update>
+
+	<select id="findById" parameterType="int" resultMap="intentionRechargeWexinDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention_recharge_wexin
+		where id=#{_parameter}
+	</select>
+
+	<select id="findAll" resultMap="intentionRechargeWexinDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention_recharge_wexin
+	</select>
+
+	<select id="findByOutTradeNo" resultMap="intentionRechargeWexinDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention_recharge_wexin
+		where out_trade_no = #{outTradeNo,jdbcType=VARCHAR} limit 1
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from
+		intention_recharge_wexin where id=#{_parameter}
+	</delete>
+</mapper>

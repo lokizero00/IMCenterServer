@@ -20,4 +20,6 @@ public interface UserDao {
 	List<Integer> findIdList(@Param("status") String status);
 	List<User> findByParam(Map<String,Object> map);
 	User findByPhone(String phone);
+	int findIdByEaseId(String easeId);
+	String findEaseIdById(int userId);
 }

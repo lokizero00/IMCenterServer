@@ -27,7 +27,8 @@
     <result column="enterprise_id" jdbcType="INTEGER" property="enterpriseId" />
     <result column="docking_id" jdbcType="INTEGER" property="dockingId" />
     <result column="read_count" jdbcType="INTEGER" property="readCount" />
-    
+    <result column="docking_count" jdbcType="INTEGER" property="dockingCount" />
+    <result column="collection_count" jdbcType="INTEGER" property="collectionCount"/>
     <result column="industry_name" jdbcType="VARCHAR" property="industryName" />
     <result column="invoice_name" jdbcType="VARCHAR" property="invoiceName" />
     <result column="paycode_name" jdbcType="VARCHAR" property="paycodeName" />
@@ -40,7 +41,7 @@
 		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
 		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
 		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
-		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id) _attachment on _attachment.trade_id=trade.id
+		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id,name) _attachment on _attachment.trade_id=trade.id
 		left join user as _user on _user.id=trade.user_id
 		<where>
 			<if test="sn!=null and sn!=''">
@@ -63,6 +64,9 @@
 			</if>
 			<if test="status!=null and status!=''">
 				and trade.status=#{status}
+			</if>
+			<if test="ignoreSuccessAndDown!=null and ignoreSuccessAndDown==true">
+				and trade.status not in ('trade_under_carriage','trade_success')
 			</if>
 			<if test="userId!=null and userId!=0">
 				and trade.user_id=#{userId} 
@@ -89,7 +93,68 @@
 	            </if>
 	        </when>
 	        <otherwise>
-	            id desc
+	            docking_count,id desc
+	        </otherwise>
+	     </choose>
+  </select>
+  
+  <select id="findDockingTrade" resultMap="tradeComplexDO">
+		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.preview_image_name,_user.nick_name as user_nick_name
+		from trade 
+		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
+		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id,name) _attachment on _attachment.trade_id=trade.id
+		left join user as _user on _user.id=trade.user_id
+		<if test="userId!=null and userId!=0">
+			join trade_docking on trade_docking.trade_id=trade.id and trade_docking.user_id=#{user_id} 
+		</if>
+		
+		<where>
+			<if test="sn!=null and sn!=''">
+				trade.sn=#{sn}
+			</if>
+			<if test="title!=null and title!=''">
+				and trade.title like CONCAT('%','${title}','%' ) 
+			</if>
+			<if test="type!=null and type!=''">
+				and trade.type=#{type}
+			</if>
+			<if test="provinceName!=null and provinceName!=''">
+				and trade.province_name=#{provinceName}
+			</if>
+			<if test="cityName!=null and cityName!=''">
+				and trade.city_name=#{cityName}
+			</if>
+			<if test="townName!=null and townName!=''">
+				and trade.town_name=#{townName}
+			</if>
+			<if test="status!=null and status!=''">
+				and trade.status=#{status}
+			</if>
+			<if test="invoiceCode!=null and invoiceCode!=''">
+				and trade.id in(
+				select trade_id from trade_invoice where code=#{invoiceCode})
+			</if>
+			<if test="industryCode!=null and industryCode!=''">
+				and trade.id in(
+				select trade_id from trade_industry where code=#{industryCode})
+			</if>
+			<if test="payCode!=null and payCode!=''">
+				and trade.id in(
+				select trade_id from trade_paycode where code=#{payCode})
+			</if>
+		</where>
+		ORDER BY
+		 <choose>
+	        <when test="sortName!=null">
+	                trade.${sortName}
+	            <if test="sortOrder!=null">
+	                ${sortOrder}
+	            </if>
+	        </when>
+	        <otherwise>
+	            docking_count,id desc
 	        </otherwise>
 	     </choose>
   </select>
@@ -100,8 +165,62 @@
 		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
 		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
 		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
-		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id) _attachment on _attachment.trade_id=trade.id
+		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id,name) _attachment on _attachment.trade_id=trade.id
 		left join user as _user on _user.id=trade.user_id
 		where trade.id=#{_parameter}
+  </select>
+  
+  <select id="findLastest10Trade" resultMap="tradeComplexDO">
+		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.preview_image_name,_user.nick_name as user_nick_name
+		from trade 
+		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
+		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id,name) _attachment on _attachment.trade_id=trade.id
+		left join user as _user on _user.id=trade.user_id
+		ORDER BY create_time desc limit 10
+  </select>
+  
+  <select id="findRecommendedList" resultMap="tradeComplexDO">
+		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.preview_image_name,_user.nick_name as user_nick_name
+		from trade 
+		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
+		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id,name) _attachment on _attachment.trade_id=trade.id
+		left join user as _user on _user.id=trade.user_id
+		<where>
+			<if test="title!=null and title!=''">
+				and trade.title like CONCAT('%','${title}','%' ) 
+			</if>
+			<if test="type!=null and type!=''">
+				and trade.type=#{type}
+			</if>
+			<if test="provinceName!=null and provinceName!=''">
+				and trade.province_name=#{provinceName}
+			</if>
+			<if test="cityName!=null and cityName!=''">
+				and trade.city_name=#{cityName}
+			</if>
+			<if test="townName!=null and townName!=''">
+				and trade.town_name=#{townName}
+			</if>
+			<if test="status!=null and status!=''">
+				and trade.status=#{status}
+			</if>
+			<if test="invoiceCode!=null and invoiceCode!=''">
+				and trade.id in(
+				select trade_id from trade_invoice where code=#{invoiceCode})
+			</if>
+			<if test="industryCode!=null and industryCode!=''">
+				and trade.id in(
+				select trade_id from trade_industry where code=#{industryCode})
+			</if>
+			<if test="payCode!=null and payCode!=''">
+				and trade.id in(
+				select trade_id from trade_paycode where code=#{payCode})
+			</if>
+		</where>
+		ORDER BY intention ,collection_count ,read_count ,docking_count desc
   </select>
 </mapper>

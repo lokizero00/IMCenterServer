@@ -10,4 +10,5 @@ public interface TradeReportAttachmentDao {
 	boolean delete(int id);
 	List<TradeReportAttachment> findAll();
 	TradeReportAttachment findById(int id);
+	List<TradeReportAttachment> findByInformationId(int tradeReportInformationId);
 }

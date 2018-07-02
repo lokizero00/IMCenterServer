@@ -29,6 +29,12 @@
 		where id=#{_parameter}
   </select>
   
+  <select id="findByTradeId" parameterType="int" resultMap="tradeInvoiceDO">
+		select <include refid="Base_Column_List" /> 
+		from trade_invoice
+		where trade_id=#{_parameter}
+  </select>
+  
   <select id="findAll" resultMap="tradeInvoiceDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_invoice

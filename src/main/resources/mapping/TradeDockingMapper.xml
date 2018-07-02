@@ -16,19 +16,20 @@
     <result column="offer" jdbcType="DECIMAL" property="offer" />
     <result column="intention" jdbcType="DECIMAL" property="intention" />
     <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,update_time,creator_id,updater_id,user_id,trade_id,identity_id,enterprise_id,offer,intention,message
+    id,create_time,update_time,creator_id,updater_id,user_id,trade_id,identity_id,enterprise_id,offer,intention,message,type
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeDocking">
-		insert into trade_docking(create_time,creator_id,user_id,trade_id,identity_id,enterprise_id,offer,intention,message) 
-		values(now(),#{creatorId},#{userId},#{tradeId},#{identityId},#{enterpriseId},#{offer},#{intention},#{message})
+		insert into trade_docking(create_time,creator_id,user_id,trade_id,identity_id,enterprise_id,offer,intention,message,type) 
+		values(now(),#{creatorId},#{userId},#{tradeId},#{identityId},#{enterpriseId},#{offer},#{intention},#{message},#{type})
 	</insert>
 	
   <update id="update" parameterType="com.loki.server.entity.User">
-  	update trade_docking SET update_time=now(),updater_id=#{updaterId},user_id=#{userId},trade_id=#{tradeId},identity_id=#{identityId},enterprise_id=#{enterpriseId},offer=#{offer},intention=#{intention},message=#{message} where id=#{id}
+  	update trade_docking SET update_time=now(),updater_id=#{updaterId},user_id=#{userId},trade_id=#{tradeId},identity_id=#{identityId},enterprise_id=#{enterpriseId},offer=#{offer},intention=#{intention},message=#{message},type=#{type} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="tradeDockingDO">
@@ -41,6 +42,53 @@
 		select <include refid="Base_Column_List" /> 
 		from trade_docking
 		where trade_id=#{_parameter}
+		order by id desc 
+  </select>
+  
+  <select id="findByParam" resultMap="tradeDockingDO">
+		select <include refid="Base_Column_List" /> 
+		from trade_docking
+		<where>
+			<if test="tradeId != null and tradeId != 0">
+				trade_id=#{tradeId}
+			</if>
+			<if test="userId != null and userId != 0">
+				and user_id=#{userId}
+			</if>
+			<if test="identityId != null and identityId != 0">
+				and identity_id=#{identityId}
+			</if>
+			<if test="enterpriseId != null and enterpriseId != 0">
+				and enterprise_id=#{enterpriseId}
+			</if>
+			<if test="type != null and type !=''">
+				and type=#{type}
+			</if>
+		</where>
+		ORDER BY
+		<choose>
+			<when test="sortName!=null">
+				${sortName}
+				<if test="sortOrder!=null">
+					${sortOrder}
+				</if>
+			</when>
+			<otherwise>
+				id desc
+			</otherwise>
+		</choose>
+  </select>
+  
+  <select id="findByIdAndUserId" resultMap="tradeDockingDO">
+  		select <include refid="Base_Column_List" /> 
+		from trade_docking
+		where id=#{id} and user_id=#{userId}
+  </select>
+  
+  <select id="countByTradeAndUserId" resultType="int">
+  		select count(id)
+		from trade_docking
+		where trade_id=#{tradeId} and user_id=#{userId}
   </select>
   
   <select id="findByUserId" parameterType="int" resultMap="tradeDockingDO">

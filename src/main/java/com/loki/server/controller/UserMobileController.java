@@ -94,4 +94,20 @@ public class UserMobileController {
 		}
 		return "mobileResultJson";
 	}
+	
+	//通过环信id获取用户id
+	//TODO 返回值修改为用户实体
+	@RequestMapping(value="/getUserIdByEaseId",method=RequestMethod.GET)
+	public String getUserIdByEaseId(String easeId,ModelMap mm) {
+		ServiceResult<Integer> returnValue=userService.getUserIdByEaseId(easeId);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+		return "mobileResultJson";
+	}
 }

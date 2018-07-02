@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.EnterpriseCertificationDao;
 import com.loki.server.dao.UserDao;
+import com.loki.server.dto.ArticleDTO;
 import com.loki.server.dto.EnterpriseCertificationDTO;
 import com.loki.server.dto.convertor.EnterpriseCertificationConvertor;
 import com.loki.server.entity.EnterpriseCertification;
@@ -148,7 +150,8 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 				enterpriseCertificationDTO=setDTOExtendFields(enterpriseCertificationDTO,null);
 				enterpriseCertificationDTOList.add(enterpriseCertificationDTO);
 			}
-			PagedResult<EnterpriseCertificationDTO> pageResult = BeanUtil.toPagedResult(enterpriseCertificationDTOList);
+			Page data=(Page) enterpriseCertificationList;
+			PagedResult<EnterpriseCertificationDTO> pageResult=BeanUtil.toPagedResult(enterpriseCertificationDTOList,data.getPageNum(),data.getPageSize(),data.getTotal(),data.getPages());
 			if (pageResult != null) {
 				return pageResult;
 			} else {

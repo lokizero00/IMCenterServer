@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.IntentionJournalDao">
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="intentionJournalDO" type="com.loki.server.entity.IntentionJournal">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="intention_id" jdbcType="INTEGER" property="intentionId" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="inner_busi_no" jdbcType="VARCHAR" property="innerBusiNo" />
+		<result column="amount" jdbcType="DECIMAL" property="amount" />
+		<result column="state" jdbcType="VARCHAR" property="state" />
+		<result column="check_state" jdbcType="VARCHAR" property="checkState" />
+		<result column="op_time" jdbcType="TIMESTAMP" property="opTime" />
+		<result column="third_channel" jdbcType="VARCHAR" property="thirdChannel" />
+		<result column="third_trans_no" jdbcType="VARCHAR" property="thirdTransNo" />
+		<result column="third_receipt_time" jdbcType="TIMESTAMP"
+			property="thirdReceiptTime" />
+		<result column="third_receipt_amount" jdbcType="DECIMAL"
+			property="thirdReceiptAmount" />
+		<result column="need_third_confirm" jdbcType="INTEGER"
+			property="needThirdConfirm" />
+		<result column="memo" jdbcType="VARCHAR" property="memo" />
+		<result column="is_return" jdbcType="VARCHAR" property="isReturn" />
+		<result column="out_request_no" jdbcType="VARCHAR" property="outRequestNo" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,type,intention_id,user_id,inner_busi_no,amount,state,check_state,op_time,third_channel,third_trans_no,third_receipt_time,third_receipt_amount,need_third_confirm,memo,is_return,out_request_no
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.IntentionJournal">
+		insert into
+		intention_journal(type,intention_id,user_id,inner_busi_no,amount,state,check_state,op_time,third_channel,third_trans_no,third_receipt_time,third_receipt_amount,need_third_confirm,memo,is_return,out_request_no)
+		values(#{type},#{intentionId},#{userId},#{innerBusiNo},#{amount},#{state},#{checkState},#{opTime},#{thirdChannel},#{thirdTransNo},#{thirdReceiptTime},#{thirdReceiptAmount},#{needThirdConfirm},#{memo},#{isReturn},#{outRequestNo})
+	</insert>
+
+	<update id="update" parameterType="com.loki.server.entity.IntentionJournal">
+		update intention_journal SET
+		type=#{type},intention_id=#{intentionId},user_id=#{userId},inner_busi_no=#{innerBusiNo},amount=#{amount},state=#{state},check_state=#{checkState},op_time=#{opTime},third_channel=#{thirdChannel},third_trans_no=#{thirdTransNo},third_receipt_time=#{thirdReceiptTime},third_receipt_amount=#{thirdReceiptAmount},need_third_confirm=#{needThirdConfirm},memo=#{memo},is_return=#{isReturn},out_request_no=#{outRequestNo}
+		where id=#{id}
+	</update>
+
+	<select id="findById" parameterType="int" resultMap="intentionJournalDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention_journal
+		where id=#{_parameter}
+	</select>
+
+	<select id="findByTradeNo" resultMap="intentionJournalDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention_journal
+		where inner_busi_no = #{innerBusiNo,jdbcType=VARCHAR}
+		<if test="stateList != null">
+			and state in
+			<foreach collection="stateList" index="index" item="item"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="typeList != null">
+			and type in
+			<foreach collection="typeList" index="index" item="item"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		limit 1
+	</select>
+
+	<select id="findAll" resultMap="intentionJournalDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention_journal
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from intention_journal
+		where id=#{_parameter}
+	</delete>
+	
+	<select id="findByParam" resultMap="intentionJournalDO">
+		select <include refid="Base_Column_List" />
+		from intention_journal 
+		<where>
+			<if test="type !=null and type !=''">
+				type=#{type}
+			</if>
+			<if test="intentionId!=null and intentionId!=0">
+				and intention_id=#{intentionId} 
+			</if>
+			<if test="userId!=null and userId!=0">
+				and user_id=#{userId} 
+			</if>
+			<if test="innerBusiNo !=null and innerBusiNo !=''">
+				and inner_busi_no=#{innerBusiNo}
+			</if>
+			<if test="state !=null and state !=''">
+				and state=#{state}
+			</if>
+			<if test="checkState !=null and checkState !=''">
+				and check_state=#{checkState}
+			</if>
+			<if test="thirdChannel !=null and thirdChannel !=''">
+				and third_channel=#{thirdChannel}
+			</if>
+			<if test="isReturn !=null and isReturn !=''">
+				and is_return=#{isReturn}
+			</if>
+			<if test="outRequestNo !=null and outRequestNo !=''">
+				and out_request_no=#{outRequestNo}
+			</if>
+		</where>
+		ORDER BY
+		 <choose>
+	        <when test="sortName!=null">
+	                ${sortName}
+	            <if test="sortOrder!=null">
+	                ${sortOrder}
+	            </if>
+	        </when>
+	        <otherwise>
+	            id desc
+	        </otherwise>
+	     </choose>
+  </select>
+</mapper>

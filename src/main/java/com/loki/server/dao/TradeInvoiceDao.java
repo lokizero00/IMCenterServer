@@ -11,4 +11,5 @@ public interface TradeInvoiceDao {
 	List<TradeInvoice> findAll();
 	TradeInvoice findById(int id);
 	boolean deleteByTradeId(int tradeId);
+	List<TradeInvoice> findByTradeId(int tradeId);
 }

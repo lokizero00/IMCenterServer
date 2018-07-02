@@ -16,6 +16,7 @@ public class TradeReport implements Serializable{
 	private String status;
 	private Timestamp verifyTime;
 	private int adminVerifierId;
+	private boolean tradeOwner;
 	public int getId() {
 		return id;
 	}
@@ -75,5 +76,11 @@ public class TradeReport implements Serializable{
 	}
 	public void setAdminVerifierId(int adminVerifierId) {
 		this.adminVerifierId = adminVerifierId;
+	}
+	public boolean isTradeOwner() {
+		return tradeOwner;
+	}
+	public void setTradeOwner(boolean tradeOwner) {
+		this.tradeOwner = tradeOwner;
 	}
 }

@@ -144,6 +144,20 @@
 		where phone=#{_parameter}
   </select>
   
+  <!-- 环信查询用户id -->
+  <select id="findIdByEaseId" parameterType="String" resultType="int">
+		select id 
+		from user
+		where ease_id=#{_parameter}
+  </select>
+  
+  <!-- 用户id查询环信id -->
+  <select id="findEaseIdById" parameterType="int" resultType="String">
+		select ease_id 
+		from user
+		where id=#{_parameter}
+  </select>
+  
   <select id="userExistCheck" parameterType="String" resultType="int">
   		select count(id) from user where phone=#{_parameter}
   </select>

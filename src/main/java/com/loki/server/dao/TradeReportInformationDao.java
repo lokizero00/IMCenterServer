@@ -10,4 +10,5 @@ public interface TradeReportInformationDao {
 	boolean delete(int id);
 	List<TradeReportInformation> findAll();
 	TradeReportInformation findById(int id);
+	List<TradeReportInformation> findByTradeReportId(int tradeReportId);
 }

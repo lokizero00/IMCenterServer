@@ -22,7 +22,7 @@ public class UserBindCodeServiceImpl implements UserBindCodeService {
 	public ServiceResult<Integer> sendSmsAuthCode(String phone) {
 		ServiceResult<Integer> returnValue=new ServiceResult<Integer>();
 		if(phone!=null && !(phone.equals(""))) {
-			String authCode=CommonUtil.getInstance().getRandomStr(6, 3);
+			String authCode=CommonUtil.getInstance().getRandomStr(4, 0);
 			UserBindCode ubc=new UserBindCode();
 			ubc.setAuthCode(authCode);
 			userBindCodeDao.insert(ubc);

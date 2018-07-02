@@ -42,6 +42,13 @@
 		from identity_certification
 		where id=#{_parameter}
 	</select>
+	
+	<select id="findIdentityNameById" parameterType="int" resultType="String">
+		select
+			true_name
+		from identity_certification
+		where id=#{_parameter}
+	</select>
 
 	<select id="findByUserId" parameterType="int"
 		resultMap="identityCertificationDO">

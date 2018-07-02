@@ -11,4 +11,5 @@ public interface TradePaycodeDao {
 	List<TradePaycode> findAll();
 	TradePaycode findById(int id);
 	boolean deleteByTradeId(int tradeId);
+	List<TradePaycode> findByTradeId(int tradeId);
 }

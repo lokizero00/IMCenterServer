@@ -32,7 +32,9 @@ public class TradeComplex implements Serializable{
 	private int identityId;
 	private int enterpriseId;
 	private int dockingId;
+	private int collectionCount;
 	private int readCount;
+	private int dockingCount;
 	private String industryName;
 	private String invoiceName;
 	private String paycodeName;
@@ -41,6 +43,15 @@ public class TradeComplex implements Serializable{
 	private List<TradeInvoice> tradeInvoiceList;
 	private List<TradePaycode> tradePaycodeList;
 	private List<TradeAttachment> tradeAttachmentList;
+	private int collectionId;
+	private String identifier;
+	private String dockEnterpriseName;
+	private BigDecimal dockOffer;
+	private String publishEaseId;
+	private String dockEaseId;
+	
+	private String identityName;
+	private String enterpriseName;
 	public int getId() {
 		return id;
 	}
@@ -238,5 +249,65 @@ public class TradeComplex implements Serializable{
 	}
 	public void setPreviewImageName(String previewImageName) {
 		this.previewImageName = previewImageName;
+	}
+	public int getDockingCount() {
+		return dockingCount;
+	}
+	public void setDockingCount(int dockingCount) {
+		this.dockingCount = dockingCount;
+	}
+	public int getCollectionId() {
+		return collectionId;
+	}
+	public void setCollectionId(int collectionId) {
+		this.collectionId = collectionId;
+	}
+	public int getCollectionCount() {
+		return collectionCount;
+	}
+	public void setCollectionCount(int collectionCount) {
+		this.collectionCount = collectionCount;
+	}
+	public String getIdentityName() {
+		return identityName;
+	}
+	public void setIdentityName(String identityName) {
+		this.identityName = identityName;
+	}
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+	public String getIdentifier() {
+		return identifier;
+	}
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+	public String getDockEnterpriseName() {
+		return dockEnterpriseName;
+	}
+	public void setDockEnterpriseName(String dockEnterpriseName) {
+		this.dockEnterpriseName = dockEnterpriseName;
+	}
+	public BigDecimal getDockOffer() {
+		return dockOffer;
+	}
+	public void setDockOffer(BigDecimal dockOffer) {
+		this.dockOffer = dockOffer;
+	}
+	public String getPublishEaseId() {
+		return publishEaseId;
+	}
+	public void setPublishEaseId(String publishEaseId) {
+		this.publishEaseId = publishEaseId;
+	}
+	public String getDockEaseId() {
+		return dockEaseId;
+	}
+	public void setDockEaseId(String dockEaseId) {
+		this.dockEaseId = dockEaseId;
 	}
 }

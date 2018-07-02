@@ -14,25 +14,44 @@
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="verify_time" jdbcType="TIMESTAMP" property="verifyTime" />
     <result column="admin_verifier_id" jdbcType="INTEGER" property="adminVerifierId" />
+    <result column="trade_owner" jdbcType="BIT" property="tradeOwner" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,update_time,creator_id,trade_id,informer_id,delinquent_id,status,verify_time,admin_verifier_id
+    id,create_time,update_time,creator_id,trade_id,informer_id,delinquent_id,status,verify_time,admin_verifier_id,trade_owner
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.TradeReport">
-		insert into trade_report(create_time,creator_id,trade_id,informer_id,delinquent_id,status) 
-		values(now(),#{creatorId},#{tradeId},#{informerId},#{delinquentId},#{status})
+		insert into trade_report(create_time,creator_id,trade_id,informer_id,delinquent_id,status,trade_owner) 
+		values(now(),#{creatorId},#{tradeId},#{informerId},#{delinquentId},#{status},#{tradeOwner})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.TradeReport">
-  	update trade_report SET update_time=now(),trade_id=#{tradeId},informer_id=#{informerId},delinquent_id=#{delinquentId},status=#{status},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId} where id=#{id}
+  	update trade_report SET update_time=now(),trade_id=#{tradeId},informer_id=#{informerId},delinquent_id=#{delinquentId},status=#{status},verify_time=#{verifyTime},admin_verifier_id=#{adminVerifierId},trade_owner=#{tradeOwner} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="tradeReportDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_report
 		where id=#{_parameter}
+  </select>
+  
+  <select id="findByTradeId" parameterType="int" resultMap="tradeReportDO">
+		select <include refid="Base_Column_List" /> 
+		from trade_report
+		where trade_id=#{_parameter}
+  </select>
+  
+  <select id="findByIdAndInformerId" resultMap="tradeReportDO">
+		select <include refid="Base_Column_List" /> 
+		from trade_report
+		where id=#{tradeReportId} and informer_id=#{informerId}
+  </select>
+  
+  <select id="getCountByTradeId" parameterType="int" resultType="int">
+		select count(id) 
+		from trade_report
+		where trade_id=#{_parameter}
   </select>
   
   <select id="findAll" resultMap="tradeReportDO">

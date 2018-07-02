@@ -33,6 +33,34 @@
 		where id=#{_parameter}
   </select>
   
+  <select id="findByParam" resultMap="userCollectionDO">
+		select <include refid="Base_Column_List" /> 
+		from user_collection
+		<where>
+			<if test="userId!=null and userId!=0">
+				user_id=#{userId}
+			</if>
+			<if test="tradeId!=null and tradeId!=0">
+				and trade_id=#{tradeId}
+			</if>
+			<if test="type!=null and type!=''">
+				and type=#{type}
+			</if>
+		</where>
+		ORDER BY
+		 <choose>
+	        <when test="sortName!=null">
+	                ${sortName}
+	            <if test="sortOrder!=null">
+	                ${sortOrder}
+	            </if>
+	        </when>
+	        <otherwise>
+	            id desc
+	        </otherwise>
+	     </choose>
+  </select>
+  
   <select id="findAll" resultMap="userCollectionDO">
 		select <include refid="Base_Column_List" /> 
 		from user_collection

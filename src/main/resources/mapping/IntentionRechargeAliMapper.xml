@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.IntentionRechargeAliDao">
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="intentionRechargeAliDO" type="com.loki.server.entity.IntentionRechargeAli">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="journal_id" jdbcType="INTEGER" property="journalId" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="rtv_code" jdbcType="VARCHAR" property="rtvCode" />
+		<result column="rtv_msg" jdbcType="VARCHAR" property="rtvMsg" />
+		<result column="sub_code" jdbcType="VARCHAR" property="subCode" />
+		<result column="sub_msg" jdbcType="VARCHAR" property="subMsg" />
+		<result column="sign" jdbcType="VARCHAR" property="sign" />
+		<result column="trade_no" jdbcType="VARCHAR" property="tradeNo" />
+		<result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+		<result column="buyer_logon_id" jdbcType="VARCHAR" property="buyerLogonId" />
+		<result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+		<result column="receipt_amount" jdbcType="DECIMAL" property="receiptAmount" />
+		<result column="buyer_pay_amount" jdbcType="DECIMAL" property="buyerPayAmount" />
+		<result column="point_amount" jdbcType="DECIMAL" property="pointAmount" />
+		<result column="invoice_amount" jdbcType="DECIMAL" property="invoiceAmount" />
+		<result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
+		<result column="card_balance" jdbcType="DECIMAL" property="cardBalance" />
+		<result column="store_name" jdbcType="VARCHAR" property="storeName" />
+		<result column="buyer_user_id" jdbcType="VARCHAR" property="buyerUserId" />
+		<result column="discount_goods_detail" jdbcType="VARCHAR"
+			property="discountGoodsDetail" />
+		<result column="fund_bill_list" jdbcType="VARCHAR" property="fundBillList" />
+		<result column="voucher_detail_list" jdbcType="VARCHAR"
+			property="voucherDetailList" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,journal_id,user_id,rtv_code,rtv_msg,sub_code,sub_msg,sign,trade_no,out_trade_no,buyer_logon_id,total_amount,receipt_amount,buyer_pay_amount,point_amount,invoice_amount,gmt_payment,card_balance,store_name,buyer_user_id,discount_goods_detail,fund_bill_list,voucher_detail_list,create_time
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.IntentionRechargeAli">
+		insert into
+		intention_recharge_ali(journal_id,user_id,rtv_code,rtv_msg,sub_code,sub_msg,sign,trade_no,out_trade_no,buyer_logon_id,total_amount,receipt_amount,buyer_pay_amount,point_amount,invoice_amount,gmt_payment,card_balance,store_name,buyer_user_id,discount_goods_detail,fund_bill_list,voucher_detail_list,create_time)
+		values(#{journalId},#{userId},#{rtvCode},#{rtvMsg},#{subCode},#{subMsg},#{sign},#{tradeNo},#{outTradeNo},#{buyerLogonId},#{totalAmount},#{receiptAmount},#{buyerPayAmount},#{pointAmount},#{invoiceAmount},#{gmtPayment},#{cardBalance},#{storeName},#{buyerUserId},#{discountGoodsDetail},#{fundBillList},#{voucherDetailList},now())
+	</insert>
+
+	<update id="update" parameterType="com.loki.server.entity.IntentionRechargeAli">
+		update intention_recharge_ali SET
+		journal_id=#{journalId},user_id=#{userId},rtv_code=#{rtvCode},rtv_msg=#{rtvMsg},sub_code=#{subCode},sub_msg=#{subMsg},sign=#{sign},trade_no=#{tradeNo},out_trade_no=#{outTradeNo},buyer_logon_id=#{buyerLogonId},total_amount=#{totalAmount},receipt_amount=#{receiptAmount},buyer_pay_amount=#{buyerPayAmount},point_amount=#{pointAmount},invoice_amount=#{invoiceAmount},gmt_payment=#{gmtPayment},card_balance=#{cardBalance},store_name=#{storeName},buyer_user_id=#{buyerUserId},discount_goods_detail=#{discountGoodsDetail},fund_bill_list=#{fundBillList},voucher_detail_list=#{voucherDetailList}
+		where id=#{id}
+	</update>
+
+	<select id="findById" parameterType="int" resultMap="intentionRechargeAliDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention_recharge_ali
+		where id=#{_parameter}
+	</select>
+
+	<select id="findAll" resultMap="intentionRechargeAliDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention_recharge_ali
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from
+		intention_recharge_ali where id=#{_parameter}
+	</delete>
+
+	<select id="findByOutTradeNo" resultMap="intentionRechargeAliDO">
+		select
+		<include refid="Base_Column_List" />
+		from intention_recharge_ali
+		where out_trade_no = #{outTradeNo,jdbcType=INTEGER} limit 1
+	</select>
+</mapper>

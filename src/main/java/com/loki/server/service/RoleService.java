@@ -1,6 +1,5 @@
 package com.loki.server.service;
 
-import com.loki.server.entity.Role;
 import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.RoleVO;
 

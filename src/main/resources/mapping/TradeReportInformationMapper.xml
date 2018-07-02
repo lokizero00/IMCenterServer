@@ -34,6 +34,12 @@
 		where id=#{_parameter}
   </select>
   
+  <select id="findByTradeReportId" parameterType="int" resultMap="tradeReportInformationDO">
+		select <include refid="Base_Column_List" /> 
+		from trade_report_information
+		where trade_report_id=#{_parameter}
+  </select>
+  
   <select id="findAll" resultMap="tradeReportInformationDO">
 		select <include refid="Base_Column_List" /> 
 		from trade_report_information

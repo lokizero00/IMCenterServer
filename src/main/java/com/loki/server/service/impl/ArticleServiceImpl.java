@@ -9,9 +9,11 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.ArticleDao;
 import com.loki.server.dto.ArticleDTO;
+import com.loki.server.dto.TradeDockingDTO;
 import com.loki.server.dto.convertor.ArticleConvertor;
 import com.loki.server.entity.Article;
 import com.loki.server.entity.PagedResult;
@@ -60,7 +62,8 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 				articleDTO=setDTOExtendFields(articleDTO);
 				articleDTOList.add(articleDTO);
 			}
-			PagedResult<ArticleDTO> pageResult = BeanUtil.toPagedResult(articleDTOList);
+			Page data=(Page) articleList;
+			PagedResult<ArticleDTO> pageResult=BeanUtil.toPagedResult(articleDTOList,data.getPageNum(),data.getPageSize(),data.getTotal(),data.getPages());
 			if (pageResult != null) {
 				return pageResult;
 			} else {

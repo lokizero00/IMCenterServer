@@ -37,6 +37,13 @@
 		where id=#{_parameter}
 	</select>
 	
+	<select id="findEnterpriseNameById" parameterType="int" resultType="String">
+		select
+			enterprise_name
+		from enterprise_certification
+		where id=#{_parameter}
+	</select>
+	
 	<select id="findStatusById" parameterType="int" resultType="String">
 		select
 			status

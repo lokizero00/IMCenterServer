@@ -11,13 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.loki.server.dao.AdminDao;
 import com.loki.server.dao.AdminLogDao;
 import com.loki.server.dao.DictionariesDao;
+import com.loki.server.dao.EnterpriseCertificationDao;
+import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.IntentionLogDao;
 import com.loki.server.dao.SettingDao;
+import com.loki.server.dao.TopLineNewsDao;
 import com.loki.server.dao.TradeLogDao;
 import com.loki.server.dao.UserDao;
 import com.loki.server.entity.AdminLog;
 import com.loki.server.entity.IntentionLog;
+import com.loki.server.entity.TopLineNews;
 import com.loki.server.entity.TradeLog;
+import com.loki.server.entity.User;
 import com.loki.server.utils.PropertyUtil;
 import com.loki.server.utils.SessionContext;
 
@@ -38,6 +43,13 @@ public class BaseService {
 	SettingDao settingDao;
 	@Resource
 	AdminLogDao adminLogDao;
+	@Resource
+	EnterpriseCertificationDao enterpriseCertificationDao;
+	@Resource
+	IdentityCertificationDao identityCertificationDao;
+	@Resource 
+	TopLineNewsDao topLineNewsDao;
+	
 
 	protected void addTradeLog(int tradeId, String logRole, int logOperatorId, String logState, String logContent) {
 		TradeLog tradeLog = new TradeLog();
@@ -94,6 +106,22 @@ public class BaseService {
 			return null;
 		}
 	}
+	
+	protected String getEnterpriseName(Integer enterpriseCertificationId) {
+		if (enterpriseCertificationId!=null && enterpriseCertificationId > 0) {
+			return enterpriseCertificationDao.findEnterpriseNameById(enterpriseCertificationId);
+		} else {
+			return null;
+		}
+	}
+	
+	protected String getIdentityName(Integer identityCertificationId) {
+		if (identityCertificationId!=null && identityCertificationId > 0) {
+			return identityCertificationDao.findIdentityNameById(identityCertificationId);
+		} else {
+			return null;
+		}
+	}
 
 	protected String getSettingValue(String settingName) {
 		if (settingName != null && !(settingName.equals(""))) {
@@ -130,5 +158,26 @@ public class BaseService {
 		adminLog.setIp(ip);
 		adminLog.setContent(logContent);
 		adminLogDao.insert(adminLog);
+	}
+	
+	protected String fetchUserAvatar(int userId) {
+		String avatar="";
+		if(userId>0) {
+			User user=userDao.findById(userId);
+			if(user!=null) {
+				avatar= user.getAvatar();
+			}
+		}
+		return avatar;
+	}
+	
+	protected void addTopLineNews(String newsTitle,String newsType, int relationId) {
+		if(relationId>0) {
+			TopLineNews topLineNews=new TopLineNews();
+			topLineNews.setNewsTitle(newsTitle);
+			topLineNews.setNewsType(newsType);
+			topLineNews.setRelationId(relationId);
+			topLineNewsDao.insert(topLineNews);
+		}
 	}
 }

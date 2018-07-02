@@ -14,4 +14,6 @@ public interface TradeDao {
 	List<Trade> findByUserId(int userId);
 	Trade findById(int id);
 	Trade findByIdAndUserId(@Param("id") int id,@Param("userId") int userId);
+	boolean updateCollectionCountAdd(int id);
+	boolean updateCollectionCountSub(int id);
 }

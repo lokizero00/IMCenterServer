@@ -19,6 +19,7 @@ public class TradeDocking implements Serializable{
 	private BigDecimal offer;
 	private BigDecimal intention;
 	private String message;
+	private String type;
 	public int getId() {
 		return id;
 	}
@@ -90,5 +91,11 @@ public class TradeDocking implements Serializable{
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 }

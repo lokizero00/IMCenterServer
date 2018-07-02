@@ -11,4 +11,5 @@ public interface TradeIndustryDao {
 	List<TradeIndustry> findAll();
 	TradeIndustry findById(int id);
 	boolean deleteByTradeId(int tradeId);
+	List<TradeIndustry> findByTradeId(int tradeId);
 }

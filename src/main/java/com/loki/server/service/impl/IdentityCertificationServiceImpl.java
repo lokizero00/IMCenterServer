@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.UserDao;
+import com.loki.server.dto.EnterpriseCertificationDTO;
 import com.loki.server.dto.IdentityCertificationDTO;
 import com.loki.server.dto.convertor.IdentityCertificationConvertor;
 import com.loki.server.entity.IdentityCertification;
@@ -63,7 +65,7 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 			} else {
 				IdentityCertification identityCertification = identityCertificationDao.findById(user.getIdentityId());
 				if (null == identityCertification) {
-					returnValue.setResultCode(ResultCodeEnums.IDENTITY_CERTIFICATION_NOT_EXIST);
+					returnValue.setResultCode(ResultCodeEnums.CERTIFICATION_NOT_EXIST);
 				} else {
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 					returnValue.setResultObj(identityCertification.getStatus());
@@ -157,7 +159,8 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 				identityCertificationDTO=setDTOExtendFields(identityCertificationDTO, null);
 				identityCertificationDTOList.add(identityCertificationDTO);
 			}
-			PagedResult<IdentityCertificationDTO> pageResult = BeanUtil.toPagedResult(identityCertificationDTOList);
+			Page data=(Page) identityCertificationList;
+			PagedResult<IdentityCertificationDTO> pageResult=BeanUtil.toPagedResult(identityCertificationDTOList,data.getPageNum(),data.getPageSize(),data.getTotal(),data.getPages());
 			if (pageResult != null) {
 				return pageResult;
 			} else {
