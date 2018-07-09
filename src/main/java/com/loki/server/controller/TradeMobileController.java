@@ -65,7 +65,7 @@ public class TradeMobileController {
 	
 	//获取贸易列表（需求/供应）
 	@RequestMapping(value="/getTradeList",method=RequestMethod.GET)
-	public String getTradeList(HttpServletRequest request, Integer userId,String sn,String title,String type,Boolean ignoreSuccessAndDown,String provinceName,String cityName,String townName,String status,String invoiceCode,String industryCode,String payCode,Integer pageNo,Integer pageSize,String sortName,String sortOrder,ModelMap mm) {
+	public String getTradeList(HttpServletRequest request, Integer userId,String sn,String title,String type,Boolean ignoreSuccessAndDown,String provinceName,String cityName,String townName,String status,String invoiceCode,String industryCode,String payCode,String identityStatus,String enterpriseStatus,Integer pageNo,Integer pageSize,String sortName,String sortOrder,ModelMap mm) {
 		HashMap<String,Object> map=new HashMap<>();
 		map.put("userId", userId);
 		map.put("sn", sn);
@@ -78,6 +78,8 @@ public class TradeMobileController {
 		map.put("invoiceCode", invoiceCode);
 		map.put("industryCode", industryCode);
 		map.put("payCode", payCode);
+		map.put("identityStatus", identityStatus);
+		map.put("enterpriseStatus",enterpriseStatus);
 		map.put("sortName", sortName);
 		map.put("sortOrder", sortOrder);
 		map.put("pageNo",pageNo);
@@ -147,7 +149,6 @@ public class TradeMobileController {
 	}
 	
 	//贸易下架
-	//TODO 接口文档没写
 	@RequestMapping(value="/setTradeUnderCarriage",method=RequestMethod.POST)
 	public String setTradeUnderCarriage(HttpServletRequest request,int tradeId,int userId,ModelMap mm) {
 		ServiceResult<Void> returnValue=tradeService.setTradeUnderCarriage(tradeId, userId);

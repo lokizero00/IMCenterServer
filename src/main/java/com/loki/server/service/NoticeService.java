@@ -3,7 +3,6 @@ package com.loki.server.service;
 import java.util.List;
 import java.util.Map;
 
-import com.loki.server.entity.Notice;
 import com.loki.server.entity.NoticeComplex;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.UserNotice;
@@ -22,4 +21,5 @@ public interface NoticeService {
 	//mobile
 	ServiceResult<PagedResult<NoticeComplex>> getNoticeList_mobile(int userId,Integer pageNo,Integer pageSize);
 	ServiceResult<NoticeComplex> getNotice_mobile(int noticeId,int userId);
+	ServiceResult<Integer> getUnreadCount_mobile(int userId);
 }

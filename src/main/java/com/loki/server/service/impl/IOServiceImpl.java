@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.loki.server.dao.SettingDao;
 import com.loki.server.entity.UploadFile;
 import com.loki.server.service.IOService;
 import com.loki.server.utils.CommonUtil;

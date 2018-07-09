@@ -102,4 +102,8 @@
 		delete from user_notice where
 		id=#{_parameter}
 	</delete>
+	
+	<select id="findUnreadCount" parameterType="int" resultType="int">
+		select count(id) from user_notice where user_id=#{_parameter} and is_read=0
+	</select>
 </mapper>

@@ -199,4 +199,17 @@ public class NoticeServiceImpl extends BaseService implements NoticeService {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
+
+	@Override
+	public ServiceResult<Integer> getUnreadCount_mobile(int userId) {
+		ServiceResult<Integer> returnValue=new ServiceResult<>();
+		if(userId>0) {
+			int unreadCount=userNoticeDao.findUnreadCount(userId);
+			returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+			returnValue.setResultObj(unreadCount);
+		}else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
 }

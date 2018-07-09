@@ -84,16 +84,16 @@ public class UserServiceImpl extends BaseService implements UserService {
 						userToken.setExpired(false);
 						userTokenDao.insert(userToken);
 
-						//检查环信用户是否存在，不存在则创建
-						HuanXinUtil hu=new HuanXinUtil();
-						JSONObject json=hu.getHXUserInfo(user.getUserName());
-						if(json==null) {
-							int hxCode=hu.createUser(user.getUserName(), user.getPassword(), user.getNickName());
-							if(hxCode!=200) {
-								logger.error("用户 "+user.getUserName()+" 环信注册失败");
+						// 检查环信用户是否存在，不存在则创建
+						HuanXinUtil hu = new HuanXinUtil();
+						JSONObject json = hu.getHXUserInfo(user.getUserName());
+						if (json == null) {
+							int hxCode = hu.createUser(user.getUserName(), user.getPassword(), user.getNickName());
+							if (hxCode != 200) {
+								logger.error("用户 " + user.getUserName() + " 环信注册失败");
 							}
 						}
-						
+
 						// 返回登录信息
 						UserLoginVO userLoginVO = new UserLoginVO();
 						userLoginVO.setUser(user);
@@ -568,19 +568,19 @@ public class UserServiceImpl extends BaseService implements UserService {
 	}
 
 	/**
-	 * 通过环信id获取用户id
+	 * 通过环信id获取用户
+	 * 
 	 * @param easeId
-	 * @return userId
+	 * @return UserDTO
 	 */
 	@Override
-	public ServiceResult<Integer> getUserIdByEaseId(String easeId) {
-		ServiceResult<Integer> returnValue = new ServiceResult<>();
+	public ServiceResult<User> getUserByEaseId(String easeId) {
+		ServiceResult<User> returnValue = new ServiceResult<>();
 		try {
-			if (easeId!=null && easeId!="") {
-
-				int userId = userDao.findIdByEaseId(easeId);
-				if (userId >0) {
-					returnValue.setResultObj(userId);
+			if (easeId != null && easeId != "") {
+				User user = userDao.findByEaseId(easeId);
+				if (user != null) {
+					returnValue.setResultObj(user);
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				} else {
 					returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
