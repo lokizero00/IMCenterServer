@@ -13,6 +13,8 @@
 <title>实名认证详情</title>
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
+<link href="<%=basePath%>static/bootstrap/css/style.css"
+	rel="stylesheet">
 </head>
 
 <body>
@@ -20,13 +22,27 @@
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<%=basePath%>static/js/common.js"></script>
 	<script src="<%=basePath%>static/js/identityCertificationDetail.js"></script>
-	<jsp:include page="identityCertification.jsp" />
-	<div class="form-group">
-		<div>
-			<button type="button" id="btnVerify" data-toggle='modal'
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	       <h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 实名认证管理</h3>
+	    </div>
+	    <div class="panel-body">
+	      	<div class="panel panel-info">
+			    <div class="panel-heading">
+			       <span class="glyphicon glyphicon-tags"></span> 实名认证详情
+			    </div>
+			    <div class="panel-body">
+			        	<jsp:include page="identityCertification.jsp" />
+			    </div>
+			</div>
+	    </div>
+	    <div class="form-group">
+			<div align="center">
+				<button type="button" id="btnVerify" data-toggle='modal'
 				data-target='#icVerifyModal' class="btn btn-primary">审核</button>
-			<button type="button" id="btnBack" onclick="window.history.go(-1);"
-				class="btn btn-primary">返回</button>
+				<button type="button" id="btnBack" onclick="window.history.go(-1);"
+					class="btn btn-primary">返回</button>
+			</div>
 		</div>
 	</div>
 	<!-- 模态框（Modal） -->

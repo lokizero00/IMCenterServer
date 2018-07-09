@@ -1,0 +1,45 @@
+@CHARSET "UTF-8";
+.serchSelect{
+	height:25px;
+	font-size:14px;
+	width: 200px;
+}
+.tbInfo{
+width: 100%;
+
+}
+.date_pick{
+	width: 220px; 
+	height: 27px;
+}
+.tbInfo tr td{
+padding-top: 10px;
+}
+.tb_list th{
+background-color:#D9D5CE;
+}
+
+.tb_detail thead, .tb_detail tr {
+border-top-width: 1px;
+border-top-style: solid;
+border-top-color: #DDDDDD;
+}
+.tb_detail {
+width: 100%;
+border-bottom-width: 1px;
+border-bottom-style: solid;
+border-bottom-color: #DDDDDD;
+}
+
+.tb_detail td, .tb_detail th {
+padding: 7px 10px;
+font-size: 14px;
+font-family: Verdana;
+}
+
+.tb_detail tr:nth-child(even) {
+background: #F5F5F5;
+}
+.tb_detail tr:nth-child(odd) {
+background: #FFF;
+}

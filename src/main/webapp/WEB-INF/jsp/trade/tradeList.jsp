@@ -15,85 +15,83 @@
 	rel="stylesheet">
 <link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css"
 	rel="stylesheet">
-<style type="text/css">
-#queryDiv {
-	margin-right: auto;
-	margin-left: auto;
-	width: 100%;
-	margin-top: 50px;
-	margin-bottom: 20px;
-}
+<link href="<%=basePath%>static/bootstrap/css/style.css"
+	rel="stylesheet">
 
-#queryButton {
-	margin-right: 20px;
-	float: right;
-}
-
-#textInput {
-	margin-top: 10px;
-	margin-left: 10px;
-}
-
-#tableResult {
-	margin-right: auto;
-	margin-left: auto;
-	width: 100%;
-}
-
-#bottomTab {
-	margin-right: 20px;
-	float: right;
-}
-</style>
 </head>
 <body>
-	<div id="queryDiv">
-		<table width="100%">
-			<tr>
-				<td>标题：</td>
-				<td><input type="text" id="tradeList_queryTitle"
-					name="tradeList_queryTitle" value=""></td>
-				<td>类型：</td>
-				<td><select name="tradeList_queryType" id="tradeList_queryType">
-				</select></td>
-				<td>编号：</td>
-				<td><input type="text" id="tradeList_querySn"
-					name="tradeList_querySn" value=""></td>
-				<td>状态：</td>
-				<td><select name="tradeList_queryStatus"
-					id="tradeList_queryStatus">
-				</select></td>
-			</tr>
-			<tr>
-				<td>行业：</td>
-				<td><select name="tradeList_queryIndustryCode"
-					id="tradeList_queryIndustryCode">
-				</select></td>
-				<td>发票要求：</td>
-				<td><select name="tradeList_queryInvoiceCode"
-					id="tradeList_queryInvoiceCode">
-				</select></td>
-				<td>支付方式：</td>
-				<td><select name="tradeList_queryPayCode"
-					id="tradeList_queryPayCode">
-				</select></td>
-				<td>
-					<button id="queryButton" class="btn btn-primary" type="button">查询</button>
-				</td>
-				<td>
-					<button id="resetButton" class="btn btn-primary" type="button">清空</button>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<input type="hidden" id="contextPath" value="${contextPath}" />
-	<div class="container-fluid">
-		<div id="toolbar" class="btn-group">
-			<button id="btn_add" type="button" class="btn btn-default">
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-			</button>
-		</div>
-		<table id="table_tradeList"></table>
+	 <div class="panel panel-default">
+	    <div class="panel-heading" >
+	       	<h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 贸易管理</h3>
+	    </div>
+	    <div class="panel-body">
+	       	 <div class="panel panel-info">
+			    <div class="panel-heading" >
+			       	<span class="glyphicon glyphicon-search"></span> 贸易信息查询
+			    </div>
+			    <div class="panel-body" style="background-color:#F0F8FD;">
+			       	 <table width="100%" class="tbInfo">
+						<tr>
+							<td>标 题：</td>
+							<td><input type="text" id="tradeList_queryTitle"
+								name="tradeList_queryTitle" value=""></td>
+							<td>类 型：</td>
+							<td><select name="tradeList_queryType" id="tradeList_queryType" class="serchSelect">
+							</select></td>
+							<td>编 号：</td>
+							<td><input type="text" id="tradeList_querySn"
+								name="tradeList_querySn" value=""></td>
+							<td>状 态：</td>
+							<td><select name="tradeList_queryStatus"
+								id="tradeList_queryStatus" class="serchSelect">
+							</select></td>
+						</tr>
+						<tr>
+							<td>行 业：</td>
+							<td><select name="tradeList_queryIndustryCode"
+								id="tradeList_queryIndustryCode" class="serchSelect">
+							</select></td>
+							<td>发票要求：</td>
+							<td><select name="tradeList_queryInvoiceCode"
+								id="tradeList_queryInvoiceCode" class="serchSelect">
+							</select></td>
+							<td>支付方式：</td>
+							<td><select name="tradeList_queryPayCode"
+								id="tradeList_queryPayCode" class="serchSelect">
+							</select></td>
+							<td>
+								
+							</td>
+							<td>
+								
+							</td>
+						</tr>
+						<tr>
+							<td colspan="8" align="right">
+								<button id="queryButton" class="btn btn-primary" type="button">查 询</button>
+								<button id="resetButton" class="btn btn-primary" type="button">清 空</button>
+							</td>
+						</tr>
+					</table>
+			    </div>
+			</div>
+			
+			<div class="panel panel-info">
+			    <div class="panel-heading" >
+			       	<span class="glyphicon glyphicon-list-alt"></span> 贸易信息列表
+			    </div>
+			    <div class="panel-body" style="padding-top: 1px;">
+			       	 <input type="hidden" id="contextPath" value="${contextPath}" />
+			       	 <div id="toolbar" class="btn-group">
+							<button id="btn_add" type="button" class="btn btn-primary">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 新 增
+							</button>
+						</div>
+						<table id="table_tradeList" class="tb_list"></table>
+						
+			    </div>
+			</div>
+	    </div>
 	</div>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>

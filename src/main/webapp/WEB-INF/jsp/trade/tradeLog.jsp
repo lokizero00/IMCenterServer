@@ -10,8 +10,7 @@
 <html>
 <body>
 	<div id="div_tradeLog">
-		<table class="table">
-			<caption>历史日志</caption>
+		<table class="tb_detail">
 			<thead>
 				<tr>
 					<th>日志</th>

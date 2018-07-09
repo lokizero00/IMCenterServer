@@ -24,7 +24,7 @@
 				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>遗漏补发
 			</button>
 		</div>
-		<table id="table_userNotice"></table>
+		<table id="table_userNotice" class="tb_list"></table>
 	</div>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>

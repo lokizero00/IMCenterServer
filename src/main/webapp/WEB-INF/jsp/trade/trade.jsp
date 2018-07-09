@@ -8,10 +8,13 @@
 <c:set var="contextPath" value="<%=basePath%>"></c:set>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
+<head>
+
+</head>
 <body>
+	
 	<input type="hidden" id="contextPath" value="${contextPath }" />
-	<table class="table">
-		<caption>贸易详情</caption>
+	<table  class="tb_detail">
 		<tbody id="tb_tradeDetail">
 		</tbody>
 	</table>

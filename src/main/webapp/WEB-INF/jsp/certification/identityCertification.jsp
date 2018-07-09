@@ -10,8 +10,7 @@
 <html>
 <body>
 	<input type="hidden" id="contextPath" value="${contextPath }" />
-	<table class="table">
-		<caption>实名认证详情</caption>
+	<table class="tb_detail">
 		<tbody id="tb_identityCertificationDetail">
 		</tbody>
 	</table>

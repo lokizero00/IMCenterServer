@@ -18,8 +18,7 @@
 </head>
 <body>
 	<input type="hidden" id="contextPath" value="${contextPath }" />
-	<table class="table">
-		<caption>用户详情</caption>
+	<table class="tb_detail">
 		<tbody id="tb_userDetail">
 		</tbody>
 	</table>

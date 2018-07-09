@@ -19,7 +19,7 @@
 <body>
 	<div id="queryDiv"></div>
 	<div class="container-fluid">
-		<table id="tb_intentionLog"></table>
+		<table id="tb_intentionLog" class="tb_list"></table>
 	</div>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>

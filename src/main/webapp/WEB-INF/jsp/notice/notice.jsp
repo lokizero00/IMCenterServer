@@ -10,8 +10,7 @@
 <html>
 <body>
 	<input type="hidden" id="contextPath" value="${contextPath }" />
-	<table class="table">
-		<caption>通知详情</caption>
+	<table class="tb_detail">
 		<tbody id="tb_noticeDetail">
 		</tbody>
 	</table>

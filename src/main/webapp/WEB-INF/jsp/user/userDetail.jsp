@@ -13,6 +13,8 @@
 <title>用户详情</title>
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
+<link href="<%=basePath%>static/bootstrap/css/style.css"
+	rel="stylesheet">
 </head>
 
 <body>
@@ -20,15 +22,39 @@
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<%=basePath%>static/js/common.js"></script>
 	<script src="<%=basePath%>static/js/userDetail.js"></script>
-	<jsp:include page="user.jsp" />
-	<jsp:include page="userIntention.jsp" />
-	<div class="form-group">
-		<div>
-			<button type="button" id="btnVerify" class="btn btn-primary">审核</button>
-			<button type="button" id="btnStatus" class="btn btn-primary">停用</button>
-			<button type="button" id="btnBack" onclick="window.history.go(-1);"
-				class="btn btn-primary">返回</button>
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	       <h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 用户管理</h3>
+	    </div>
+	    <div class="panel-body">
+	      	<div class="panel panel-info">
+			    <div class="panel-heading">
+			       <span class="glyphicon glyphicon-tags"></span> 用户详情
+			    </div>
+			    <div class="panel-body">
+			        	<jsp:include page="user.jsp" />
+			    </div>
+			</div>
+	    </div>
+	    <div class="panel-body">
+	      	<div class="panel panel-info">
+			    <div class="panel-heading">
+			       <span class="glyphicon glyphicon-tags"></span> 用户意向金
+			    </div>
+			    <div class="panel-body">
+			        	<jsp:include page="userIntention.jsp" />
+			    </div>
+			</div>
+	    </div>
+	    <div class="form-group">
+			<div  align="center">
+				<button type="button" id="btnVerify" class="btn btn-primary">审 核</button>
+				<button type="button" id="btnStatus" class="btn btn-primary">停 用</button>
+				<button type="button" id="btnBack" onclick="window.history.go(-1);"
+					class="btn btn-primary">返 回</button>
+			</div>
 		</div>
 	</div>
+	
 </body>
 </html>
