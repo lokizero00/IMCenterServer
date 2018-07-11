@@ -19,6 +19,7 @@
 <body>
 	<input type="hidden" id="contextPath" value="${contextPath }" />
 	<ul class="nav nav-pills nav-stacked" id="ul_leftMenu">
+		
 	</ul>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>

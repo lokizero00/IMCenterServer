@@ -12,38 +12,52 @@
 <title>用户登陆</title>
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
-<style>
-body {
-	margin-left: auto;
-	margin-right: auto;
-	margin-TOP: 100PX;
-	width: 20em;
-}
-</style>
+<link href="<%=basePath%>static/bootstrap/css/font-awesome.css"
+	rel="stylesheet">
+<link href="<%=basePath%>static/login/css/form-elements.css"
+	rel="stylesheet">
+<link href="<%=basePath%>static/login/css/style.css" rel="stylesheet">
+
 </head>
 
-<body>
-	<form >
-		<input type="hidden" id="contextPath" value="${contextPath}" />
-		<!--下面是用户名输入框-->
-		<div class="input-group">
-			<span class="input-group-addon" id="basic-addon1">@</span> <input
-				id="userName" type="text" class="form-control" placeholder="用户名"
-				aria-describedby="basic-addon1">
-		</div>
-		<br>
-		<!--下面是密码输入框-->
-		<div class="input-group">
-			<span class="input-group-addon" id="basic-addon1">@</span> <input
-				id="password" type="password" class="form-control" placeholder="密码"
-				aria-describedby="basic-addon1">
-		</div>
-		<br>
-		<!--下面是登陆按钮,包括颜色控制-->
-		<button type="button" style="width: 280px;" id="btn_login" class="btn btn-default">登
-			录</button>
-	</form>
+<body style="background-color: #049EC4;">
 
+	<input type="hidden" id="contextPath" value="${contextPath}" />
+	<div class="top-content">
+
+		<div class="inner-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-5 col-sm-offset-4 form-box">
+						<div class="form-top">
+							<div class="form-top-left">
+								<h3>系统登录</h3>
+								<p></p>
+							</div>
+							<div class="form-top-right">
+								<i class="fa fa-key"></i>
+							</div>
+						</div>
+						<div class="form-bottom">
+							<form role="form" action="" method="post" class="login-form">
+								<div class="form-group">
+									<input id="userName" type="text" class="form-control"
+										placeholder="用户名" aria-describedby="basic-addon1">
+								</div>
+								<div class="form-group">
+									<input id="password" type="password" class="form-control"
+										placeholder="密码" aria-describedby="basic-addon1">
+								</div>
+								<button type="button" class="btn" id="btn_login">登 录</button>
+							</form>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<%=basePath%>static/js/login.js"></script>

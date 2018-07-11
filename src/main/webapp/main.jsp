@@ -14,7 +14,7 @@ String basePath = "//" + request.getHeader("host")+ path + "/";
 		}
 </style>
 </head>
-<frameset rows="100,*" cols="*" frameborder="yes" border="1"
+<frameset rows="50,*" cols="*" frameborder="yes" border="1"
 	framespacing="1">
 	<frame src="top.jsp" name="topFrame" scrolling="No" noresize="noresize"
 		id="topFrame" title="topFrame" />    
