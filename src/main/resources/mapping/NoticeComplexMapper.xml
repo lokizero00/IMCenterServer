@@ -96,57 +96,65 @@
   </select>
   
   <select id="findByParam" resultMap="noticeComplexDO">
-		select notice.*,count(user_notice.id) as user_count,dictionaries.value as relation_type_name,_admin_creator.user_name as admin_creator_name,_admin_updater.user_name as admin_updater_name
+		select _notice.*,
+		dictionaries.value as relation_type_name,
+		_admin_creator.user_name as admin_creator_name,
+		_admin_updater.user_name as admin_updater_name
+		from (
+		select 
+		notice.*,
+		count(user_notice.id) as user_count
 		from notice 
-		left join user_notice on notice.id=user_notice.notice_id
-		left join dictionaries on dictionaries.type='notice_type' and dictionaries.code=notice.relation_type
-		left join admin _admin_creator on _admin_creator.id=notice.admin_creator_id
-		left join admin _admin_updater on _admin_updater.id=notice.admin_updater_id
+		left join user_notice on notice.id=user_notice.notice_id  
+		GROUP BY  notice.id 
+		) _notice
+		left join dictionaries on dictionaries.type='notice_type' and dictionaries.code=_notice.relation_type
+		left join admin _admin_creator on _admin_creator.id=_notice.admin_creator_id
+		left join admin _admin_updater on _admin_updater.id=_notice.admin_updater_id
 		<where>
 			<if test="createTimeStart != null">
 			 	<![CDATA[
-					notice.create_time>=#{createTimeStart}
+					_notice.create_time>=#{createTimeStart}
 				]]>
 			</if>
 			<if test="createTimeEnd != null">
 			 	<![CDATA[
-					and notice.create_time<=#{createTimeEnd}
+					and _notice.create_time<=#{createTimeEnd}
 				]]>
 			</if>
 			<if test="updateTimeStart != null">
 			 	<![CDATA[
-					and notice.update_time>=#{updateTimeStart}
+					and _notice.update_time>=#{updateTimeStart}
 				]]>
 			</if>
 			<if test="updateTimeEnd != null">
 			 	<![CDATA[
-					and notice.update_time<=#{updateTimeEnd}
+					and _notice.update_time<=#{updateTimeEnd}
 				]]>
 			</if>
 			<if test="adminCreatorId !=null">
-				and notice.admin_creator_id=#{adminCreatorId}
+				and _notice.admin_creator_id=#{adminCreatorId}
 			</if>
 			<if test="adminUpdaterId !=null">
-				and notice.admin_updater_id=#{adminUpdaterId}
+				and _notice.admin_updater_id=#{adminUpdaterId}
 			</if>
 			<if test="title !=null and title!=''">
-				and notice.title like CONCAT('%','${title}','%' ) 
+				and _notice.title like CONCAT('%','${title}','%' ) 
 			</if>
 			<if test="content !=null and content!=''">
-				and notice.content like CONCAT('%','${content}','%' ) 
+				and _notice.content like CONCAT('%','${content}','%' ) 
 			</if>
 			<if test="relationType !=null and relationType!=''">
-				and notice.relation_type=#{relationType}
+				and _notice.relation_type=#{relationType}
 			</if>
 			<if test="relationId !=null and relationId!=0">
-				and notice.relation_id=#{relationId}
+				and _notice.relation_id=#{relationId}
 			</if>
 		</where>
-		GROUP BY  notice.id 
 		ORDER BY
 		 <choose>
 	        <when test="sortName!=null">
-	                notice.${sortName}
+	                _notice.${sortName}
 	            <if test="sortOrder!=null">
 	                ${sortOrder}
 	            </if>
