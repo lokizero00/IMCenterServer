@@ -203,7 +203,6 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 				int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
 				int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
 				PageHelper.startPage(pageNo, pageSize);
-				//TODO 增加认证条件筛选，不限，个人，企业，单选
 				PagedResult<TradeComplex> tradeComplexList = BeanUtil.toPagedResult(tradeComplexDao.findByParam(map));
 				if (tradeComplexList != null) {
 					// 字段code处理
@@ -286,7 +285,8 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 							tradeComplex.setDockEaseId(userDao.findEaseIdById(tradeDocking.getUserId()));
 						}
 					}
-					//TODO 阅读量+1
+					//阅读量+1
+					tradeDao.updateReadCountAdd(tradeId);
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 					returnValue.setResultObj(tradeComplex);
 				} else {

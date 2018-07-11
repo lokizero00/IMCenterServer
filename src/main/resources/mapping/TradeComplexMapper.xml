@@ -43,6 +43,8 @@
 		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
 		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id,name) _attachment on _attachment.trade_id=trade.id
 		left join user as _user on _user.id=trade.user_id
+		left join (select id,status from identity_certification) _ic on trade.identity_id=_ic.id
+		left join (select id,status from enterprise_certification) _ec on trade.enterprise_id=_ec.id
 		<where>
 			<if test="sn!=null and sn!=''">
 				trade.sn=#{sn}
@@ -83,6 +85,12 @@
 				and trade.id in(
 				select trade_id from trade_paycode where code=#{payCode})
 			</if>
+			<if test="identityStatus!=null and identityStatus!=''">
+				and _ic.status=#{identityStatus}
+			</if>
+			<if test="enterpriseStatus!=null and enterpriseStatus!=''">
+				and _ec.status=#{enterpriseStatus}
+			</if>
 		</where>
 		ORDER BY
 		 <choose>
@@ -107,7 +115,7 @@
 		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id,name) _attachment on _attachment.trade_id=trade.id
 		left join user as _user on _user.id=trade.user_id
 		<if test="userId!=null and userId!=0">
-			join trade_docking on trade_docking.trade_id=trade.id and trade_docking.user_id=#{user_id} 
+			join trade_docking on trade_docking.trade_id=trade.id and trade_docking.user_id=#{userId} 
 		</if>
 		
 		<where>

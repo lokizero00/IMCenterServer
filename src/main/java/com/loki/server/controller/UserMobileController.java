@@ -95,11 +95,10 @@ public class UserMobileController {
 		return "mobileResultJson";
 	}
 	
-	//通过环信id获取用户id
-	//TODO 返回值修改为用户实体
-	@RequestMapping(value="/getUserIdByEaseId",method=RequestMethod.GET)
+	//通过环信id获取用户
+	@RequestMapping(value="/getUserByEaseId",method=RequestMethod.GET)
 	public String getUserIdByEaseId(String easeId,ModelMap mm) {
-		ServiceResult<Integer> returnValue=userService.getUserIdByEaseId(easeId);
+		ServiceResult<User> returnValue=userService.getUserByEaseId(easeId);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

@@ -14,4 +14,5 @@ public interface UserNoticeDao {
 	UserNotice findByParam(Map<String, Object> map);
 	List<UserNotice> findListByParam(Map<String, Object> map);
 	List<Integer> findOmittedUserId(int noticeId);
+	int findUnreadCount(int userId);
 }

@@ -19,7 +19,20 @@ import com.loki.server.vo.ServiceResult;
 public class NoticeMobileController {
 	@Autowired NoticeService noticeService;
 	
-	//TODO 增加未读条数
+	//获取增加未读条数
+	@RequestMapping(value="/getUnreadCount",method=RequestMethod.GET)
+	public String getUnreadCount(HttpServletRequest request,int userId,ModelMap mm) {
+		ServiceResult<Integer> returnValue=noticeService.getUnreadCount_mobile(userId);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+		return "mobileResultJson";
+	}
 	
 	//获取消息列表
 	@RequestMapping(value="/getNoticeList",method=RequestMethod.GET)

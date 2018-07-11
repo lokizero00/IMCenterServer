@@ -15,7 +15,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.UserDao;
-import com.loki.server.dto.EnterpriseCertificationDTO;
 import com.loki.server.dto.IdentityCertificationDTO;
 import com.loki.server.dto.convertor.IdentityCertificationConvertor;
 import com.loki.server.entity.IdentityCertification;

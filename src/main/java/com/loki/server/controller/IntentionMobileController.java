@@ -12,7 +12,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.loki.server.dao.IntentionJournalDao;
 import com.loki.server.dto.IntentionRechargeDTO;
 import com.loki.server.dto.RechargeDTO;
 import com.loki.server.entity.Intention;

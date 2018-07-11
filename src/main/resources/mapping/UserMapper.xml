@@ -145,8 +145,8 @@
   </select>
   
   <!-- 环信查询用户id -->
-  <select id="findIdByEaseId" parameterType="String" resultType="int">
-		select id 
+  <select id="findByEaseId" parameterType="String" resultMap="userDO">
+		select <include refid="Base_Column_List" />
 		from user
 		where ease_id=#{_parameter}
   </select>

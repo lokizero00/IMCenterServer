@@ -50,6 +50,10 @@
   <update id="updateCollectionCountSub" parameterType="int">
   	update trade SET collection_count=collection_count-1 where id=#{id}
   </update>
+  
+  <update id="updateReadCountAdd" parameterType="int">
+  	update trade set read_count=read_count+1 where id=#{_parameter}
+  </update>
 	
   <select id="findById" parameterType="int" resultMap="tradeDO">
 		select <include refid="Base_Column_List" /> 
