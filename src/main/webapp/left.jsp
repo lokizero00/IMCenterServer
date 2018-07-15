@@ -16,11 +16,19 @@
 <link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css"
 	rel="stylesheet">
 </head>
-<body>
+<body style="background-color: #222;">
 	<input type="hidden" id="contextPath" value="${contextPath }" />
-	<ul class="nav nav-pills nav-stacked" id="ul_leftMenu">
-		
-	</ul>
+	
+	<nav class="navbar navbar-inverse" role="navigation">
+	    <div class="navbar-header">
+	        <a class="navbar-brand" href="#"><span class='glyphicon glyphicon-th-large'></span> 后台管理</a>
+	    </div>
+	    <div>
+	    	<ul class="nav navbar-nav" id="ul_leftMenu">
+	    	</ul>
+	        
+	    </div>
+	</nav>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<%=basePath%>static/js/left.js"></script>

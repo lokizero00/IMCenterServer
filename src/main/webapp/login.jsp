@@ -20,7 +20,7 @@
 
 </head>
 
-<body style="background-color: #049EC4;">
+<body style="background-color: #0071C1;">
 
 	<input type="hidden" id="contextPath" value="${contextPath}" />
 	<div class="top-content">

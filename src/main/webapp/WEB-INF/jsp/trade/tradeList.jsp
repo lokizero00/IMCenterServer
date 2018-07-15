@@ -25,11 +25,6 @@
 	       	<h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 贸易管理</h3>
 	    </div>
 	    <div class="panel-body">
-	       	 <div class="panel panel-info">
-			    <div class="panel-heading" >
-			       	<span class="glyphicon glyphicon-search"></span> 贸易信息查询
-			    </div>
-			    <div class="panel-body" style="background-color:#F0F8FD;">
 			       	 <table width="100%" class="tbInfo">
 						<tr>
 							<td>标 题：</td>
@@ -69,14 +64,14 @@
 						<tr>
 							<td colspan="8" align="right">
 								<button id="queryButton" class="btn btn-primary" type="button">查 询</button>
-								<button id="resetButton" class="btn btn-primary" type="button">清 空</button>
+								<button id="resetButton" class="btn btn-default" type="button">清 空</button>
 							</td>
 						</tr>
 					</table>
 			    </div>
-			</div>
+	</div>
 			
-			<div class="panel panel-info">
+			<div class="panel panel-default">
 			    <div class="panel-heading" >
 			       	<span class="glyphicon glyphicon-list-alt"></span> 贸易信息列表
 			    </div>
@@ -91,8 +86,6 @@
 						
 			    </div>
 			</div>
-	    </div>
-	</div>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap-table.js"></script>
