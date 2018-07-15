@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.loki.server.dto.IntentionDTO;
 import com.loki.server.dto.IntentionLogDTO;
+import com.loki.server.dto.IntentionRefundRequestDTO;
 import com.loki.server.entity.Intention;
 import com.loki.server.entity.IntentionLog;
 import com.loki.server.entity.PagedResult;
@@ -26,4 +27,5 @@ public interface IntentionService {
 	ServiceResult<List<UserBankcard>> getUserBankcard_mobile(int userId);
 	ServiceResult<Void> addUserBankcard_mobile(UserBankcard userBankcard);
 	ServiceResult<Void> deleteUserBankcard_mobile(int userBankcardId);
+	public ServiceResult<Void> returnIntention(IntentionRefundRequestDTO intentionRefundRequestDTO);
 }

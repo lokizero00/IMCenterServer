@@ -61,7 +61,41 @@ public class TradeMobileController {
 		return "mobileResultJson";
 	}
 	
-	
+	//我的发布
+	@RequestMapping(value="/getOwnPublishTradeList",method=RequestMethod.GET)
+	public String getOwnPublishTradeList(HttpServletRequest request, Integer userId,String sn,String title,String type,Boolean ignoreSuccessAndDown,String provinceName,String cityName,String townName,String status,String invoiceCode,String industryCode,String payCode,String identityStatus,String enterpriseStatus,Integer pageNo,Integer pageSize,String sortName,String sortOrder,ModelMap mm) {
+		HashMap<String,Object> map=new HashMap<>();
+		map.put("userId", userId);
+		map.put("sn", sn);
+		map.put("title", title);
+		map.put("type", type);
+		map.put("provinceName", provinceName);
+		map.put("cityName", cityName);
+		map.put("townName", townName);
+		map.put("status", status);
+		map.put("invoiceCode", invoiceCode);
+		map.put("industryCode", industryCode);
+		map.put("payCode", payCode);
+		map.put("identityStatus", identityStatus);
+		map.put("enterpriseStatus",enterpriseStatus);
+		map.put("sortName", sortName);
+		map.put("sortOrder", sortOrder);
+		map.put("pageNo",pageNo);
+		map.put("pageSize",pageSize);
+		map.put("ignoreSuccessAndDown", false);
+		
+		ServiceResult<PagedResult<TradeComplex>> returnValue=tradeService.getOwnPublishTradeList_mobile(map);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+			
+		return "mobileResultJson";
+	}
 	
 	//获取贸易列表（需求/供应）
 	@RequestMapping(value="/getTradeList",method=RequestMethod.GET)

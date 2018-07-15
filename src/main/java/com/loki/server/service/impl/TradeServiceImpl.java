@@ -1099,4 +1099,50 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 		}
 		return returnValue;
 	}
+
+	@Override
+	public ServiceResult<PagedResult<TradeComplex>> getOwnPublishTradeList_mobile(Map<String, Object> map) {
+		ServiceResult<PagedResult<TradeComplex>> returnValue = new ServiceResult<>();
+		try {
+			if (map != null) {
+				int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
+				int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
+				PageHelper.startPage(pageNo, pageSize);
+				PagedResult<TradeComplex> tradeComplexList = BeanUtil.toPagedResult(tradeComplexDao.findByOwnPublish(map));
+				if (tradeComplexList != null) {
+					// 字段code处理
+					for (int i = 0; i < tradeComplexList.getRows().size(); i++) {
+						tradeComplexList.getRows().get(i).setStatusName(
+								getDictionariesValue("trade_status", tradeComplexList.getRows().get(i).getStatus()));
+						tradeComplexList.getRows().get(i).setTypeName(
+								getDictionariesValue("trade_type", tradeComplexList.getRows().get(i).getType()));
+						tradeComplexList.getRows().get(i).setTradeAttachmentList(
+								tradeAttachmentDao.findByTradeId(tradeComplexList.getRows().get(i).getId()));
+						tradeComplexList.getRows().get(i).setIdentityName(getIdentityName(tradeComplexList.getRows().get(i).getIdentityId()));
+						tradeComplexList.getRows().get(i).setEnterpriseName(getEnterpriseName(tradeComplexList.getRows().get(i).getEnterpriseId()));
+						if (tradeComplexList.getRows().get(i).getStatus().equals("trade_success")
+								&& tradeComplexList.getRows().get(i).getDockingId() > 0) {
+							TradeDocking tradeDocking = tradeDockingDao
+									.findById(tradeComplexList.getRows().get(i).getDockingId());
+							if (tradeDocking != null) {
+								tradeComplexList.getRows().get(i)
+										.setDockEnterpriseName(getEnterpriseName(tradeDocking.getEnterpriseId()));
+								tradeComplexList.getRows().get(i).setDockOffer(tradeDocking.getOffer());
+							}
+						}
+					}
+					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+					returnValue.setResultObj(tradeComplexList);
+				} else {
+					returnValue.setResultCode(ResultCodeEnums.DATA_QUERY_FAIL);
+				}
+			} else {
+				returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
+		}
+		return returnValue;
+	}
 }

@@ -1,9 +1,9 @@
-package com.loki.server.entity;
+package com.loki.server.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Adv implements Serializable{
+public class AdvDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
@@ -22,6 +22,9 @@ public class Adv implements Serializable{
 	private int sort;
 	private int clickCount;
 	private int state;
+	
+	private String adminCreatorName;
+	private String adminUpdaterName;
 	public int getId() {
 		return id;
 	}
@@ -117,5 +120,17 @@ public class Adv implements Serializable{
 	}
 	public void setState(int state) {
 		this.state = state;
+	}
+	public String getAdminCreatorName() {
+		return adminCreatorName;
+	}
+	public void setAdminCreatorName(String adminCreatorName) {
+		this.adminCreatorName = adminCreatorName;
+	}
+	public String getAdminUpdaterName() {
+		return adminUpdaterName;
+	}
+	public void setAdminUpdaterName(String adminUpdaterName) {
+		this.adminUpdaterName = adminUpdaterName;
 	}
 }

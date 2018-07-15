@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.loki.server.dto.IntentionRechargeDTO;
+import com.loki.server.dto.IntentionRefundRequestDTO;
 import com.loki.server.dto.RechargeDTO;
 import com.loki.server.entity.Intention;
 import com.loki.server.entity.IntentionJournal;
@@ -154,6 +155,26 @@ public class IntentionMobileController {
 		map.put("pageSize",pageSize);
 		
 		ServiceResult<PagedResult<IntentionJournal>> returnValue = payService.getIntentionJournal(map);
+		if (returnValue != null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		} else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+		return "mobileResultJson";
+	}
+	
+	// 意向金提现申请
+	@RequestMapping(value = "/intentionRefundRequest", method = RequestMethod.POST)
+	public String intentionRefundRequest(HttpServletRequest request,Integer userId,Integer refundChannel,String refundAccount,BigDecimal amount,ModelMap mm) {
+		IntentionRefundRequestDTO intentionRefundRequestDTO=new IntentionRefundRequestDTO();
+		intentionRefundRequestDTO.setUserId(userId);
+		intentionRefundRequestDTO.setRefundChannel(refundChannel);
+		intentionRefundRequestDTO.setRefundAccount(refundAccount);
+		intentionRefundRequestDTO.setAmount(amount);
+		ServiceResult<Void> returnValue = intentionService.returnIntention(intentionRefundRequestDTO);
 		if (returnValue != null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

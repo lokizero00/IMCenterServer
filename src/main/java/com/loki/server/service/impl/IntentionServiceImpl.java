@@ -1,5 +1,7 @@
 package com.loki.server.service.impl;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,18 +15,25 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.DictionariesDao;
 import com.loki.server.dao.IntentionDao;
+import com.loki.server.dao.IntentionJournalDao;
 import com.loki.server.dao.IntentionLogDao;
+import com.loki.server.dao.IntentionRefundDao;
 import com.loki.server.dao.UserBankcardDao;
 import com.loki.server.dto.IntentionDTO;
 import com.loki.server.dto.IntentionLogDTO;
+import com.loki.server.dto.IntentionRefundRequestDTO;
 import com.loki.server.dto.convertor.IntentionConvertor;
 import com.loki.server.dto.convertor.IntentionLogConvertor;
 import com.loki.server.entity.Intention;
+import com.loki.server.entity.IntentionJournal;
 import com.loki.server.entity.IntentionLog;
+import com.loki.server.entity.IntentionRefund;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.UserBankcard;
 import com.loki.server.service.IntentionService;
 import com.loki.server.utils.BeanUtil;
+import com.loki.server.utils.BillConst;
+import com.loki.server.utils.OrderNoGenerator;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ServiceResult;
@@ -36,6 +45,7 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 	@Resource IntentionLogDao intentionLogDao;
 	@Resource UserBankcardDao userBankcardDao;
 	@Resource DictionariesDao dictionariesDao;
+	@Resource IntentionRefundDao intentionRefundDao;
 	
 	DozerBeanMapper mapper = new DozerBeanMapper();
 	
@@ -225,5 +235,44 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
+	
+	/**
+     * 提现申请
+     * @param intentionRefundRequestDTO
+     * @return
+     */
+	@Override
+    @Transactional
+    //TODO 提现时，需要先把钱转到提现中的字段里，等待成功或失败后，更新账户信息
+    public ServiceResult<Void> returnIntention(IntentionRefundRequestDTO intentionRefundRequestDTO){
+    		ServiceResult<Void> returnValue=new ServiceResult<>();
+    		if(intentionRefundRequestDTO!=null && intentionRefundRequestDTO.getAmount().compareTo(BigDecimal.ZERO)==1) {
+    			//拿到账户
+    	        Intention intention=intentionDao.findByUserId(intentionRefundRequestDTO.getUserId());
+    	        if(intention!=null) {
+    	        		if (!(intention.getAvailable().compareTo(intentionRefundRequestDTO.getAmount())==-1)) {
+    	        			IntentionRefund intentionRefund=new IntentionRefund();
+    	        			intentionRefund.setIntentionId(intention.getId());
+    	        			intentionRefund.setUserId(intention.getUserId());
+    	        			intentionRefund.setRequestTime(new Timestamp(System.currentTimeMillis()));
+    	        			intentionRefund.setAmount(intentionRefundRequestDTO.getAmount());
+    	        			intentionRefund.setRefundItem(0);
+    	        			intentionRefund.setState(0);
+    	        			intentionRefund.setRefundType(1);
+    	        			intentionRefund.setRefundChannel(intentionRefundRequestDTO.getRefundChannel());
+    	        			intentionRefund.setRefundAccount(intentionRefundRequestDTO.getRefundAccount());
+    	        			intentionRefundDao.insert(intentionRefund);
+    	        			returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+    	        		}else {
+    	        			returnValue.setResultCode(ResultCodeEnums.INTENTION_AVAILABLE_NOT_ENOUGH);
+    	        		}
+    	        }else {
+    	        		returnValue.setResultCode(ResultCodeEnums.INTENTION_NOT_EXIST);
+    	        }
+    		}else {
+    			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+    		}
+        return returnValue;
+    }
 
 }

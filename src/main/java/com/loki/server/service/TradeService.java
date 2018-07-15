@@ -31,6 +31,8 @@ public interface TradeService {
 	ServiceResult<Void> editTrade(TradeVO tradeVO);
 	//获取贸易列表
 	ServiceResult<PagedResult<TradeComplex>> getTradeList_mobile(Map<String, Object> map);
+	//我的发布
+	ServiceResult<PagedResult<TradeComplex>> getOwnPublishTradeList_mobile(Map<String, Object> map);
 	//获取我的对接贸易列表
 	ServiceResult<PagedResult<TradeComplex>> getDockingTradeList_mobile(Map<String, Object> map);
 	ServiceResult<PagedResult<TradeComplex>> getCollectionTrade(Map<String,Object> map);

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.IntentionRefundDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="intentionRefundDO" type="com.loki.server.entity.IntentionRefund">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="intention_id" jdbcType="INTEGER" property="intentionId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="request_time" jdbcType="TIMESTAMP" property="requestTime" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="refund_item" jdbcType="INTEGER" property="refundItem" />
+    <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime" />
+    <result column="journal_id" jdbcType="INTEGER" property="journalId" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="out_request_no" jdbcType="VARCHAR" property="outRequestNo" />
+    <result column="refund_type" jdbcType="INTEGER" property="refundType" />
+    <result column="refund_channel" jdbcType="INTEGER" property="refundChannel" />
+    <result column="refund_account" jdbcType="VARCHAR" property="refundAccount" />
+    <result column="admin_payer_id" jdbcType="INTEGER" property="adminPayerId" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,intention_id,user_id,request_time,amount,refund_item,finish_time,journal_id,state,out_request_no,refund_type,refund_channel,refund_account,admin_payer_id
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.IntentionRefund">
+		insert into intention_refund(intention_id,user_id,request_time,amount,refund_item,finish_time,journal_id,state,out_request_no,refund_type,refund_channel,refund_account,admin_payer_id) 
+		values(#{intentionId},#{userId},now(),#{amount},#{refundItem},#{finishTime},#{journalId},#{state},#{outRequestNo},#{refundType},#{refundChannel},#{refundAccount},#{adminPayerId})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.entity.IntentionRefund">
+  	update intention_refund SET intention_id=#{intentionId},user_id=#{userId},request_time=#{requestTime},amount=#{amount},refund_item=#{refundItem},finish_time=#{finishTime},journal_id=#{journalId},state=#{state},out_request_no=#{outRequestNo},refund_type=#{refundType},refund_channel=#{refundChannel},refund_account=#{refundAccount},admin_payer_id=#{adminPayerId} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="intentionRefundDO">
+		select <include refid="Base_Column_List" /> 
+		from intention_refund
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findAll" resultMap="intentionRefundDO">
+		select <include refid="Base_Column_List" /> 
+		from intention_refund
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from intention_refund where id=#{_parameter}
+	</delete>
+</mapper>

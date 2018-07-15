@@ -13,24 +13,26 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="preview_url" jdbcType="VARCHAR" property="previewUrl" />
     <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="linkable" jdbcType="INTEGER" property="linkable" />
+    <result column="link_url" jdbcType="VARCHAR" property="linkUrl" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="click_count" jdbcType="INTEGER" property="clickCount" />
-    <result column="is_show" jdbcType="BIT" property="isShow" />
+    <result column="state" jdbcType="INTEGER" property="state" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,create_time,update_time,admin_creator_id,admin_updater_id,position,title,preview_url,content,start_time,end_time,sort,click_count,is_show
+    id,create_time,update_time,admin_creator_id,admin_updater_id,position,title,preview_url,content,linkable,link_url,start_time,end_time,sort,click_count,state
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Adv">
-		insert into adv(create_time,admin_creator_id,position,title,preview_url,content,start_time,end_time,sort,click_count,is_show) 
-		values(now(),#{adminCreatorId},#{position},#{title},#{previewUrl},#{content},#{startTime},#{endTime},#{sort},#{clickCount},#{isShow})
+		insert into adv(create_time,admin_creator_id,position,title,preview_url,content,linkable,link_url,start_time,end_time,sort,click_count,state) 
+		values(now(),#{adminCreatorId},#{position},#{title},#{previewUrl},#{content},#{linkable},#{linkUrl},#{startTime},#{endTime},#{sort},#{clickCount},#{state})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.Adv">
-  	update adv SET update_time=now(),admin_updater_id=#{adminUpdaterId},position=#{position},title=#{title},preview_url=#{previewUrl},content=#{content},start_time=#{startTime},end_time=#{endTime},sort=#{sort},click_count=#{clickCount},is_show=#{isShow} where id=#{id}
+  	update adv SET update_time=now(),admin_updater_id=#{adminUpdaterId},position=#{position},title=#{title},preview_url=#{previewUrl},content=#{content},linkable=#{linkable},link_url=#{linkUrl},start_time=#{startTime},end_time=#{endTime},sort=#{sort},click_count=#{clickCount},state=#{state} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="advDO">

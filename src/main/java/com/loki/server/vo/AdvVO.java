@@ -1,9 +1,9 @@
-package com.loki.server.entity;
+package com.loki.server.vo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Adv implements Serializable{
+public class AdvVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
@@ -15,13 +15,11 @@ public class Adv implements Serializable{
 	private String title;
 	private String previewUrl;
 	private String content;
-	private int linkable;
-	private String linkUrl;
 	private Timestamp startTime;
 	private Timestamp endTime;
 	private int sort;
 	private int clickCount;
-	private int state;
+	private boolean isShow;
 	public int getId() {
 		return id;
 	}
@@ -100,22 +98,10 @@ public class Adv implements Serializable{
 	public void setClickCount(int clickCount) {
 		this.clickCount = clickCount;
 	}
-	public int getLinkable() {
-		return linkable;
+	public boolean isShow() {
+		return isShow;
 	}
-	public void setLinkable(int linkable) {
-		this.linkable = linkable;
-	}
-	public String getLinkUrl() {
-		return linkUrl;
-	}
-	public void setLinkUrl(String linkUrl) {
-		this.linkUrl = linkUrl;
-	}
-	public int getState() {
-		return state;
-	}
-	public void setState(int state) {
-		this.state = state;
+	public void setShow(boolean isShow) {
+		this.isShow = isShow;
 	}
 }
