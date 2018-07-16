@@ -12,11 +12,12 @@ import com.loki.server.vo.ServiceResult;
 public interface AdvService {
 	//mobile
 	ServiceResult<List<AdvDTO>> getAdvList_mobile(int count);
-	ServiceResult<AdvDTO> getAdv(int id);
+	ServiceResult<AdvDTO> getAdv_mobile(int id);
 	
 	//web
 	boolean addAdv(AdvVO advVO) throws ServiceException; 
 	PagedResult<AdvDTO> getAdvList(Map<String, Object> map) throws ServiceException;
 	boolean editAdv(AdvVO advVO) throws ServiceException;
 	boolean delAdv(int id) throws ServiceException;
+	AdvDTO getAdv(int id) throws ServiceException;
 }
