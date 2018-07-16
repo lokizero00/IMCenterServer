@@ -15,11 +15,13 @@ public class AdvVO implements Serializable{
 	private String title;
 	private String previewUrl;
 	private String content;
+	private int linkable;
+	private String linkUrl;
 	private Timestamp startTime;
 	private Timestamp endTime;
 	private int sort;
 	private int clickCount;
-	private boolean isShow;
+	private int state;
 	public int getId() {
 		return id;
 	}
@@ -98,10 +100,22 @@ public class AdvVO implements Serializable{
 	public void setClickCount(int clickCount) {
 		this.clickCount = clickCount;
 	}
-	public boolean isShow() {
-		return isShow;
+	public int getLinkable() {
+		return linkable;
 	}
-	public void setShow(boolean isShow) {
-		this.isShow = isShow;
+	public void setLinkable(int linkable) {
+		this.linkable = linkable;
+	}
+	public String getLinkUrl() {
+		return linkUrl;
+	}
+	public void setLinkUrl(String linkUrl) {
+		this.linkUrl = linkUrl;
+	}
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
 	}
 }

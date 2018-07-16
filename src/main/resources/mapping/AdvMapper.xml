@@ -49,4 +49,40 @@
   <delete id="delete" parameterType="int">
 		delete from adv where id=#{_parameter}
 	</delete>
+	
+	<select id="findByCount" parameterType="int" resultMap="advDO">
+		select <include refid="Base_Column_List" /> 
+		from adv
+		where state=1 
+		order by sort asc
+		limit #{_parameter}
+  </select>
+
+	<select id="findByParam" resultMap="advDO">
+		select <include refid="Base_Column_List" /> 
+		from adv
+		<where>
+			<if test="position != null and position != ''">
+				position=#{position}
+			</if>
+			<if test="title != null and title != ''">
+				and title=#{title}
+			</if>
+			<if test="state != null">
+				and state=#{state}
+			</if>
+		</where>
+		ORDER BY
+		<choose>
+			<when test="sortName!=null">
+				${sortName}
+				<if test="sortOrder!=null">
+					${sortOrder}
+				</if>
+			</when>
+			<otherwise>
+				id desc
+			</otherwise>
+		</choose>
+  	</select>
 </mapper>
