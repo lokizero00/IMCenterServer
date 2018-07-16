@@ -93,7 +93,6 @@ public class PayNotifyController {
 				wxpayCallbackDto.setReturn_msg("参数格式校验错误");
 			} else {
 				wxpayCallbackDto = payCallBackService.wxpayCallback(xmlData);
-
 			}
 		} catch (Exception e) {
 			logger.error("微信回调异常：" + e.getMessage());

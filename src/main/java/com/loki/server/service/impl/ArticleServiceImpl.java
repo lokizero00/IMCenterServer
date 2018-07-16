@@ -13,7 +13,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.ArticleDao;
 import com.loki.server.dto.ArticleDTO;
-import com.loki.server.dto.TradeDockingDTO;
 import com.loki.server.dto.convertor.ArticleConvertor;
 import com.loki.server.entity.Article;
 import com.loki.server.entity.PagedResult;
