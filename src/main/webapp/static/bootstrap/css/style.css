@@ -1,22 +1,27 @@
 @CHARSET "UTF-8";
 .serchSelect{
-	height:25px;
-	font-size:14px;
+	height:23px;
+	font-size:12px;
 	width: 200px;
-}
-.tbInfo{
-width: 100%;
-
 }
 .date_pick{
 	width: 220px; 
-	height: 27px;
+	height: 25px;
 }
+.tbInfo{
+width: 100%;
+}
+
 .tbInfo tr td{
 padding-top: 10px;
+font-size: 12px;
 }
 .tb_list th{
 background-color:#D9D5CE;
+font-size: 13px;
+}
+.tb_list td{
+	font-size: 12px;
 }
 
 .tb_detail thead, .tb_detail tr {
@@ -33,8 +38,9 @@ border-bottom-color: #DDDDDD;
 
 .tb_detail td, .tb_detail th {
 padding: 7px 10px;
-font-size: 14px;
+font-size: 12px;
 font-family: Verdana;
+line-height: 24px;
 }
 
 .tb_detail tr:nth-child(even) {

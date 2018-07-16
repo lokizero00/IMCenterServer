@@ -24,37 +24,27 @@
 	<script src="<%=basePath%>static/js/userDetail.js"></script>
 	<div class="panel panel-default">
 	    <div class="panel-heading">
-	       <h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 用户管理</h3>
+	       <span class="glyphicon glyphicon-tags"></span> 用户详情
 	    </div>
 	    <div class="panel-body">
-	      	<div class="panel panel-info">
-			    <div class="panel-heading">
-			       <span class="glyphicon glyphicon-tags"></span> 用户详情
-			    </div>
-			    <div class="panel-body">
-			        	<jsp:include page="user.jsp" />
-			    </div>
-			</div>
+	        	<jsp:include page="user.jsp" />
+	    </div>
+	</div>
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	       <span class="glyphicon glyphicon-tags"></span> 用户意向金
 	    </div>
 	    <div class="panel-body">
-	      	<div class="panel panel-info">
-			    <div class="panel-heading">
-			       <span class="glyphicon glyphicon-tags"></span> 用户意向金
-			    </div>
-			    <div class="panel-body">
-			        	<jsp:include page="userIntention.jsp" />
-			    </div>
-			</div>
+	        	<jsp:include page="userIntention.jsp" />
 	    </div>
-	    <div class="form-group">
-			<div  align="center">
-				<button type="button" id="btnVerify" class="btn btn-primary">审 核</button>
-				<button type="button" id="btnStatus" class="btn btn-primary">停 用</button>
-				<button type="button" id="btnBack" onclick="window.history.go(-1);"
-					class="btn btn-primary">返 回</button>
-			</div>
+	</div>
+	<div class="form-group">
+		<div  align="center">
+			<button type="button" id="btnVerify" class="btn btn-primary">审 核</button>
+			<button type="button" id="btnStatus" class="btn btn-primary">停 用</button>
+			<button type="button" id="btnBack" onclick="window.history.go(-1);"
+				class="btn btn-primary">返 回</button>
 		</div>
 	</div>
-	
 </body>
 </html>

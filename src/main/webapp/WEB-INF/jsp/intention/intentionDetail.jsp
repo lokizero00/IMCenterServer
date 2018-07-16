@@ -22,32 +22,26 @@
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<div class="panel panel-default">
 	    <div class="panel-heading">
-	       <h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 意向金详情</h3>
+	       <span class="glyphicon glyphicon-tags"></span> 意向金信息
 	    </div>
 	    <div class="panel-body">
-	      	<div class="panel panel-info">
-			    <div class="panel-heading">
-			       <span class="glyphicon glyphicon-tags"></span> 意向金信息
-			    </div>
-			    <div class="panel-body">
-			        	<jsp:include page="intention.jsp" />
-			    </div>
-			</div>
-			<div class="panel panel-info">
-			    <div class="panel-heading">
-			       <span class="glyphicon glyphicon-tags"></span> 意向金日志
-			    </div>
-			    <div class="panel-body">
-			        	<jsp:include page="intentionLog.jsp" />
-			    </div>
-			</div>
+	        	<jsp:include page="intention.jsp" />
 	    </div>
-	    <div class="form-group">
-			<div align="center">
-				<button type="button" id="btnBack" onclick="window.history.go(-1);"
-				class="btn btn-primary">返回</button>
-			</div>
+	</div>
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	       <span class="glyphicon glyphicon-tags"></span> 意向金日志
+	    </div>
+	    <div class="panel-body">
+	        	<jsp:include page="intentionLog.jsp" />
+	    </div>
+	</div>
+	<div class="form-group">
+		<div align="center">
+			<button type="button" id="btnBack" onclick="window.history.go(-1);"
+			class="btn btn-primary">返回</button>
 		</div>
 	</div>
+	
 </body>
 </html>

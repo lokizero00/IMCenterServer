@@ -20,7 +20,7 @@
 	<div id="queryDiv"></div>
 	<div class="container-fluid">
 		<div id="toolbar" class="btn-group">
-			<button id="btn_sendOmitted" type="button" class="btn btn-default">
+			<button id="btn_sendOmitted" type="button" class="btn btn-primary">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>遗漏补发
 			</button>
 		</div>

@@ -25,7 +25,7 @@
 	       	<h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 贸易管理</h3>
 	    </div>
 	    <div class="panel-body">
-			       	 <table width="100%" class="tbInfo">
+			       	 <table class="tbInfo">
 						<tr>
 							<td>标 题：</td>
 							<td><input type="text" id="tradeList_queryTitle"

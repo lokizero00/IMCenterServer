@@ -27,14 +27,8 @@
 	       <h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 实名认证管理</h3>
 	    </div>
 	    <div class="panel-body">
-	      	<div class="panel panel-info">
-			    <div class="panel-heading">
-			       <span class="glyphicon glyphicon-tags"></span> 实名认证详情
-			    </div>
-			    <div class="panel-body">
-			        	<jsp:include page="identityCertification.jsp" />
-			    </div>
-			</div>
+	    	<jsp:include page="identityCertification.jsp" />
+	      	
 	    </div>
 	    <div class="form-group">
 			<div align="center">

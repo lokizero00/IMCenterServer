@@ -20,53 +20,46 @@
 <body>
 	<div class="panel panel-default">
 	    <div class="panel-heading">
-	        <h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 文章管理</h3>
+	       	<span class="glyphicon glyphicon-tags"></span> 新建文章
 	    </div>
 	    <div class="panel-body">
-	    	<div class="panel panel-info">
-			    <div class="panel-heading">
-			       	<span class="glyphicon glyphicon-tags"></span> 新建文章
-			    </div>
-			    <div class="panel-body">
-			    	<input type="hidden" id="contextPath" value="${contextPath}" />
-						<div class="form-horizontal">
-							<div class="form-group">
-								<label for="articleAdd_title" class="col-sm-2 control-label">标 题：</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" id="articleAdd_title"
-										placeholder="请输入标题">
-								</div>
-							</div>
-							<form class="form-horizontal required-validate" action="#"
-								enctype="multipart/form-data" method="post"
-								onsubmit="return iframeCallback(this, pageAjaxDone)">
-								<div class="form-group">
-									<label for="articleAdd_content" class="col-sm-2 control-label">内 容：</label>
-									<div class="col-sm-8">
-										<div class="summernote" id="articleAdd_content"
-											placeholder="请输入文章的正文内容" action="<%=basePath%>s/io/uploadImage"></div>
-									</div>
-								</div>
-							</form>
-							<div class="form-group">
-								<label for="articleAdd_status" class="col-sm-2 control-label">状 态：</label>
-								<div class="col-sm-8">
-									<select class="form-control" id="articleAdd_status">
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-offset-2 col-sm-10">
-									<button type="submit" class="btn btn-primary" id="btnSubmit">提 交</button>
-									<button type="button" id="btnBack" onclick="window.history.go(-1);"
-										class="btn btn-primary">返 回</button>
-								</div>
+	    	<input type="hidden" id="contextPath" value="${contextPath}" />
+				<div class="form-horizontal">
+					<div class="form-group">
+						<label for="articleAdd_title" class="col-sm-2 control-label">标 题：</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="articleAdd_title"
+								placeholder="请输入标题">
+						</div>
+					</div>
+					<form class="form-horizontal required-validate" action="#"
+						enctype="multipart/form-data" method="post"
+						onsubmit="return iframeCallback(this, pageAjaxDone)">
+						<div class="form-group">
+							<label for="articleAdd_content" class="col-sm-2 control-label">内 容：</label>
+							<div class="col-sm-8">
+								<div class="summernote" id="articleAdd_content"
+									placeholder="请输入文章的正文内容" action="<%=basePath%>s/io/uploadImage"></div>
 							</div>
 						</div>
-			    </div>
-			</div>	
+					</form>
+					<div class="form-group">
+						<label for="articleAdd_status" class="col-sm-2 control-label">状 态：</label>
+						<div class="col-sm-8">
+							<select class="form-control" id="articleAdd_status">
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="submit" class="btn btn-primary" id="btnSubmit">提 交</button>
+							<button type="button" id="btnBack" onclick="window.history.go(-1);"
+								class="btn btn-primary">返 回</button>
+						</div>
+					</div>
+				</div>
 	    </div>
-	</div>
+	</div>	
 	
 
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>

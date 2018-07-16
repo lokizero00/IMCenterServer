@@ -27,14 +27,7 @@
 	       <h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 企业认证管理</h3>
 	    </div>
 	    <div class="panel-body">
-	      	<div class="panel panel-info">
-			    <div class="panel-heading">
-			       <span class="glyphicon glyphicon-tags"></span> 企业认证详情
-			    </div>
-			    <div class="panel-body">
-			        	<jsp:include page="enterpriseCertification.jsp" />
-			    </div>
-			</div>
+	      	<jsp:include page="enterpriseCertification.jsp" />
 	    </div>
 	    <div class="form-group">
 			<div align="center">
