@@ -12,7 +12,7 @@ String basePath = "//" + request.getHeader("host")+ path + "/";
 <title>文件上传实例</title>
 </head>
 <body>
-	<form action="<%=basePath%>common/upload" method="post" enctype="multipart/form-data">  
+	<form action="<%=basePath%>s/io/uploadImage" method="post" enctype="multipart/form-data">  
     选择文件:<input type="file" name="file">  
     <input type="submit" value="提交">   
 </form>
