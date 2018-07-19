@@ -67,7 +67,7 @@ public class AdvController extends BaseController{
 	}
 	
 	/**
-     * 保存新建的文章
+     * 保存新建的广告
      * @return
      */
 	@RequestMapping(value="/advAdd.do",method=RequestMethod.POST)
@@ -97,7 +97,7 @@ public class AdvController extends BaseController{
 	}
 	
 	/**
-     * 获取文章
+     * 获取广告
      * @return
      */
 	@RequestMapping(value="/advDetail.do",method=RequestMethod.GET)
@@ -121,7 +121,7 @@ public class AdvController extends BaseController{
 	}
 	
 	/**
-     * 编辑文章
+     * 编辑广告
      * @return
      */
 	@RequestMapping(value="/advEdit.do",method=RequestMethod.POST)
@@ -136,6 +136,25 @@ public class AdvController extends BaseController{
 				return responseSuccess();
 			}else {
 				return responseFail(ResultCodeEnums.UPDATE_FAIL.getMessage());
+			}
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 删除广告
+     * @return
+     */
+	@RequestMapping(value="/advDel.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String advDel(HttpServletRequest request, int id) {
+		try {
+			boolean result=advService.delAdv(id);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.DELETE_FAIL.getMessage());
 			}
 		}catch(Exception e) {
 			return responseFail(e.getMessage());
