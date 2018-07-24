@@ -232,7 +232,9 @@ public class BillConst {
 //	}
 
 	public enum BillOrder {
-		RECHARGE(2,"充值");
+		RECHARGE(2,"充值"),
+		FREEZE(3,"冻结"),
+		UNFREEZE(4,"解冻");
 
 		private int key;
 

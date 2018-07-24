@@ -27,6 +27,8 @@ import com.loki.server.entity.Trade;
 import com.loki.server.entity.TradeDocking;
 import com.loki.server.service.TradeDockingService;
 import com.loki.server.utils.BeanUtil;
+import com.loki.server.utils.BillConst;
+import com.loki.server.utils.OrderNoGenerator;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.ServiceResult;
 
@@ -90,10 +92,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 										intention.setFreeze(intention.getFreeze().add(tradeDockingDTO.getIntention()));
 										intentionDao.update(intention);
 										// 创建意向金日志
-										addIntentionLog(intention.getId(), intention.getAvailable(),
-												tradeDockingDTO.getIntention().negate(), "trade_docking_freeze",
-												tradeDockingDTO.getId(), "user", tradeDockingDTO.getUserId(),
-												logTradeType + " 对接成功,冻结意向金 " + tradeDockingDTO.getIntention());
+										addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),tradeDockingDTO.getIntention().negate(),logTradeType + " 对接成功,冻结意向金 " + tradeDockingDTO.getIntention());
 									}
 
 									trade.setDockingCount(trade.getDockingCount() + 1);
@@ -148,10 +147,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 					intention.setFreeze(intention.getFreeze().add(tradeDocking.getIntention().negate()));
 					intentionDao.update(intention);
 					// 创建意向金日志
-					addIntentionLog(intention.getId(), intention.getAvailable(),
-							tradeDocking.getIntention(), "trade_docking_cancel_unfreeze",
-							tradeDocking.getId(), "user", tradeDocking.getUserId(),
-							logTradeType + " 对接申请已取消，解冻意向金 " + tradeDocking.getIntention());
+					addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),tradeDocking.getIntention(),logTradeType + " 对接申请已取消，解冻意向金 " + tradeDocking.getIntention());
 				}
 				
 				boolean result = intentionDao.delete(tradeDockingId);
@@ -198,10 +194,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 								intention.setFreeze(intention.getFreeze().add(tradeDocking.getIntention().negate()));
 								intentionDao.update(intention);
 								// 创建意向金日志
-								addIntentionLog(intention.getId(), intention.getAvailable(),
-										tradeDocking.getIntention(), "trade_docking_fail_unfreeze",
-										tradeDocking.getId(), "user", tradeDocking.getUserId(),
-										logTradeType + " 对接申请已作废，解冻意向金 " + tradeDocking.getIntention());
+								addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),tradeDocking.getIntention(),logTradeType + " 对接申请已作废，解冻意向金 " + tradeDocking.getIntention());
 							}
 						}
 					}
@@ -217,9 +210,9 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 						String newsTitle="";
 						newsTitle=CompanyNamePublisher+" 的【"+trade.getTitle()+"】的订单通过本平台与 "+CompanyNameDocker+" 成功对接，订单金额";
 						if(trade.getType().equals("trade_demand")) {
-							newsTitle+=trade.getBudget();
+							newsTitle+=trade.getBudget().divide(new BigDecimal(10000))+" 万";
 						}else if(trade.getType().equals("trade_supply")) {
-							newsTitle+=tradeDockingData.getOffer();
+							newsTitle+=tradeDockingData.getOffer().divide(new BigDecimal(10000))+" 万";
 						}else {
 							newsTitle+="???";
 						}

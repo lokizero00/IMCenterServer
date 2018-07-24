@@ -19,6 +19,12 @@ public class OrderNoGenerator {
 		if(orderType == BillConst.BillOrder.RECHARGE.getKey()){
 			orderNo="R"+timeInfo+randomNum;
 			return orderNo;
+		} else if(orderType == BillConst.BillOrder.FREEZE.getKey()){
+			orderNo="F"+timeInfo+randomNum;
+			return orderNo;
+		} else if(orderType == BillConst.BillOrder.UNFREEZE.getKey()){
+			orderNo="UF"+timeInfo+randomNum;
+			return orderNo;
 		} 
 		return orderNo;
 	}

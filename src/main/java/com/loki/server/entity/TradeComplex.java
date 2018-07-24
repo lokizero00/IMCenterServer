@@ -46,6 +46,13 @@ public class TradeComplex implements Serializable{
 	private int collectionId;
 	private String identifier;
 	private String dockEnterpriseName;
+	private String dockIdentityName;
+	public String getDockIdentityName() {
+		return dockIdentityName;
+	}
+	public void setDockIdentityName(String dockIdentityName) {
+		this.dockIdentityName = dockIdentityName;
+	}
 	private BigDecimal dockOffer;
 	private String publishEaseId;
 	private String dockEaseId;

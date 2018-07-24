@@ -80,5 +80,34 @@ public class IntentionController extends BaseController{
 			return responseFail(e.getMessage());
 		}
 	}
-		
+	
+	/**
+     * 显示意向金列表页
+     * @return
+     */
+	@RequestMapping("/intentionListPage")  
+	public String intentionListPage(){
+		return "intention/intentionList.jsp";
+	}
+	
+	/**
+     * 获取意向金列表
+     * @return
+     */
+	@RequestMapping(value="/getIntentionList.do",method=RequestMethod.GET)
+	@ResponseBody
+	public String getIntentionList(HttpServletRequest request, String phone,String sortName,String sortOrder,String pageNo,String pageSize) {
+		try {
+			HashMap<String,Object> map=new HashMap<>();
+			map.put("phone", phone);
+			map.put("sortName", sortName);
+			map.put("sortOrder", sortOrder);
+			map.put("pageNo",pageNo);
+			map.put("pageSize",pageSize);
+			PagedResult<IntentionDTO> intentionDTOList=intentionService.getIntentionList(map);
+			return responseSuccess(intentionDTOList);
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
 }

@@ -60,24 +60,25 @@
 	</delete>
 
 	<select id="findByParam" resultMap="intentionDO">
-		select
-		<include refid="Base_Column_List" />
-		from intention
+		select intention.* 
+		from intention 
+		left join user on user.id=intention.user_id
 		<where>
-			<if test="userId !=null and userId !=0">
-				user_id=#{userId}
+			<if test="phone !=null and phone !=''">
+				<bind name="pattern1" value="'%' + phone + '%'" />
+				user.phone like #{pattern1}
 			</if>
 		</where>
 		ORDER BY
 		<choose>
 			<when test="sortName!=null">
-				${sortName}
+				intention.${sortName}
 				<if test="sortOrder!=null">
 					${sortOrder}
 				</if>
 			</when>
 			<otherwise>
-				id desc
+				intention.id desc
 			</otherwise>
 		</choose>
 	</select>
