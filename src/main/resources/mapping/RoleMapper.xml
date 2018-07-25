@@ -41,4 +41,27 @@
   <delete id="delete" parameterType="int">
 		delete from role where id=#{_parameter}
 	</delete>
+	
+	<select id="findByParam" resultMap="roleDO">
+		select <include refid="Base_Column_List" /> 
+		from role
+		<where>
+			<if test="name !=null and name !=''">
+				<bind name="pattern1" value="'%' + name + '%'" />
+				name like #{pattern1}
+			</if>
+		</where>
+		ORDER BY
+		<choose>
+			<when test="sortName!=null">
+				${sortName}
+				<if test="sortOrder!=null">
+					${sortOrder}
+				</if>
+			</when>
+			<otherwise>
+				sort asc
+			</otherwise>
+		</choose>
+  	</select>
 </mapper>

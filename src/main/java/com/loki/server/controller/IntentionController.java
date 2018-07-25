@@ -94,7 +94,7 @@ public class IntentionController extends BaseController{
      * 获取意向金列表
      * @return
      */
-	@RequestMapping(value="/getIntentionList.do",method=RequestMethod.GET)
+	@RequestMapping(value="/intentionList.do",method=RequestMethod.GET)
 	@ResponseBody
 	public String getIntentionList(HttpServletRequest request, String phone,String sortName,String sortOrder,String pageNo,String pageSize) {
 		try {

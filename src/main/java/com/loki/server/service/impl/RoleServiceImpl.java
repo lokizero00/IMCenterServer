@@ -1,19 +1,26 @@
 package com.loki.server.service.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.RoleDao;
 import com.loki.server.dto.RoleDTO;
-import com.loki.server.entity.PagedResult;
+import com.loki.server.dto.convertor.RoleConvertor;
 import com.loki.server.entity.Role;
+import com.loki.server.entity.PagedResult;
 import com.loki.server.service.RoleService;
+import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.RoleVO;
 
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl extends BaseService implements RoleService{
 	@Resource 
 	RoleDao roleDao;
 
@@ -38,21 +45,81 @@ public class RoleServiceImpl implements RoleService{
 	}
 
 	@Override
-	public boolean editRole(RoleVO role) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean editRole(RoleVO roleVO) throws ServiceException {
+		if(roleVO!=null && roleVO.getId()>0) {
+			Role role=roleDao.findById(roleVO.getId());
+			if(role!=null) {
+				role.setAdminUpdaterId(roleVO.getAdminUpdaterId());
+				role.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+				role.setName(roleVO.getName());
+				role.setDescription(roleVO.getDescription());
+				role.setSort(roleVO.getSort());
+				if(roleDao.update(role)) {
+					return true;
+				}else {
+					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
+				}
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+	
+	@Override
+	public boolean delRole(int id) throws ServiceException {
+		if(id>0) {
+			return roleDao.delete(id);
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
 	}
 
 	@Override
 	public RoleDTO getRole(int id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		if(id>0) {
+			Role role=roleDao.findById(id);
+			if(role!=null) {
+				RoleDTO roleDTO=RoleConvertor.convertRole2RoleDTO(role);
+				return roleDTO;
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
 	}
 
 	@Override
-	public PagedResult<RoleDTO> getRoleList() throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public PagedResult<RoleDTO> getRoleList(Map<String,Object> map) throws ServiceException {
+		if (map != null) {
+			int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
+			int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
+			PageHelper.startPage(pageNo, pageSize);
+			List<Role> roleList=roleDao.findByParam(map);
+			if(roleList!=null) {
+				List<RoleDTO> roleDTOList=new ArrayList<>();
+				for(Role role:roleList) {
+					RoleDTO roleDTO=new RoleDTO();
+					roleDTO=RoleConvertor.convertRole2RoleDTO(role);
+					roleDTO.setAdminCreatorName(getAdminName(role.getAdminCreatorId()));
+					roleDTO.setAdminUpdaterName(getAdminName(role.getAdminUpdaterId()));
+					roleDTOList.add(roleDTO);
+				}
+				Page data=(Page) roleList;
+				PagedResult<RoleDTO> pagedList=BeanUtil.toPagedResult(roleDTOList,data.getPageNum(),data.getPageSize(),data.getTotal(),data.getPages());
+				if(pagedList!=null) {
+					return pagedList;
+				}else {
+					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
+				}
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		} else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
 	}
 
 

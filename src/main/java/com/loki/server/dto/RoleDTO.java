@@ -14,6 +14,21 @@ public class RoleDTO implements Serializable{
 	private String name;
 	private String description;
 	private int sort;
+	
+	private String adminCreatorName;
+	private String adminUpdaterName;
+	public String getAdminCreatorName() {
+		return adminCreatorName;
+	}
+	public void setAdminCreatorName(String adminCreatorName) {
+		this.adminCreatorName = adminCreatorName;
+	}
+	public String getAdminUpdaterName() {
+		return adminUpdaterName;
+	}
+	public void setAdminUpdaterName(String adminUpdaterName) {
+		this.adminUpdaterName = adminUpdaterName;
+	}
 	public int getId() {
 		return id;
 	}
