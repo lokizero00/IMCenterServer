@@ -21,6 +21,7 @@ import com.loki.server.dao.TopLineNewsDao;
 import com.loki.server.dao.TradeLogDao;
 import com.loki.server.dao.UserDao;
 import com.loki.server.entity.AdminLog;
+import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.IntentionJournal;
 import com.loki.server.entity.IntentionLog;
 import com.loki.server.entity.TopLineNews;
@@ -124,6 +125,27 @@ public class BaseService {
 	protected String getIdentityName(Integer identityCertificationId) {
 		if (identityCertificationId!=null && identityCertificationId > 0) {
 			return identityCertificationDao.findIdentityNameById(identityCertificationId);
+		} else {
+			return null;
+		}
+	}
+	
+	protected String getIdentityNameByUserId(Integer userId) {
+		if (userId!=null && userId > 0) {
+			String trueName=null;
+			IdentityCertification ic=identityCertificationDao.findByUserId(userId);
+			if(ic!=null) {
+				trueName=ic.getTrueName();
+			}
+			return trueName;
+		} else {
+			return null;
+		}
+	}
+	
+	protected String getUserPhoneByUserId(Integer userId) {
+		if (userId!=null && userId > 0) {
+			return userDao.findPhoneById(userId);
 		} else {
 			return null;
 		}

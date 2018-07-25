@@ -152,6 +152,8 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 			for(Intention intention:intentionList) {
 				IntentionDTO intentionDTO=IntentionConvertor.convertIntention2IntentionDTO(intention);
 				intentionDTO.setUserNickName(getUserNickName(intentionDTO.getUserId()));
+				intentionDTO.setPhone(getUserPhoneByUserId(intentionDTO.getUserId()));
+				intentionDTO.setRealName(getIdentityNameByUserId(intentionDTO.getUserId()));
 				intentionDTOList.add(intentionDTO);
 			}
 			PagedResult<IntentionDTO> pageResult=BeanUtil.toPagedResult(intentionDTOList);
@@ -173,6 +175,8 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 				IntentionDTO intentionDTO=IntentionConvertor.convertIntention2IntentionDTO(intention);
 				if(intentionDTO!=null) {
 					intentionDTO.setUserNickName(getUserNickName(intentionDTO.getUserId()));
+					intentionDTO.setPhone(getUserPhoneByUserId(intentionDTO.getUserId()));
+					intentionDTO.setRealName(getIdentityNameByUserId(intentionDTO.getUserId()));
 					return intentionDTO;
 				}else {
 					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
@@ -193,6 +197,8 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 				IntentionDTO intentionDTO=IntentionConvertor.convertIntention2IntentionDTO(intention);
 				if(intentionDTO!=null) {
 					intentionDTO.setUserNickName(getUserNickName(intentionDTO.getUserId()));
+					intentionDTO.setPhone(getUserPhoneByUserId(intentionDTO.getUserId()));
+					intentionDTO.setRealName(getIdentityNameByUserId(intentionDTO.getUserId()));
 					return intentionDTO;
 				}else {
 					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);

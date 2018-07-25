@@ -22,4 +22,5 @@ public interface UserDao {
 	User findByPhone(String phone);
 	User findByEaseId(String easeId);
 	String findEaseIdById(int userId);
+	String findPhoneById(int userId);
 }

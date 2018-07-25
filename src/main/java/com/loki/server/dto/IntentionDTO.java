@@ -11,7 +11,35 @@ public class IntentionDTO implements Serializable{
 	private BigDecimal available;
 	private BigDecimal freeze;
 	private int userId;
+	private String userName;
+	private String phone;
+	private String realName;
 	
+	
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	private String userNickName;
 
 	public int getId() {
