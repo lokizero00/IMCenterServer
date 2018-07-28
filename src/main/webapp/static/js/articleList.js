@@ -198,7 +198,7 @@ var TableInit = function() {
 			}, {
 				title : '操作',
 				field : 'operate',
-				width : '5%',
+				width : '10%',
 				events : operateEvents,
 				formatter : operateFormatter
 			} ]
@@ -227,11 +227,11 @@ var TableInit = function() {
 		var operate = '<a class="view" href="'
 				+ (path + 's/article/articleDetailPage?id=')
 				+ row.id
-				+ '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
+				+ '" title="查看"><button type="button" class="btn btn-primary">查看</button></a>';
 		operate += ' <a class="edit" href="'
 				+ (path + 's/article/articleEditPage?id=')
 				+ row.id
-				+ '" title="编辑"><span class="glyphicon glyphicon-pencil"></span></a>';
+				+ '" title="编辑"><button type="button" class="btn btn-success">编辑</button></a>';
 		return operate;
 	}
 };

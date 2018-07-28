@@ -277,4 +277,27 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
         return returnValue;
     }
 
+	@Override
+	public boolean editIntention(IntentionDTO intentionDto) throws ServiceException {
+		// TODO Auto-generated method stub
+		if(intentionDto!=null && intentionDto.getId()>0) {
+			Intention intention= intentionDao.findById(intentionDto.getId());
+			if(intention!=null) {
+				intention.setFreeze(intentionDto.getFreeze());
+				intention.setAvailable(intentionDto.getAvailable());
+				intention.setTotal(intentionDto.getTotal());
+				boolean flag=intentionDao.update(intention);
+				if(flag) {
+					return flag;
+				}else {
+					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
+				}
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+			}
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
 }

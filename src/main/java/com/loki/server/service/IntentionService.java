@@ -20,6 +20,7 @@ public interface IntentionService {
 	IntentionDTO getUserIntention(int userId) throws ServiceException;
 	IntentionDTO getIntention(int intentionId) throws ServiceException;
 	PagedResult<IntentionLogDTO> getIntentionLog(Map<String,Object> map);
+	boolean editIntention(IntentionDTO intentionDto) throws ServiceException;
 	
 	//mobile
 	ServiceResult<Intention> getIntention_mobile(int userId);
@@ -28,4 +29,5 @@ public interface IntentionService {
 	ServiceResult<Void> addUserBankcard_mobile(UserBankcard userBankcard);
 	ServiceResult<Void> deleteUserBankcard_mobile(int userBankcardId);
 	public ServiceResult<Void> returnIntention(IntentionRefundRequestDTO intentionRefundRequestDTO);
+	
 }

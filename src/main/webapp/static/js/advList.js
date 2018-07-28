@@ -198,7 +198,7 @@ var TableInit = function() {
 			}, {
 				title : '操作',
 				field : 'operate',
-				width : '5%',
+				width : '12%',
 				events : operateEvents,
 				formatter : operateFormatter
 			} ]
@@ -227,11 +227,39 @@ var TableInit = function() {
 		var operate = '<a class="view" href="'
 				+ (path + 's/adv/advDetailPage?id=')
 				+ row.id
-				+ '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
+				+ '" title="查看"><button type="button" class="btn btn-primary">查看</button></a>';
 		operate += ' <a class="edit" href="'
 				+ (path + 's/adv/advEditPage?id=')
 				+ row.id
-				+ '" title="编辑"><span class="glyphicon glyphicon-pencil"></span></a>';
+				+ '" title="编辑"><button type="button" class="btn btn-success">编辑</button></a>';
+		operate += ' <button type="button" onclick="delAdv('+row.id+')" class="btn btn-info">删除</button>';
 		return operate;
 	}
+	
 };
+
+function delAdv(id){
+	Ewin.confirm({ message: "确认要删除选择的数据吗？" }).on(function (e) {
+		if(!e){
+			return;
+		}
+		$.ajax({
+			type:'POST',
+			url:path+"s/adv/advDel.do",
+			data:{id:id},
+			dataType:'json',
+			success:function(result){
+				if(result.isError==false){
+					toastr.success('删除数据成功！');
+				}else{
+					toastr.error('删除数据失败！');
+				}
+				$('#table_advList').bootstrapTable('refresh');
+			},
+			error:function(){
+				toastr.error('系统错误！');
+			}
+		});
+		
+	});
+}

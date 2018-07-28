@@ -1,5 +1,6 @@
 package com.loki.server.controller;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,11 +10,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.loki.server.dto.IntentionDTO;
 import com.loki.server.dto.IntentionLogDTO;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.service.IntentionService;
+import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.vo.AdvVO;
+
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/s/intention")
@@ -87,7 +94,7 @@ public class IntentionController extends BaseController{
      */
 	@RequestMapping("/intentionListPage")  
 	public String intentionListPage(){
-		return "intention/intentionList.jsp";
+		return "intention/intentionList";
 	}
 	
 	/**
@@ -96,7 +103,7 @@ public class IntentionController extends BaseController{
      */
 	@RequestMapping(value="/intentionList.do",method=RequestMethod.GET)
 	@ResponseBody
-	public String getIntentionList(HttpServletRequest request, String phone,String sortName,String sortOrder,String pageNo,String pageSize) {
+	public String getIntentionList(HttpServletRequest request, String phone,String sortName,String sortOrder,Integer pageNo,Integer pageSize) {
 		try {
 			HashMap<String,Object> map=new HashMap<>();
 			map.put("phone", phone);
@@ -106,6 +113,30 @@ public class IntentionController extends BaseController{
 			map.put("pageSize",pageSize);
 			PagedResult<IntentionDTO> intentionDTOList=intentionService.getIntentionList(map);
 			return responseSuccess(intentionDTOList);
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 意向金编辑页
+     * @return
+     */
+	@RequestMapping("/intentionEditPage")  
+	public String advEditPage(int id){
+		return "intention/intentionEdit.jsp?id="+id;
+	}
+	
+	@RequestMapping(value="/intentionEdit.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String intentionEdit(HttpServletRequest request,IntentionDTO intentionDto) {
+		try {
+			boolean result=intentionService.editIntention(intentionDto);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.UPDATE_FAIL.getMessage());
+			}
 		}catch(Exception e) {
 			return responseFail(e.getMessage());
 		}

@@ -28,8 +28,7 @@
 				<div class="form-group">
 					<label for="advEdit_title" class="col-sm-2 control-label">标题</label>
 					<div class="col-sm-8">
-						<input type="text" class="form-control" id="advEdit_title"
-							placeholder="请输入标题">
+						<input type="text" class="form-control" id="advEdit_title" placeholder="请输入标题">
 					</div>
 				</div>
 				<form class="form-horizontal required-validate" action="#"
@@ -51,33 +50,34 @@
 					</div>
 				</div>
 				<div class="form-group">
-						<label for="advEdit_linkable" class="col-sm-2 control-label">链接化：</label>
-						<div class="col-sm-8">
-							<select class="form-control" id="advEdit_linkable">
-							</select>
-						</div>
+					<label for="advEdit_linkable" class="col-sm-2 control-label">链接化：</label>
+					<div class="col-sm-8">
+						<select class="form-control" id="advEdit_linkable">
+						</select>
 					</div>
-					<div class="form-group">
-						<label for="advEdit_linkUrl" class="col-sm-2 control-label">跳转链接：</label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control" id="advEdit_linkUrl"
-								placeholder="请输入跳转链接">
-						</div>
+				</div>
+				<div class="form-group">
+					<label for="advEdit_linkUrl" class="col-sm-2 control-label">跳转链接：</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="advEdit_linkUrl" placeholder="请输入跳转链接">
 					</div>
-					
-					<div class="form-group">
-						<label for="advEdit_previewUrl" class="col-sm-2 control-label">上传缩略图：</label>
-						<div class="col-sm-8">
-							<form action="<%=basePath%>common/upload" method="post" enctype="multipart/form-data">  
-							    <input type="file" name="file" id="advEdit_previewUrl">   
-							</form>
-						</div>
+				</div>
+				<div class="form-group">
+					<label for="advEdit_previewUrl" class="col-sm-2 control-label">上传缩略图：</label>
+					<div class="col-sm-8">
+					    <input type="file" name="file" id="advEdit_previewUrl">   
 					</div>
+				</div>
+				<div class="form-group">
+                       <label class="col-sm-2 control-label"></label>
+                       <div class="col-sm-8">
+                           <img src="" width="100px" height="100px">
+                       </div>
+                </div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="submit" class="btn btn-primary" id="btnSubmit">提交</button>
-						<button type="button" id="btnBack" onclick="window.history.go(-1);"
-							class="btn btn-primary">返回</button>
+						<button type="button" id="btnBack" onclick="window.history.go(-1);" class="btn btn-primary">返回</button>
 					</div>
 				</div>
 			</div>

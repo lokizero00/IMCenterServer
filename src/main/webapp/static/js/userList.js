@@ -197,7 +197,7 @@ var TableInit = function() {
 		var operate = '<a class="view" href="'
 				+ (path + 's/user/userDetailPage?id=')
 				+ row.id
-				+ '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
+				+ '" title="查看"><button type="button" class="btn btn-primary">查看</button></a>';
 		return operate;
 	}
 };

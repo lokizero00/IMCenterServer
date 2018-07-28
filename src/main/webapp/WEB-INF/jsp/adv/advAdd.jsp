@@ -18,7 +18,7 @@
 </head>
 
 <body>
-<form action="<%=basePath%>s/io/uploadImage" method="post" enctype="multipart/form-data">
+<form id="addAdvVo" method="post"  enctype="multipart/form-data">
 	<div class="panel panel-default">
 	    <div class="panel-heading">
 	       	<span class="glyphicon glyphicon-tags"></span> 新建广告
@@ -70,11 +70,15 @@
 					<div class="form-group">
 						<label for="advAdd_previewUrl" class="col-sm-2 control-label">上传缩略图：</label>
 						<div class="col-sm-8">
-							  
-							    <input type="file" name="file"  id="advAdd_previewUrl">
-							
+						    <input type="file" name="file"  id="advAdd_previewUrl">
 						</div>
-					</div>
+					</div> 
+					<div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <img src="" width="100px" height="100px">
+                        </div>
+                    </div>
 					
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
@@ -86,7 +90,7 @@
 				</div>
 	    </div>
 	</div>
-	</form>	
+</form>
 	
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>

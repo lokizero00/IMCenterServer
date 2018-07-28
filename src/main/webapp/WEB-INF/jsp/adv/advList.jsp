@@ -11,15 +11,11 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>广告列表</title>
-<link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet">
-<link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css"
-	rel="stylesheet">
-<link
-	href="<%=basePath%>static/bootstrap/css/bootstrap-datetimepicker.css"
-	rel="stylesheet">
-<link href="<%=basePath%>static/bootstrap/css/style.css"
-	rel="stylesheet">
+<link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css" rel="stylesheet">
+<link href="<%=basePath%>static/bootstrap/css/bootstrap-datetimepicker.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+<link href="<%=basePath%>static/bootstrap/css/style.css" rel="stylesheet">
 </head>
 <body>
 	<div class="panel panel-default">
@@ -88,16 +84,19 @@
 			<table id="table_advList" class="tb_list"></table>
 	    </div>
 	</div>
+	
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap-table.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap-table-zh-CN.js"></script>
-	<script
-		src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.js"></script>
-	<script
-		src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.js"></script>
+	<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="<%=basePath%>static/bootstrap/js/ewin.js"></script>
 	<script src="<%=basePath%>static/js/common.js"></script>
 	<script src="<%=basePath%>static/js/advList.js"></script>
-
+ 	<script type="text/javascript">
+         toastr.options.positionClass = 'toast-center-center';
+ 	</script>
 </body>
 </html>

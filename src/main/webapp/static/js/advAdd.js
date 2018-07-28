@@ -11,16 +11,24 @@ $(document).ready(function() {
 			param.title = $("#advAdd_title").val();
 			param.content = $("#advAdd_content").summernote('code');
 			param.state = $("#advAdd_state").val();
-			
 			param.linkable = $("#advAdd_linkable").val();
 			param.linkUrl = $("#advAdd_linkUrl").val();
 			param.previewUrl = $("#advAdd_previewUrl").val().substring($("#advAdd_previewUrl").val().lastIndexOf("\\")+1);
+			var file = document.getElementById("advAdd_previewUrl").files[0];
+			
+			var ht = JSON.stringify(param);
+			var formData = new FormData();
+			formData.append("file",file);
+			formData.append("advVO", ht);
 			$.ajax({
-				"type" : 'post',
-				"url" : path + 's/adv/advAdd.do',
-				"dataType" : "json",
-				"data" : param,
-				"success" : function(data) {
+				type : 'post',
+				url : path + 's/adv/advAdd.do',
+				data : formData,
+				async : false,
+				cache : false,
+				contentType : false,
+				processData : false,
+				success : function(data) {
 					if (data.isError === true) {
 						alert('发生错误：' + data.errorMsg);
 					} else {
@@ -89,26 +97,35 @@ $(document).ready(function() {
         	  }
         });
     });
+	$("#advAdd_previewUrl").change(function (e) {
+        var file = e.target.files[0] || e.dataTransfer.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                $("img").attr("src", this.result);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
 });
 
 // 配置下拉框
 function showSel(elementName, elementType) {
-	$
-			.ajax({
-				"type" : 'get',
-				"url" : path + 's/dictionaries/dictionariesList.do?type='
-						+ elementType,
-				"dataType" : "json",
-				"success" : function(data) {
-					var data_list = data;
-					var opts = "";
-					for (var data_index = 0; data_index < data_list.length; data_index++) {
-						var data = data_list[data_index];
-						opts += "<option value='" + data.code + "' >";
-						opts += data.value + "</option>";
-					}
-					// 查询界面
-					$(elementName).append(opts);
-				}
-			});
+	$.ajax({
+		"type" : 'get',
+		"url" : path + 's/dictionaries/dictionariesList.do?type='
+				+ elementType,
+		"dataType" : "json",
+		"success" : function(data) {
+			var data_list = data;
+			var opts = "";
+			for (var data_index = 0; data_index < data_list.length; data_index++) {
+				var data = data_list[data_index];
+				opts += "<option value='" + data.code + "' >";
+				opts += data.value + "</option>";
+			}
+			// 查询界面
+			$(elementName).append(opts);
+		}
+	});
 }

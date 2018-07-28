@@ -230,11 +230,11 @@ var TableInit = function() {
 	// 表格-操作 - 格式化
 	function operateFormatter(value, row, index) {
 		var operate = '<a class="view" href="'
-				+ (path + 's/trade/tradeDetail?id=') + row.id + '" title="查看"><span class="glyphicon glyphicon-info-sign"></span></a>';
+				+ (path + 's/trade/tradeDetail?id=') + row.id + '" title="查看"><button type="button" class="btn btn-primary">查看</button></a>';
 		if (row.status == 'trade_verify') {
 			operate += ' <a class="verify" href="'
 					+ (path + 's/trade/tradeVerify?id=') + row.id
-					+ '" title="审核"><span class="glyphicon glyphicon-wrench"></span></a>';
+					+ '" title="审核"><button type="button" class="btn btn-success">审核</button></a>';
 		}
 		return operate;
 	}

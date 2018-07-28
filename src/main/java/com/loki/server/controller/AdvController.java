@@ -10,17 +10,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.loki.server.dto.AdvDTO;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.service.AdvService;
+import com.loki.server.service.IOService;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.AdvVO;
+
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/s/adv")
 public class AdvController extends BaseController{
 	@Autowired AdvService advService;
+	@Autowired
+	public IOService ioService;
 	
 	/**
      * 显示首页
@@ -72,8 +79,17 @@ public class AdvController extends BaseController{
      */
 	@RequestMapping(value="/advAdd.do",method=RequestMethod.POST)
 	@ResponseBody
-	public String advAdd(HttpServletRequest request, AdvVO advVO) {
+	public String advAdd(HttpServletRequest request) {
 		try {
+			JSONObject jsob=JSONObject.fromObject(request.getParameter("advVO"));
+			AdvVO advVO=(AdvVO)JSONObject.toBean(jsob,AdvVO.class);
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			MultipartFile file=multipartRequest.getFile("file");
+			String filePath="";
+			if(file!=null) {
+				filePath= ioService.uploadImage(request,file);
+				advVO.setPreviewUrl(filePath);
+			}
 			advVO.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			advVO.setAdminCreatorId((int) request.getSession().getAttribute("adminId"));
 			boolean result=advService.addAdv(advVO);
@@ -126,8 +142,17 @@ public class AdvController extends BaseController{
      */
 	@RequestMapping(value="/advEdit.do",method=RequestMethod.POST)
 	@ResponseBody
-	public String advEdit(HttpServletRequest request, AdvVO advVO) {
+	public String advEdit(HttpServletRequest request) {
 		try {
+			JSONObject jsob=JSONObject.fromObject(request.getParameter("advVO"));
+			AdvVO advVO=(AdvVO)JSONObject.toBean(jsob,AdvVO.class);
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			MultipartFile file=multipartRequest.getFile("file");
+			String filePath="";
+			if(file!=null) {
+				filePath= ioService.uploadImage(request,file);
+				advVO.setPreviewUrl(filePath);
+			}
 			int adminId=(int) request.getSession().getAttribute("adminId");
 			advVO.setAdminUpdaterId(adminId);
 			advVO.setUpdateTime(new Timestamp(System.currentTimeMillis()));

@@ -31,6 +31,12 @@ $(document).ready(function() {
 			str+="<td>点击量</td><td>";
 			str+=data.clickCount+"</td>";
 			str+="</tr>";
+			if(data.previewUrl){
+				str+="<tr>";
+				str+="<td>缩略图</td><td colspan='3'>";
+				str+= "<img src="+path + "s/io/getImage?name="+data.previewUrl+" width='100px' height='100px'></td>";
+				str+="</tr>";
+			}
 			str+="<tr>";
 			str+="<td>内容</td><td colspan='3'>";
 			str+=data.content+"</td>";
