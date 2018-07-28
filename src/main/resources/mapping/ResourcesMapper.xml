@@ -2,49 +2,86 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.ResourcesDao">
-  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="resourcesDO" type="com.loki.server.entity.Resources">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
-    <result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="model" jdbcType="VARCHAR" property="model" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
-    <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="pic" jdbcType="VARCHAR" property="pic" />
-    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
-  </resultMap>
-  
-  <sql id="Base_Column_List">
-    id,create_time,update_time,admin_creator_id,admin_updater_id,name,model,url,description,type,sort,status,pic,parent_id
-  </sql>
-  
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.Resources">
-		insert into resources(create_time,admin_creator_id,name,model,url,description,type,sort,status,pic,parent_id) 
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="resourcesDO" type="com.loki.server.entity.Resources">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="admin_creator_id" jdbcType="INTEGER" property="adminCreatorId" />
+		<result column="admin_updater_id" jdbcType="INTEGER" property="adminUpdaterId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="model" jdbcType="VARCHAR" property="model" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="sort" jdbcType="INTEGER" property="sort" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="pic" jdbcType="VARCHAR" property="pic" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,create_time,update_time,admin_creator_id,admin_updater_id,name,model,url,description,type,sort,status,pic,parent_id
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.Resources">
+		insert into
+		resources(create_time,admin_creator_id,name,model,url,description,type,sort,status,pic,parent_id)
 		values(now(),#{adminCreatorId},#{name},#{model},#{url},#{description},#{type},#{sort},#{status},#{pic},#{parentId})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.entity.Resources">
-  	update resources SET update_time=now(),admin_updater_id=#{adminUpdaterId},name=#{name},model=#{model},url=#{url},description=#{description},type=#{type},sort=#{sort},status=#{status},pic=#{pic},parent_id=#{parentId} where id=#{id}
-  </update>
-  
-  <select id="findById" parameterType="int" resultMap="resourcesDO">
-		select <include refid="Base_Column_List" /> 
+	<update id="update" parameterType="com.loki.server.entity.Resources">
+		update resources SET
+		update_time=now(),admin_updater_id=#{adminUpdaterId},name=#{name},model=#{model},url=#{url},description=#{description},type=#{type},sort=#{sort},status=#{status},pic=#{pic},parent_id=#{parentId}
+		where id=#{id}
+	</update>
+
+	<select id="findById" parameterType="int" resultMap="resourcesDO">
+		select
+		<include refid="Base_Column_List" />
 		from resources
 		where id=#{_parameter}
-  </select>
-  
-  <select id="findAll" resultMap="resourcesDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findAll" resultMap="resourcesDO">
+		select
+		<include refid="Base_Column_List" />
 		from resources
-  </select>
-  
-  <delete id="delete" parameterType="int">
-		delete from resources where id=#{_parameter}
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from resources where
+		id=#{_parameter}
 	</delete>
+
+	<select id="findByParam" resultMap="resourcesDO">
+		select
+		<include refid="Base_Column_List" />
+		from resources
+		<where>
+			<if test="name !=null and name !=''">
+				<bind name="pattern1" value="'%' + name + '%'" />
+				name like #{pattern1}
+			</if>
+			<if test="type !=null and type !=''">
+				and type = #{type}
+			</if>
+			<if test="status !=null and status !=''">
+				and status = #{status}
+			</if>
+		</where>
+		ORDER BY
+		<choose>
+			<when test="sortName!=null">
+				${sortName}
+				<if test="sortOrder!=null">
+					${sortOrder}
+				</if>
+			</when>
+			<otherwise>
+				sort asc
+			</otherwise>
+		</choose>
+	</select>
 </mapper>

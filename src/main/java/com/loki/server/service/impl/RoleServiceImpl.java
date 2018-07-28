@@ -87,6 +87,8 @@ public class RoleServiceImpl extends BaseService implements RoleService{
 			Role role=roleDao.findById(id);
 			if(role!=null) {
 				RoleDTO roleDTO=RoleConvertor.convertRole2RoleDTO(role);
+				roleDTO.setAdminCreatorName(getAdminName(role.getAdminCreatorId()));
+				roleDTO.setAdminUpdaterName(getAdminName(role.getAdminUpdaterId()));
 				return roleDTO;
 			}else {
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
