@@ -28,18 +28,6 @@
           </div>
      </div>
      <div class="row form-group">
-          <label class="control-label col-lg-1" for="name">密码</label>
-          <div class="col-lg-5 col-md-6">
-              <input class="form-control" name="password" id="password" type="text">
-          </div>
-     </div>
-     <div class="row form-group">
-          <label class="control-label col-lg-1" for="name">确认密码</label>
-          <div class="col-lg-5 col-md-6">
-              <input class="form-control" name="repwd" id="repwd" type="text">
-          </div>
-     </div>
-     <div class="row form-group">
           <label class="control-label col-lg-1" for="name">角色</label>
           <div class="col-lg-5 col-md-6">
               <select id="roleName" class="form-control">
@@ -59,7 +47,7 @@
      <div class="row form-group">
           <label class="control-label col-lg-1" for="name"></label>
           <div class="col-lg-5 col-md-6">
-              <input class="form-control" name="superAdmin" id="superAdmin" type="radio"> 超级管理员
+              <input name="superAdmin" id="superAdmin" type="checkbox"> 超级管理员
           </div>
      </div>
   	<div class="row">

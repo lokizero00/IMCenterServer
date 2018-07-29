@@ -27,13 +27,14 @@
 				<tr>
 					<td>用户名：</td>
 					<td>
-						<input type="text" id="username" name="username" value="">
+						<input type="text" id="userName" name="userName" value="">
 					</td>
 				</tr>
 				<tr>
 					<td>超级管理员：</td>
 					<td>
 					<select id="superAdmin" class="form-control">
+						<option value="">全部</option>
 						<option value="0">是</option>
 						<option value="1">否</option>
 					</select>
@@ -43,6 +44,7 @@
 					<td>状态：</td>
 					<td>
 						<select id="status" class="form-control">
+							<option value="">全部</option>
 							<option value="on">启用</option>
 							<option value="off">禁用</option>
 						</select>

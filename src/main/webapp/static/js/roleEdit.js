@@ -8,14 +8,12 @@ $(document).ready(function() {
 		url : path + 's/role/roleDetail.do?id='+ paramId,
 		dataType : "json",
 		success : function(data) {
-			console.log(data);
 			$("#name").val(data.name);
 			$('#description').val(data.description);
 		}
 	});
 	
 	$("#btnSubmit").click(function() {
-		console.log(!$('#name').val());
 		if(!$('#name').val()){
 			toastr.warning('填写内容不正确！');
 			return;

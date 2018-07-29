@@ -3,32 +3,29 @@ var path = $("#contextPath").val();
 $(document).ready(function() {
 	$.ajax({
 		"type" : 'get',
-		"url" : path + 's/admin/adminList.do',
+		"url" : path + 's/role/roleList.do',
 		"dataType" : "json",
 		"success" : function(data) {
 			var data_list = data;
-			var opts = "<option value=''>请选择角色</option>";
-			$(data).each(function(index,value){
-				opts += "<option value='" + data.id + "' >"+data.name+"</option>";
+			var opts = "<option value='0'>请选择角色</option>";
+			$.each(data.rows,function(index,item){
+				opts += "<option value='" + item.id + "' >"+item.name+"</option>";
 			});
-//			for (var data_index = 0; data_index < data_list.length; data_index++) {
-//				var data = data_list[data_index];
-//				opts += "<option value='" + data.name + "'";
-//				if (getFromStorage(elementName) == data.name) {
-//					opts += " selected='selected'>";
-//				} else {
-//					opts += " >";
-//				}
-//				opts += data.value + "</option>";
-//			}
-			// 查询界面
-			$("adminName").append(opts);
+			$("#roleName").append(opts);
 		}
 	});
 	
 	
 	$("#btnSubmit").click(function() {
 		if(!$('#userName').val() && !$('#password').val() && !$('#repwd').val()){
+			toastr.warning('填写内容不正确！');
+			return;
+		}
+		if(!$('#repwd').val()){
+			toastr.warning('填写内容不正确！');
+			return;
+		}
+		if(!$('#userName').val()){
 			toastr.warning('填写内容不正确！');
 			return;
 		}
@@ -45,7 +42,7 @@ $(document).ready(function() {
 			param.password=$('#password').val();
 			param.roleId=$('#roleName').val();
 			param.status=$('#status').val();
-			param.superAdmin=$('#superAdmin:checked');
+			param.superAdmin=$('#superAdmin').is(':checked');
 			$.ajax({
 				type : 'POST',
 				url : path + 's/admin/adminAdd.do',
