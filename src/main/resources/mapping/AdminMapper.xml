@@ -76,7 +76,7 @@
 				<bind name="pattern1" value="'%' + userName + '%'" />
 				user_name like #{pattern1}
 			</if>
-			<if test="superAdmin != null and superAdmin != null">
+			<if test="superAdmin != null and superAdmin != ''">
 				and super_admin=#{superAdmin}
 			</if>
 			<if test="status != null">
