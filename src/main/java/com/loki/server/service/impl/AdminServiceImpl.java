@@ -41,18 +41,25 @@ import com.loki.server.vo.AdminVO;
 @Service
 @Transactional
 public class AdminServiceImpl extends BaseService implements AdminService {
-	@Resource  AdminDao adminDao;
-	@Resource  AdminLogDao adminLogDao;
-	@Resource  RoleDao roleDao;
-	@Resource  ResourcesDao resourcesDao;
-	@Resource  RoleAdminDao roleAdminDao;
-	@Resource  RoleResourcesDao roleResourcesDao;
-	@Resource  SettingDao settingDao;
+	@Resource
+	AdminDao adminDao;
+	@Resource
+	AdminLogDao adminLogDao;
+	@Resource
+	RoleDao roleDao;
+	@Resource
+	ResourcesDao resourcesDao;
+	@Resource
+	RoleAdminDao roleAdminDao;
+	@Resource
+	RoleResourcesDao roleResourcesDao;
+	@Resource
+	SettingDao settingDao;
 
 	@Override
-	public boolean add(AdminVO adminVO) throws ServiceException{
-		if(adminVO!=null) {
-			Admin admin=new Admin();
+	public boolean add(AdminVO adminVO) throws ServiceException {
+		if (adminVO != null) {
+			Admin admin = new Admin();
 			admin.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			admin.setAdminCreatorId(adminVO.getAdminCreatorId());
 			admin.setUserName(adminVO.getUserName());
@@ -61,20 +68,20 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 			admin.setSuperAdmin(adminVO.isSuperAdmin());
 			admin.setStatus(adminVO.getStatus());
 			adminDao.insert(admin);
-			if(admin.getId()>0) {
+			if (admin.getId() > 0) {
 				return true;
-			}else {
+			} else {
 				throw new ServiceException(ResultCodeEnums.SAVE_FAIL);
 			}
-		}else {
+		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
 
 	@Override
-	public boolean edit(AdminVO adminVO) throws ServiceException{
-		if(adminVO!=null && adminVO.getId()>0) {
-			Admin admin=new Admin();
+	public boolean edit(AdminVO adminVO) throws ServiceException {
+		if (adminVO != null && adminVO.getId() > 0) {
+			Admin admin = new Admin();
 			admin.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 			admin.setAdminUpdaterId(adminVO.getAdminCreatorId());
 			admin.setUserName(adminVO.getUserName());
@@ -82,76 +89,77 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 			admin.setSuperAdmin(adminVO.isSuperAdmin());
 			admin.setStatus(adminVO.getStatus());
 			return adminDao.update(admin);
-		}else {
+		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
 
 	@Override
-	public boolean delete(int id) throws ServiceException{
-		if(id>0) {
+	public boolean delete(int id) throws ServiceException {
+		if (id > 0) {
 			return adminDao.delete(id);
-		}else {
+		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
 
 	@Override
-	public AdminDTO getAdmin(int id) throws ServiceException{
-		if(id>0) {
-			Admin admin=adminDao.findById(id);
-			if(admin!=null) {
-				AdminDTO adminDTO=AdminConvertor.convertAdmin2AdminDTO(admin);
+	public AdminDTO getAdmin(int id) throws ServiceException {
+		if (id > 0) {
+			Admin admin = adminDao.findById(id);
+			if (admin != null) {
+				AdminDTO adminDTO = AdminConvertor.convertAdmin2AdminDTO(admin);
 				adminDTO.setAdminCreatorName(getAdminName(admin.getAdminCreatorId()));
 				adminDTO.setAdminUpdaterName(getAdminName(admin.getAdminUpdaterId()));
-				RoleAdmin roleAdmin=roleAdminDao.findByAdminId(id);
-				if(roleAdmin!=null) {
-					Role role=roleDao.findById(roleAdmin.getRoleId());
-					if(role!=null) {
+				RoleAdmin roleAdmin = roleAdminDao.findByAdminId(id);
+				if (roleAdmin != null) {
+					Role role = roleDao.findById(roleAdmin.getRoleId());
+					if (role != null) {
 						adminDTO.setRoleId(role.getId());
 						adminDTO.setRoleName(role.getName());
 					}
 				}
 				return adminDTO;
-			}else {
+			} else {
 				throw new ServiceException(ResultCodeEnums.ADMIN_NOT_EXIST);
 			}
-		}else {
+		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
 
 	@Override
-	public PagedResult<AdminDTO> getAdminList(Map<String,Object> map) throws ServiceException{
+	public PagedResult<AdminDTO> getAdminList(Map<String, Object> map) throws ServiceException {
 		if (map != null) {
 			int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
 			int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
 			PageHelper.startPage(pageNo, pageSize);
-			List<Admin> adminList=adminDao.findByParam(map);
-			if(adminList!=null) {
-				List<AdminDTO> adminDTOList=new ArrayList<>();
-				for(Admin admin:adminList) {
-					AdminDTO adminDTO=AdminConvertor.convertAdmin2AdminDTO(admin);
+			List<Admin> adminList = adminDao.findByParam(map);
+			if (adminList != null) {
+				List<AdminDTO> adminDTOList = new ArrayList<>();
+				for (Admin admin : adminList) {
+					AdminDTO adminDTO = AdminConvertor.convertAdmin2AdminDTO(admin);
 					adminDTO.setAdminCreatorName(getAdminName(admin.getAdminCreatorId()));
 					adminDTO.setAdminUpdaterName(getAdminName(admin.getAdminUpdaterId()));
-					RoleAdmin roleAdmin=roleAdminDao.findByAdminId(admin.getId());
-					if(roleAdmin!=null) {
-						Role role=roleDao.findById(roleAdmin.getRoleId());
-						if(role!=null) {
+					RoleAdmin roleAdmin = roleAdminDao.findByAdminId(admin.getId());
+					if (roleAdmin != null) {
+						Role role = roleDao.findById(roleAdmin.getRoleId());
+						if (role != null) {
 							adminDTO.setRoleId(role.getId());
 							adminDTO.setRoleName(role.getName());
 						}
 					}
 					adminDTOList.add(adminDTO);
 				}
-				Page data=(Page) adminList;
-				PagedResult<AdminDTO> pagedList=BeanUtil.toPagedResult(adminDTOList,data.getPageNum(),data.getPageSize(),data.getTotal(),data.getPages());
-				if(pagedList!=null) {
+				Page data = (Page) adminList;
+				PagedResult<AdminDTO> pagedList = BeanUtil.toPagedResult(adminDTOList, data.getPageNum(),
+						data.getPageSize(), data.getTotal(), data.getPages());
+				if (pagedList != null) {
 					return pagedList;
-				}else {
+				} else {
 					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
 				}
-			}else {
+			} else {
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
 		} else {
@@ -159,57 +167,87 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 		}
 	}
 
-	//TODO 这里有问题，第一行的loginCheck执行后，在RedisCache中的put方法中，value是null。很奇怪！
+	// TODO 这里有问题，第一行的loginCheck执行后，在RedisCache中的put方法中，value是null。很奇怪！
 	@Override
-	public AdminLoginDTO login(String userName, String password,String clientIP,String contextPath) throws ServiceException{
-		if(userName!=null && userName!="" && password!=null && password!="") {
-			Admin admin=adminDao.loginCheck(userName, password);
-			if(admin!=null) {
+	public AdminLoginDTO login(String userName, String password, String clientIP, String contextPath)
+			throws ServiceException {
+		if (userName != null && userName != "" && password != null && password != "") {
+			Admin admin = adminDao.loginCheck(userName, password);
+			if (admin != null) {
 				admin.setLoginTime(new Timestamp(System.currentTimeMillis()));
-				admin.setLoginCount(admin.getLoginCount()+1);
-				if(adminDao.update(admin)) {
-					//登录日志
+				admin.setLoginCount(admin.getLoginCount() + 1);
+				if (adminDao.update(admin)) {
+					// 登录日志
 					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					AdminLog adminLog=new AdminLog();
+					AdminLog adminLog = new AdminLog();
 					adminLog.setAdminId(admin.getId());
 					adminLog.setIp(clientIP);
-					adminLog.setContent("管理员 "+admin.getUserName()+" 在"+dateFormat.format(new Date())+"登录了系统");
+					adminLog.setContent("管理员 " + admin.getUserName() + " 在" + dateFormat.format(new Date()) + "登录了系统");
 					adminLogDao.insert(adminLog);
-					
-					//获取关联角色
-					RoleAdmin roleAdmin=roleAdminDao.findByAdminId(admin.getId());
-					Role role=roleDao.findById(roleAdmin.getRoleId());
-					List<RoleResources> roleResourcesList=roleResourcesDao.findByRoleId(role.getId());
-					
-					List<Resources> menuList=new ArrayList<Resources>();
-					List<String> permissionList=new ArrayList<String>();
-					//获取菜单/权限资源
-					for(RoleResources roleResource:roleResourcesList) {
-						Resources resources=resourcesDao.findById(roleResource.getResourcesId());
-						if(resources.getType().equals("menu")) {
+
+					// 获取关联角色
+					RoleAdmin roleAdmin = roleAdminDao.findByAdminId(admin.getId());
+					Role role = roleDao.findById(roleAdmin.getRoleId());
+					List<RoleResources> roleResourcesList = roleResourcesDao.findByRoleId(role.getId());
+
+					List<Resources> menuList = new ArrayList<Resources>();
+					List<String> permissionList = new ArrayList<String>();
+					// 获取菜单/权限资源
+					for (RoleResources roleResource : roleResourcesList) {
+						Resources resources = resourcesDao.findById(roleResource.getResourcesId());
+						if (resources.getType().equals("menu")) {
 							menuList.add(resources);
-						}else if(resources.getType().equals("action")||resources.getType().equals("page")) {
-							String p_url=contextPath+"/"+resources.getUrl();
+						} else if (resources.getType().equals("action") || resources.getType().equals("page")) {
+							String p_url = contextPath + "/" + resources.getUrl();
 							permissionList.add(p_url);
+						} else {
 						}
-						else {}
 					}
-					AdminDTO adminDTO=AdminConvertor.convertAdmin2AdminDTO(admin);
+					AdminDTO adminDTO = AdminConvertor.convertAdmin2AdminDTO(admin);
 					adminDTO.setRoleId(role.getId());
 					adminDTO.setRoleName(role.getName());
-					AdminLoginDTO adminLoginDTO=new AdminLoginDTO();
+					AdminLoginDTO adminLoginDTO = new AdminLoginDTO();
 					adminLoginDTO.setAdminDTO(adminDTO);
 					adminLoginDTO.setRole(role);
 					adminLoginDTO.setMenuList(menuList);
 					adminLoginDTO.setPermissionList(permissionList);
 					return adminLoginDTO;
-				}else {
+				} else {
 					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
 				}
-			}else {
+			} else {
 				throw new ServiceException(ResultCodeEnums.LOGIN_DATA_INVALID);
 			}
-		}else {
+		} else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
+	@Override
+	public boolean setRole(int adminId, int roleId) throws ServiceException {
+		if (adminId > 0 && roleId > 0) {
+			Admin admin = adminDao.findById(adminId);
+			Role role = roleDao.findById(roleId);
+			if (admin == null) {
+				throw new ServiceException(ResultCodeEnums.ADMIN_NOT_EXIST);
+			}
+			if (role == null) {
+				throw new ServiceException(ResultCodeEnums.ROLE_NOT_EXIST);
+			}
+			if (roleAdminDao.deleteByAdminId(adminId)) {
+				RoleAdmin roleAdmin = new RoleAdmin();
+				roleAdmin.setAdminId(admin.getId());
+				roleAdmin.setRoleId(role.getId());
+				roleAdminDao.insert(roleAdmin);
+				if (roleAdmin.getId() > 0) {
+					return true;
+				} else {
+					throw new ServiceException(ResultCodeEnums.SAVE_FAIL);
+				}
+			} else {
+				throw new ServiceException(ResultCodeEnums.ADMIN_DELETE_ROLE_FAIL);
+			}
+		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
