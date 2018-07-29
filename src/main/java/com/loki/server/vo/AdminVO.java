@@ -17,6 +17,13 @@ public class AdminVO implements Serializable{
 	private int loginCount;
 	private boolean superAdmin;
 	private String status;
+	public int getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
+	}
+	private int roleId;
 	public int getId() {
 		return id;
 	}

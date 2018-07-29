@@ -2,44 +2,54 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.RoleAdminDao">
-  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="roleAdminDO" type="com.loki.server.entity.RoleAdmin">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
-  </resultMap>
-  
-  <sql id="Base_Column_List">
-    id,role_id,admin_id
-  </sql>
-  
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.RoleAdmin">
-		insert into role_admin(role_id,admin_id) 
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="roleAdminDO" type="com.loki.server.entity.RoleAdmin">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="role_id" jdbcType="INTEGER" property="roleId" />
+		<result column="admin_id" jdbcType="INTEGER" property="adminId" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,role_id,admin_id
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.RoleAdmin">
+		insert into role_admin(role_id,admin_id)
 		values(#{roleId},#{adminId})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.entity.RoleAdmin">
-  	update role_admin SET role_id=#{roleId},admin_id=#{adminId} where id=#{id}
-  </update>
-  
-  <select id="findById" parameterType="int" resultMap="roleAdminDO">
-		select <include refid="Base_Column_List" /> 
+	<update id="update" parameterType="com.loki.server.entity.RoleAdmin">
+		update role_admin SET role_id=#{roleId},admin_id=#{adminId} where id=#{id}
+	</update>
+
+	<select id="findById" parameterType="int" resultMap="roleAdminDO">
+		select
+		<include refid="Base_Column_List" />
 		from role_admin
 		where id=#{_parameter}
-  </select>
-  
-  <select id="findByAdminId" parameterType="int" resultMap="roleAdminDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findByAdminId" parameterType="int" resultMap="roleAdminDO">
+		select
+		<include refid="Base_Column_List" />
 		from role_admin
 		where admin_id=#{_parameter}
-  </select>
-  
-  <select id="findAll" resultMap="roleAdminDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findAll" resultMap="roleAdminDO">
+		select
+		<include refid="Base_Column_List" />
 		from role_admin
-  </select>
-  
-  <delete id="delete" parameterType="int">
-		delete from role_admin where id=#{_parameter}
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from role_admin where
+		id=#{_parameter}
+	</delete>
+	
+	<delete id="deleteByAdminId" parameterType="int">
+		delete from role_admin where
+		admin_id=#{_parameter}
 	</delete>
 </mapper>

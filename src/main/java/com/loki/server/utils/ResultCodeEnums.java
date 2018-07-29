@@ -39,7 +39,12 @@ public enum ResultCodeEnums {
 	TRANACTION_ALI_CLOSE_ERROR(-35,"支付宝订单关闭错误"),
 	RECHARGE_AMOUNT_ZERO(-36,"充值金额错误"),
 	AUTH_RESOURCE_FAIL(-37,"资源授权失败"),
-	ADMIN_NOT_EXIST(-38,"管理员不存在")
+	ADMIN_NOT_EXIST(-38,"管理员不存在"),
+	ADMIN_DELETE_ROLE_FAIL(-39,"解绑角色失败"),
+	ROLE_NOT_EXIST(-40,"角色不可用"),
+	ADMIN_INSERT_FAIL(-41,"管理员添加失败"),
+	ADMIN_UPDATE_FAIL(-42,"管理员更新失败"),
+	ADMIN_INSERT_ROLE_FAIL(-43,"绑定角色失败")
 	;
 
 	public int code;  
