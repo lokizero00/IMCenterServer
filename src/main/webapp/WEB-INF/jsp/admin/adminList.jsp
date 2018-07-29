@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>角色列表</title>
+<title>管理员列表</title>
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css" rel="stylesheet">
 <link href="<%=basePath%>static/bootstrap/css/bootstrap-datetimepicker.css" rel="stylesheet">
@@ -20,14 +20,32 @@
 <body>
 <div class="panel panel-default">
 	    <div class="panel-heading" >
-	       	<h3 class="panel-title"><span class="glyphicon glyphicon-book"></span>角色管理</h3>
+	       	<h3 class="panel-title"><span class="glyphicon glyphicon-book"></span>管理员管理</h3>
 	    </div>
 	    <div class="panel-body">
 	       	 <table class="tbInfo">
 				<tr>
-					<td>角色名称：</td>
+					<td>用户名：</td>
 					<td>
 						<input type="text" id="username" name="username" value="">
+					</td>
+				</tr>
+				<tr>
+					<td>超级管理员：</td>
+					<td>
+					<select id="superAdmin" class="form-control">
+						<option value="0">是</option>
+						<option value="1">否</option>
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<td>状态：</td>
+					<td>
+						<select id="status" class="form-control">
+							<option value="on">启用</option>
+							<option value="off">禁用</option>
+						</select>
 					</td>
 				</tr>
 				<tr>
@@ -42,7 +60,7 @@
 	</div>
 	<div class="panel panel-default">
 	    <div class="panel-heading" >
-	       	<span class="glyphicon glyphicon-list-alt"></span> 角色列表
+	       	<span class="glyphicon glyphicon-list-alt"></span> 管理员列表
 	    </div>
 	    <div class="panel-body" style="padding-top: 1px;">
 	       	 <input type="hidden" id="contextPath" value="${contextPath}" />
@@ -51,7 +69,7 @@
 					<span class="glyphicon glyphicon-plus"></span>新增
 				</button>
 			</div>
-			<table id="table_roleList" class="tb_list"></table>
+			<table id="table_adminList" class="tb_list"></table>
 	    </div>
 	</div>
 	
@@ -67,6 +85,6 @@
 	<script type="text/javascript">
          toastr.options.positionClass = 'toast-center-center';
  	</script>
-	<script src="<%=basePath%>static/js/roleList.js"></script>
+	<script src="<%=basePath%>static/js/adminList.js"></script>
 </body>
 </html>
