@@ -82,17 +82,21 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 	@Override
 	public boolean edit(AdminVO adminVO) throws ServiceException {
 		if (adminVO != null && adminVO.getId() > 0) {
-			Admin admin = new Admin();
-			admin.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-			admin.setAdminUpdaterId(adminVO.getAdminCreatorId());
-			admin.setUserName(adminVO.getUserName());
-			admin.setSuperAdmin(adminVO.isSuperAdmin());
-			admin.setStatus(adminVO.getStatus());
-			if (adminDao.update(admin)) {
-				setRole(adminVO.getId(), adminVO.getRoleId());
-				return true;
-			} else {
-				throw new ServiceException(ResultCodeEnums.ADMIN_UPDATE_FAIL);
+			Admin admin =adminDao.findById(adminVO.getId());
+			if(admin!=null) {
+				admin.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+				admin.setAdminUpdaterId(adminVO.getAdminCreatorId());
+				admin.setUserName(adminVO.getUserName());
+				admin.setSuperAdmin(adminVO.isSuperAdmin());
+				admin.setStatus(adminVO.getStatus());
+				if (adminDao.update(admin)) {
+					setRole(adminVO.getId(), adminVO.getRoleId());
+					return true;
+				} else {
+					throw new ServiceException(ResultCodeEnums.ADMIN_UPDATE_FAIL);
+				}
+			}else {
+				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
 		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
