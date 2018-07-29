@@ -14,7 +14,7 @@
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css" rel="stylesheet">
 <link href="<%=basePath%>static/bootstrap/css/bootstrap-datetimepicker.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+<link href="<%=basePath%>static/css/toastr.min.css" rel="stylesheet" />
 <link href="<%=basePath%>static/bootstrap/css/style.css" rel="stylesheet">
 </head>
 <body>
@@ -86,7 +86,7 @@
 	</div>
 	
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script src="<%=basePath%>static/bootstrap/js/toastr.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap-table.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap-table-zh-CN.js"></script>

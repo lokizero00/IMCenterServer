@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.ResourcesDao;
@@ -26,6 +29,8 @@ import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ResourcesVO;
 
+@Service
+@Transactional
 public class ResourcesServiceImpl extends BaseService implements ResourcesService{
 	@Resource
 	ResourcesDao resourcesDao;

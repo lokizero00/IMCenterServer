@@ -3,8 +3,8 @@ var path = $("#contextPath").val();
 //定义存储
 var storage = window.localStorage;
 $(document).ready(function() {
-	$('#table_roleList').bootstrapTable({
-		url : path + 's/role/roleList.do', // 请求后台的URL（*）
+	$('#table_adminList').bootstrapTable({
+		url : path + 's/admin/adminList.do', // 请求后台的URL（*）
 		method : 'get', // 请求方式（*）
 		toolbar : '#toolbar', // 工具按钮用哪个容器
 		striped : true, // 是否显示行间隔色
@@ -39,24 +39,53 @@ $(document).ready(function() {
 			title : '序号',// 标题
 			formatter : function(value, row, index) {  
                 //return index + 1;  
-                var page = $('#table_roleList').bootstrapTable("getPage");  
+                var page = $('#table_adminList').bootstrapTable("getPage");  
                 return page.pageSize * (page.pageNumber - 1) + index + 1;  
             }  
 		}, {
-			title : '角色名',
-			field : 'name',
-			sortable : true,
-			sortName : 'name'
+			title : '用户名',
+			field : 'namuserNamee',
 		}, {
-			title : '描述',
-			field : 'description',
+			title : '角色',
+			field : 'roleName',
+		}, {
+			title : '超级管理员',
+			field : 'superAdmin',
+			formatter : function(value,row,index){
+				if(value){
+					return '是';
+				}
+				return '否';
+			}
+		}, {
+			title : '状态',
+			field : 'status',
+			formatter : function(value,row,index){
+				if(value=='on'){
+					return '启用';
+				}
+				return '禁用';
+			}
+		}, {
+			title : '最后登录时间',
+			field : 'loginTime',
 			sortable : true,
-			sortName : 'description'
+			sortName : 'loginTime'
+		}, {
+			title : '登录次数',
+			field : 'loginCount',
+			sortable : true,
+			sortName : 'loginCount'
 		}, {
 			title : '创建时间',
 			field : 'createTime',
 			sortable : true,
 			sortName : 'createTime'
+		}, {
+			title : '创建人',
+			field : 'adminCreatorName',
+			sortable : true,
+			sortName : 'adminCreatorName'
 		}, {
 			title : '更新时间',
 			field : 'updateTime',
@@ -70,17 +99,13 @@ $(document).ready(function() {
 		}, {
 			title : '操作',
 			field : 'operate',
-			width : '12%',
+			width : '8%',
 			formatter : function(value,row,index){
-				var operate = ' <a class="authorize" href="'
-					+ (path + 's/role/roleAuthorizePage?id=')
-					+ row.id
-					+ '" title="授权"><button type="button" class="btn btn-primary">授权</button></a>';
-				operate += ' <a class="edit" href="'
-					+ (path + 's/role/roleEditPage?id=')
+				var operate = ' <a class="edit" href="'
+					+ (path + 's/admin/adminEditPage?id=')
 					+ row.id
 					+ '" title="编辑"><button type="button" class="btn btn-success">编辑</button></a>';
-				operate += ' <button type="button" onclick="delRole('+row.id+')" class="btn btn-info">删除</button>';
+				operate += ' <button type="button" onclick="delAdmin('+row.id+')" class="btn btn-info">删除</button>';
 				return operate;
 			}
 		} ],
@@ -94,28 +119,31 @@ $(document).ready(function() {
 				pageSize : params.pageSize, // 页面大小
 				pageNo : params.pageNumber, // 页码
 				sortName : params.sortName, // 排序列名
-				sortOrder : params.sortOrder // 排序方式
+				sortOrder : params.sortOrder, // 排序方式
+				'username':$('username').val(),
+				'superAdmin':$('superAdmin').val(),
+				'status':$('status').val()
 		}
 	}
 	
 	$("#queryButton").click(function() {
-		$('#table_roleList').bootstrapTable('refresh');
+		$('#table_adminList').bootstrapTable('refresh');
 	});
 	
 	$("#btn_add").click(function() {
-		window.location.href = path + 's/role/roleAddPage';
+		window.location.href = path + 's/admin/adminAddPage';
 	});
 	
 });
 
-function delRole(id){
+function delAdmin(id){
 	Ewin.confirm({ message: "确认要删除选择的数据吗？" }).on(function (e) {
 		if(!e){
 			return;
 		}
 		$.ajax({
 			type:'POST',
-			url:path+"s/role/roleDel.do",
+			url:path+"s/admin/adminDel.do",
 			data:{'id':id},
 			dataType:'json',
 			success:function(result){
@@ -124,7 +152,7 @@ function delRole(id){
 				}else{
 					toastr.error('删除数据失败！');
 				}
-				$('#table_roleList').bootstrapTable('refresh');
+				$('#table_adminList').bootstrapTable('refresh');
 			},
 			error:function(){
 				toastr.error('系统错误！');
