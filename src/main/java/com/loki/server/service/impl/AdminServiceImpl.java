@@ -235,14 +235,17 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 	private boolean setRole(int adminId, int roleId) throws ServiceException {
 		if (adminId > 0 && roleId > 0) {
 			Admin admin = adminDao.findById(adminId);
-			Role role = roleDao.findById(roleId);
 			if (admin == null) {
 				throw new ServiceException(ResultCodeEnums.ADMIN_NOT_EXIST);
 			}
+			roleAdminDao.deleteByAdminId(adminId);
+			if(roleId==0) {
+				return true;
+			}
+			Role role = roleDao.findById(roleId);
 			if (role == null) {
 				throw new ServiceException(ResultCodeEnums.ROLE_NOT_EXIST);
 			}
-			roleAdminDao.deleteByAdminId(adminId);
 			RoleAdmin roleAdmin = new RoleAdmin();
 			roleAdmin.setAdminId(admin.getId());
 			roleAdmin.setRoleId(role.getId());
