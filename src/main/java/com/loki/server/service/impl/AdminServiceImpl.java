@@ -86,7 +86,6 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 			admin.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 			admin.setAdminUpdaterId(adminVO.getAdminCreatorId());
 			admin.setUserName(adminVO.getUserName());
-			admin.setPassword(MD5.getMD5Str(adminVO.getPassword()));
 			admin.setSuperAdmin(adminVO.isSuperAdmin());
 			admin.setStatus(adminVO.getStatus());
 			if (adminDao.update(admin)) {
