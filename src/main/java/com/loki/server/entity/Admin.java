@@ -18,10 +18,6 @@ public class Admin implements Serializable{
 	private int loginCount;
 	private boolean superAdmin;
 	private String status;
-	private String adminCreatorName;
-	private String adminUpdaterName;
-	private String roleName;
-	private int roleId;
 	public int getId() {
 		return id;
 	}
@@ -88,30 +84,4 @@ public class Admin implements Serializable{
 	public void setSuperAdmin(boolean superAdmin) {
 		this.superAdmin = superAdmin;
 	}
-	public String getAdminCreatorName() {
-		return adminCreatorName;
-	}
-	public void setAdminCreatorName(String adminCreatorName) {
-		this.adminCreatorName = adminCreatorName;
-	}
-	public String getAdminUpdaterName() {
-		return adminUpdaterName;
-	}
-	public void setAdminUpdaterName(String adminUpdaterName) {
-		this.adminUpdaterName = adminUpdaterName;
-	}
-	public String getRoleName() {
-		return roleName;
-	}
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
-	public int getRoleId() {
-		return roleId;
-	}
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
-	}
-	
-
 }

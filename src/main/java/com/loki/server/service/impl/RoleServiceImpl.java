@@ -13,21 +13,28 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.RoleDao;
+import com.loki.server.dao.RoleResourcesDao;
 import com.loki.server.dto.RoleDTO;
 import com.loki.server.dto.convertor.RoleConvertor;
 import com.loki.server.entity.Role;
+import com.loki.server.entity.RoleResources;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.service.RoleService;
 import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
+import com.loki.server.vo.RoleResourcesVO;
 import com.loki.server.vo.RoleVO;
+
+import net.sf.json.JSONArray;
 
 @Service
 @Transactional
 public class RoleServiceImpl extends BaseService implements RoleService{
 	@Resource 
 	RoleDao roleDao;
+	@Resource
+	RoleResourcesDao roleResourcesDao;
 
 	@Override
 	public boolean addRole(RoleVO roleVO) throws ServiceException {
@@ -75,7 +82,12 @@ public class RoleServiceImpl extends BaseService implements RoleService{
 	@Override
 	public boolean delRole(int id) throws ServiceException {
 		if(id>0) {
-			return roleDao.delete(id);
+			//解除角色与资源的绑定
+			if(roleResourcesDao.deleteByRoleId(id)) {
+				return roleDao.delete(id);
+			}else {
+				throw new ServiceException(ResultCodeEnums.DELETE_FAIL);
+			}
 		}else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
@@ -129,5 +141,24 @@ public class RoleServiceImpl extends BaseService implements RoleService{
 		}
 	}
 
-
+	@Override
+	public boolean authRole(String authJson) throws ServiceException {
+		if(authJson!=null && authJson!="") {
+			JSONArray json = JSONArray.fromObject(authJson);
+			List<RoleResourcesVO> authList= (List<RoleResourcesVO>)JSONArray.toCollection(json, RoleResourcesVO.class);
+			if(authList.size()>0) {
+				int roleId=authList.get(0).getRoleId();
+				roleResourcesDao.deleteByRoleId(roleId);
+			}
+			for(RoleResourcesVO roleResourcesVO:authList) {
+				RoleResources roleResources=new RoleResources();
+				roleResources.setResourcesId(roleResourcesVO.getResourcesId());
+				roleResources.setRoleId(roleResourcesVO.getRoleId());
+				roleResourcesDao.insert(roleResources);
+			}
+			return true;
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
 }

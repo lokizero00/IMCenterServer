@@ -11,4 +11,5 @@ public interface RoleResourcesDao {
 	List<RoleResources> findAll();
 	RoleResources findById(int id);
 	List<RoleResources> findByRoleId(int roleId);
+	boolean deleteByRoleId(int roleId);
 }

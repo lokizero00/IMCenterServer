@@ -13,4 +13,5 @@ public interface RoleService {
 	RoleDTO getRole(int id) throws ServiceException;
 	PagedResult<RoleDTO> getRoleList(Map<String,Object> map) throws ServiceException;
 	boolean delRole(int id) throws ServiceException;
+	boolean authRole(String authJson) throws ServiceException;
 }

@@ -2,44 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loki.server.dao.RoleResourcesDao">
-  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
-  <resultMap id="roleResourcesDO" type="com.loki.server.entity.RoleResources">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="resources_id" jdbcType="INTEGER" property="resourcesId" />
-  </resultMap>
-  
-  <sql id="Base_Column_List">
-    id,role_id,resources_id
-  </sql>
-  
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.RoleResources">
-		insert into role_resources(role_id,resources_id) 
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="roleResourcesDO" type="com.loki.server.entity.RoleResources">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="role_id" jdbcType="INTEGER" property="roleId" />
+		<result column="resources_id" jdbcType="INTEGER" property="resourcesId" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,role_id,resources_id
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.RoleResources">
+		insert into role_resources(role_id,resources_id)
 		values(#{roleId},#{resourcesId})
 	</insert>
 
-  <update id="update" parameterType="com.loki.server.entity.RoleResources">
-  	update role_resources SET role_id=#{roleId},resource_id=#{resourcesId} where id=#{id}
-  </update>
-  
-  <select id="findById" parameterType="int" resultMap="roleResourcesDO">
-		select <include refid="Base_Column_List" /> 
+	<update id="update" parameterType="com.loki.server.entity.RoleResources">
+		update role_resources SET role_id=#{roleId},resource_id=#{resourcesId} where
+		id=#{id}
+	</update>
+
+	<select id="findById" parameterType="int" resultMap="roleResourcesDO">
+		select
+		<include refid="Base_Column_List" />
 		from role_resources
 		where id=#{_parameter}
-  </select>
-  
-  <select id="findByRoleId" parameterType="int" resultMap="roleResourcesDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findByRoleId" parameterType="int" resultMap="roleResourcesDO">
+		select
+		<include refid="Base_Column_List" />
 		from role_resources
 		where role_id=#{_parameter}
-  </select>
-  
-  <select id="findAll" resultMap="roleResourcesDO">
-		select <include refid="Base_Column_List" /> 
+	</select>
+
+	<select id="findAll" resultMap="roleResourcesDO">
+		select
+		<include refid="Base_Column_List" />
 		from role_resources
-  </select>
-  
-  <delete id="delete" parameterType="int">
-		delete from role_resources where id=#{_parameter}
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from role_resources
+		where id=#{_parameter}
+	</delete>
+	
+	<delete id="deleteByRoleId" parameterType="int">
+		delete from role_resources
+		where role_id=#{_parameter}
 	</delete>
 </mapper>

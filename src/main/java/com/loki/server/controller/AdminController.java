@@ -2,6 +2,7 @@ package com.loki.server.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,108 +12,158 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loki.server.dto.AdminDTO;
+import com.loki.server.dto.AdminDTO;
+import com.loki.server.dto.AdminDTO;
 import com.loki.server.entity.Admin;
+import com.loki.server.entity.PagedResult;
 import com.loki.server.service.AdminService;
 import com.loki.server.utils.MD5;
+import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.vo.AdminVO;
 
 @Controller
 @RequestMapping("/s/admin")
-public class AdminController {
+public class AdminController extends BaseController{
 	@Autowired AdminService adminService;
 	
 	/**
-	 * 获取所有管理员
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value="/getAllAdmin")
-	public String getAllUser(HttpServletRequest request) {
-		List<Admin> findAll=adminService.findAll();
-		request.setAttribute("adminList", findAll);
-		return "/allAdmin";
+     * 显示首页
+     * @return
+     */
+	@RequestMapping("/adminListPage")  
+	public String adminListPage(){
+		return "admin/adminList";
 	}
 	
 	/**
-	 * 跳转到添加界面
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/toAddAdmin")
-	public String toAddAdmin(HttpServletRequest request){
-		return "/addAdmin";
-	}
-	
-	/**
-	 * 添加并重定向
-	 * @param admin
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value="/addAdmin",method=RequestMethod.POST)
-	public String addAdmin(Admin admin,HttpServletRequest request){
-		Admin clientAdmin=(Admin) request.getSession().getAttribute("clientAdmin");
-		admin.setAdminCreatorId(clientAdmin.getId());
-		//md5加密
-		admin.setPassword(MD5.getMD5Str(admin.getPassword()));
-		adminService.insert(admin);
-		return "redirect:/s/admin/getAllAdmin";
-	}
-	
-	/**
-	 * 根据id查询单个管理员
-	 * @param id
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/getAdmin")
-	public String getAdmin(int id,HttpServletRequest request){
-		
-		request.setAttribute("admin", adminService.findById(id));
-		return "/editAdmin";
-	}
-	
-	/**
-	 *编辑管理员
-	 * @param admin
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/updateAdmin")
-	public String updateAdmin(Admin admin,HttpServletRequest request){
-		Admin clientAdmin=(Admin) request.getSession().getAttribute("clientAdmin");
-		admin.setAdminUpdaterId(clientAdmin.getId());
-		if(adminService.update(admin)){
-			admin = adminService.findById(admin.getId());
-			request.setAttribute("admin", admin);
-			return "redirect:/s/admin/getAllAdmin";
-		}else{
-			return "/error";
-		}
-	}
-	
-	/**
-	 * 删除管理员
-	 * @param id
-	 * @param request
-	 * @param response
-	 */
-	@RequestMapping("/delAdmin")
-	public void delAdmin(int id,HttpServletRequest request,HttpServletResponse response){
-		String result = "{\"result\":\"error\"}";
-		
-		if(adminService.delete(id)){
-			result = "{\"result\":\"success\"}";
-		}
-		
-		response.setContentType("application/json");
-		
+     * 分页查询
+     * @return
+     */
+    @RequestMapping(value="/adminList.do", method= RequestMethod.GET)
+    @ResponseBody
+    public String getAdminList(Integer adminCreatorId,Integer adminUpdaterId,String position,String title,Integer linkable,Integer state,Integer pageSize,Integer pageNo,String sortName,String sortOrder) {
 		try {
-			PrintWriter out = response.getWriter();
-			out.write(result);
-		} catch (IOException e) {
-			e.printStackTrace();
+			HashMap<String,Object> map=new HashMap<>();
+			map.put("adminCreatorId", adminCreatorId);
+			map.put("adminUpdaterId", adminUpdaterId);
+			map.put("position", position);
+			map.put("title", title);
+			map.put("linkable", linkable);
+			map.put("state", state);
+			map.put("sortName", sortName);
+			map.put("sortOrder", sortOrder);
+			map.put("pageNo",pageNo);
+			map.put("pageSize",pageSize);
+			PagedResult<AdminDTO> list=adminService.getAdminList(map);
+    	    return responseSuccess(list);
+    	} catch (Exception e) {
+			return responseFail(e.getMessage());
 		}
-
+    }
+	
+    /**
+     * 显示添加页面
+     * @return
+     */
+	@RequestMapping("/advAdminPage")  
+	public String advAdminPage(){
+		return "admin/adminAdd";
+	}
+	
+	/**
+     * 保存管理员
+     * @return
+     */
+	@RequestMapping(value="/adminAdd.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String adminAdd(HttpServletRequest request, AdminVO adminVO) {
+		try {
+			int adminId=(int) request.getSession().getAttribute("adminId");
+			adminVO.setAdminCreatorId(adminId);
+			boolean result=adminService.add(adminVO);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.SAVE_FAIL.getMessage());
+			}
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 显示详情页
+     * @return
+     */
+	@RequestMapping("/adminDetailPage")  
+	public String adminDetailPage(int id){
+		return "admin/adminDetail.jsp?id="+id;
+	}
+	
+	/**
+     * 获取管理员
+     * @return
+     */
+	@RequestMapping(value="/adminDetail.do",method=RequestMethod.GET)
+	@ResponseBody
+	public String adminDetail(HttpServletRequest request, Integer id) {
+		try {
+			AdminDTO adminDTO=adminService.getAdmin(id);
+			return responseSuccess(adminDTO);
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 显示编辑页
+     * @return
+     */
+	@RequestMapping("/adminEditPage")  
+	public String adminEditPage(int id){
+		return "admin/adminEdit.jsp?id="+id;
+	}
+	
+	/**
+     * 编辑管理员
+     * @return
+     */
+	@RequestMapping(value="/adminEdit.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String adminEdit(HttpServletRequest request, AdminVO adminVO) {
+		try {
+			int adminId=(int) request.getSession().getAttribute("adminId");
+			adminVO.setAdminUpdaterId(adminId);
+			boolean result=adminService.edit(adminVO);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.UPDATE_FAIL.getMessage());
+			}
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 删除文章
+     * @return
+     */
+	@RequestMapping(value="/adminDel.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String adminDel(HttpServletRequest request, Integer id) {
+		try {
+			boolean result=adminService.delete(id);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.DELETE_FAIL.getMessage());
+			}
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
 	}
 }

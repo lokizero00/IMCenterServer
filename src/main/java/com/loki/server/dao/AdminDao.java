@@ -1,6 +1,7 @@
 package com.loki.server.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -14,4 +15,5 @@ public interface AdminDao {
 	Admin findById(int id);
 	Admin loginCheck(@Param("userName") String userName,@Param("password") String password);
 	String findAdminNameById(int id);
+	List<Admin> findByParam(Map<String,Object> map);
 }

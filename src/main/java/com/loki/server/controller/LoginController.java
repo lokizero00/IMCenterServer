@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loki.server.dto.AdminLoginDTO;
 import com.loki.server.service.AdminService;
 import com.loki.server.utils.IpUtil;
 import com.loki.server.utils.MD5;
 import com.loki.server.utils.ResultCodeEnums;
-import com.loki.server.vo.AdminVO;
 
 @Controller
 @RequestMapping("/login")
@@ -29,15 +29,15 @@ public class LoginController extends BaseController{
 				String md5_password=MD5.getMD5Str(password);
 				String ip=IpUtil.getIpFromRequest(request);
 				String contextPath=request.getContextPath();
-				AdminVO adminVO=adminService.login(userName, md5_password,ip,contextPath);
-				if(adminVO != null) {
+				AdminLoginDTO adminDTO=adminService.login(userName, md5_password,ip,contextPath);
+				if(adminDTO != null) {
 					//登录成功，保存登录信息
-					httpSession.setAttribute("adminId", adminVO.getAdmin().getId());
-					httpSession.setAttribute("userName", adminVO.getAdmin().getUserName());
-					httpSession.setAttribute("superAdmin", adminVO.getAdmin().isSuperAdmin());
-					httpSession.setAttribute("clientAdmin", adminVO.getAdmin());
-					httpSession.setAttribute("menuList", adminVO.getMenuList());
-					httpSession.setAttribute("permissionList", adminVO.getPermissionList());
+					httpSession.setAttribute("adminId", adminDTO.getAdminDTO().getId());
+					httpSession.setAttribute("userName", adminDTO.getAdminDTO().getUserName());
+					httpSession.setAttribute("superAdmin", adminDTO.getAdminDTO().isSuperAdmin());
+					httpSession.setAttribute("clientAdmin", adminDTO.getAdminDTO());
+					httpSession.setAttribute("menuList", adminDTO.getMenuList());
+					httpSession.setAttribute("permissionList", adminDTO.getPermissionList());
 					httpSession.setAttribute("loginIp", ip);
 					
 					return responseSuccess();

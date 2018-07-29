@@ -1,11 +1,11 @@
-package com.loki.server.vo;
+package com.loki.server.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class AdminVO implements Serializable{
+public class AdminDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
-
+	
 	private int id;
 	private Timestamp createTime;
 	private Timestamp updateTime;
@@ -17,6 +17,10 @@ public class AdminVO implements Serializable{
 	private int loginCount;
 	private boolean superAdmin;
 	private String status;
+	private String adminCreatorName;
+	private String adminUpdaterName;
+	private String roleName;
+	private int roleId;
 	public int getId() {
 		return id;
 	}
@@ -82,5 +86,29 @@ public class AdminVO implements Serializable{
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getAdminCreatorName() {
+		return adminCreatorName;
+	}
+	public void setAdminCreatorName(String adminCreatorName) {
+		this.adminCreatorName = adminCreatorName;
+	}
+	public String getAdminUpdaterName() {
+		return adminUpdaterName;
+	}
+	public void setAdminUpdaterName(String adminUpdaterName) {
+		this.adminUpdaterName = adminUpdaterName;
+	}
+	public String getRoleName() {
+		return roleName;
+	}
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+	public int getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
 }

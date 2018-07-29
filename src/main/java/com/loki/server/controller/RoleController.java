@@ -155,4 +155,23 @@ public class RoleController extends BaseController{
 			return responseFail(e.getMessage());
 		}
 	}
+	
+	/**
+     * 角色授权资源
+     * @return
+     */
+	@RequestMapping(value="/authRole.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String authRole(HttpServletRequest request, String authJson) {
+		try {
+			boolean result=roleService.authRole(authJson);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.AUTH_RESOURCE_FAIL.getMessage());
+			}
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
 }
