@@ -69,7 +69,7 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 			admin.setStatus(adminVO.getStatus());
 			adminDao.insert(admin);
 			if (admin.getId() > 0) {
-				setRole(admin.getId(),adminVO.getRoleId());
+				setRole(admin.getId(), adminVO.getRoleId());
 				return true;
 			} else {
 				throw new ServiceException(ResultCodeEnums.ADMIN_INSERT_FAIL);
@@ -89,10 +89,10 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 			admin.setPassword(MD5.getMD5Str(adminVO.getPassword()));
 			admin.setSuperAdmin(adminVO.isSuperAdmin());
 			admin.setStatus(adminVO.getStatus());
-			if(adminDao.update(admin)) {
+			if (adminDao.update(admin)) {
 				setRole(adminVO.getId(), adminVO.getRoleId());
 				return true;
-			}else {
+			} else {
 				throw new ServiceException(ResultCodeEnums.ADMIN_UPDATE_FAIL);
 			}
 		} else {
@@ -239,18 +239,15 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 			if (role == null) {
 				throw new ServiceException(ResultCodeEnums.ROLE_NOT_EXIST);
 			}
-			if (roleAdminDao.deleteByAdminId(adminId)) {
-				RoleAdmin roleAdmin = new RoleAdmin();
-				roleAdmin.setAdminId(admin.getId());
-				roleAdmin.setRoleId(role.getId());
-				roleAdminDao.insert(roleAdmin);
-				if (roleAdmin.getId() > 0) {
-					return true;
-				} else {
-					throw new ServiceException(ResultCodeEnums.ADMIN_INSERT_ROLE_FAIL);
-				}
+			roleAdminDao.deleteByAdminId(adminId);
+			RoleAdmin roleAdmin = new RoleAdmin();
+			roleAdmin.setAdminId(admin.getId());
+			roleAdmin.setRoleId(role.getId());
+			roleAdminDao.insert(roleAdmin);
+			if (roleAdmin.getId() > 0) {
+				return true;
 			} else {
-				throw new ServiceException(ResultCodeEnums.ADMIN_DELETE_ROLE_FAIL);
+				throw new ServiceException(ResultCodeEnums.ADMIN_INSERT_ROLE_FAIL);
 			}
 		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
@@ -258,10 +255,10 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 	}
 
 	@Override
-	public boolean changePassword(int adminId, int adminUpdaterId, String password) throws ServiceException{
-		if(adminId>0 && password!=null && password!="") {
+	public boolean changePassword(int adminId, int adminUpdaterId, String password) throws ServiceException {
+		if (adminId > 0 && password != null && password != "") {
 			return adminDao.changePassword(adminId, adminUpdaterId, MD5.getMD5Str(password));
-		}else {
+		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
