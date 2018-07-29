@@ -1,12 +1,8 @@
 package com.loki.server.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loki.server.dto.AdminDTO;
-import com.loki.server.dto.AdminDTO;
-import com.loki.server.dto.AdminDTO;
-import com.loki.server.entity.Admin;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.service.AdminService;
-import com.loki.server.utils.MD5;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.AdminVO;
 
@@ -44,15 +36,14 @@ public class AdminController extends BaseController{
      */
     @RequestMapping(value="/adminList.do", method= RequestMethod.GET)
     @ResponseBody
-    public String getAdminList(Integer adminCreatorId,Integer adminUpdaterId,String position,String title,Integer linkable,Integer state,Integer pageSize,Integer pageNo,String sortName,String sortOrder) {
+    public String getAdminList(Integer adminCreatorId,Integer adminUpdaterId,String userName,boolean superAdmin,String status,Integer pageSize,Integer pageNo,String sortName,String sortOrder) {
 		try {
 			HashMap<String,Object> map=new HashMap<>();
 			map.put("adminCreatorId", adminCreatorId);
 			map.put("adminUpdaterId", adminUpdaterId);
-			map.put("position", position);
-			map.put("title", title);
-			map.put("linkable", linkable);
-			map.put("state", state);
+			map.put("userName", userName);
+			map.put("superAdmin", superAdmin);
+			map.put("status", status);
 			map.put("sortName", sortName);
 			map.put("sortOrder", sortOrder);
 			map.put("pageNo",pageNo);
@@ -149,7 +140,7 @@ public class AdminController extends BaseController{
 	}
 	
 	/**
-     * 删除文章
+     * 删除管理员
      * @return
      */
 	@RequestMapping(value="/adminDel.do",method=RequestMethod.POST)
