@@ -16,4 +16,5 @@ public interface AdminService {
 	AdminDTO getAdmin(int id) throws ServiceException;
 	PagedResult<AdminDTO> getAdminList(Map<String,Object> map) throws ServiceException;
 	AdminLoginDTO login(String userName, String password,String clientIP,String contextPath) throws ServiceException;
+	boolean changePassword(int adminId,int adminUpdaterId,String password) throws ServiceException;
 }

@@ -49,7 +49,7 @@
 
 	<update id="update" parameterType="com.loki.server.entity.Admin">
 		update admin SET
-		update_time=now(),admin_updater_id=${adminUpdaterId},user_name=#{userName},password=#{password},login_time=#{loginTime},login_count=#{loginCount},super_admin=#{superAdmin},status=#{status}
+		update_time=now(),admin_updater_id=${adminUpdaterId},user_name=#{userName},login_time=#{loginTime},login_count=#{loginCount},super_admin=#{superAdmin},status=#{status}
 		where id=#{id}
 	</update>
 
@@ -96,4 +96,10 @@
 			</otherwise>
 		</choose>
 	</select>
+	
+	<update id="changePassword">
+		update admin SET
+		update_time=now(),admin_updater_id=${adminUpdaterId},password=#{password}
+		where id=#{id}
+	</update>
 </mapper>

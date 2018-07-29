@@ -16,4 +16,5 @@ public interface AdminDao {
 	Admin loginCheck(@Param("userName") String userName,@Param("password") String password);
 	String findAdminNameById(int id);
 	List<Admin> findByParam(Map<String,Object> map);
+	boolean changePassword(@Param("id") int id,@Param("adminUpdaterId") int adminUpdaterId,@Param("password") String password);
 }

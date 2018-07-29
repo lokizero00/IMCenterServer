@@ -59,7 +59,7 @@ public class AdminController extends BaseController{
      * 显示添加页面
      * @return
      */
-	@RequestMapping("/advAdminPage")  
+	@RequestMapping("/adminAddPage")  
 	public String advAdminPage(){
 		return "admin/adminAdd";
 	}
@@ -152,6 +152,26 @@ public class AdminController extends BaseController{
 				return responseSuccess();
 			}else {
 				return responseFail(ResultCodeEnums.DELETE_FAIL.getMessage());
+			}
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
+	/**
+     * 修改密码
+     * @return
+     */
+	@RequestMapping(value="/adminChangePassword.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String adminChangePassword(HttpServletRequest request, Integer id,String password) {
+		try {
+			int updaterId=(int) request.getSession().getAttribute("adminId");
+			boolean result=adminService.changePassword(id, updaterId, password);
+			if(result) {
+				return responseSuccess();
+			}else {
+				return responseFail(ResultCodeEnums.UPDATE_FAIL.getMessage());
 			}
 		}catch(Exception e) {
 			return responseFail(e.getMessage());

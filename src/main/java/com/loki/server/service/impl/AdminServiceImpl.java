@@ -257,4 +257,13 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 		}
 	}
 
+	@Override
+	public boolean changePassword(int adminId, int adminUpdaterId, String password) throws ServiceException{
+		if(adminId>0 && password!=null && password!="") {
+			return adminDao.changePassword(adminId, adminUpdaterId, MD5.getMD5Str(password));
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
+
 }
