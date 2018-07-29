@@ -67,7 +67,7 @@
 		status='on'
 	</select>
 
-	<select id="findByParam" resultMap="advDO">
+	<select id="findByParam" resultMap="adminDO">
 		select
 		<include refid="Base_Column_List" />
 		from admin
