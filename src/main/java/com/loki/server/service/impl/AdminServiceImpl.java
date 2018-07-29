@@ -69,9 +69,10 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 			admin.setStatus(adminVO.getStatus());
 			adminDao.insert(admin);
 			if (admin.getId() > 0) {
+				setRole(admin.getId(),adminVO.getRoleId());
 				return true;
 			} else {
-				throw new ServiceException(ResultCodeEnums.SAVE_FAIL);
+				throw new ServiceException(ResultCodeEnums.ADMIN_INSERT_FAIL);
 			}
 		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
@@ -88,7 +89,12 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 			admin.setPassword(MD5.getMD5Str(adminVO.getPassword()));
 			admin.setSuperAdmin(adminVO.isSuperAdmin());
 			admin.setStatus(adminVO.getStatus());
-			return adminDao.update(admin);
+			if(adminDao.update(admin)) {
+				setRole(adminVO.getId(), adminVO.getRoleId());
+				return true;
+			}else {
+				throw new ServiceException(ResultCodeEnums.ADMIN_UPDATE_FAIL);
+			}
 		} else {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
@@ -223,8 +229,7 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 		}
 	}
 
-	@Override
-	public boolean setRole(int adminId, int roleId) throws ServiceException {
+	private boolean setRole(int adminId, int roleId) throws ServiceException {
 		if (adminId > 0 && roleId > 0) {
 			Admin admin = adminDao.findById(adminId);
 			Role role = roleDao.findById(roleId);
@@ -242,7 +247,7 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 				if (roleAdmin.getId() > 0) {
 					return true;
 				} else {
-					throw new ServiceException(ResultCodeEnums.SAVE_FAIL);
+					throw new ServiceException(ResultCodeEnums.ADMIN_INSERT_ROLE_FAIL);
 				}
 			} else {
 				throw new ServiceException(ResultCodeEnums.ADMIN_DELETE_ROLE_FAIL);
