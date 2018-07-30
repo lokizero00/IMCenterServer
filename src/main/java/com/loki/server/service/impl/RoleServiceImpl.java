@@ -161,4 +161,14 @@ public class RoleServiceImpl extends BaseService implements RoleService{
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
+
+	@Override
+	public List<RoleResources> getResources(int roleId) throws ServiceException {
+		if(roleId>0) {
+			List<RoleResources> roleResourcesList = roleResourcesDao.findByRoleId(roleId);
+			return roleResourcesList;
+		}else {
+			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+		}
+	}
 }

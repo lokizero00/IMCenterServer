@@ -43,7 +43,7 @@
 		<include refid="Base_Column_List" />
 		from role_resources
 	</select>
-
+	
 	<delete id="delete" parameterType="int">
 		delete from role_resources
 		where id=#{_parameter}
