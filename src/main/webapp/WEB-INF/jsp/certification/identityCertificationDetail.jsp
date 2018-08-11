@@ -11,17 +11,23 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>实名认证详情</title>
-<link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet">
-<link href="<%=basePath%>static/bootstrap/css/style.css"
-	rel="stylesheet">
+<link type="image/x-icon" rel="shortcut icon" href="/images/favicon.png" />
+<link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="<%=basePath%>static/bootstrap/css/style.css" rel="stylesheet">
+<link href="<%=basePath%>static/css/toastr.min.css" rel="stylesheet" />
 </head>
 
 <body>
 	<script src="<%=basePath%>static/jQuery/jquery-2.1.4.min.js"></script>
+	<script src="<%=basePath%>static/bootstrap/js/toastr.min.js"></script>
 	<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<%=basePath%>static/js/common.js"></script>
+	<script src="<%=basePath%>static/bootstrap/js/ewin.js"></script>
+	<script type="text/javascript">
+         toastr.options.positionClass = 'toast-center-center';
+ 	</script>
 	<script src="<%=basePath%>static/js/identityCertificationDetail.js"></script>
+	
 	<div class="panel panel-default">
 	    <div class="panel-heading">
 	       <h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 实名认证管理</h3>
@@ -49,23 +55,16 @@
 				</div>
 				<div class="modal-body">
 					<div>
-						<label for="name">请选择审核结果</label> <select
-							id="identityCertificationDetail_verifyResult">
-							<option value="verify_pass">通过</option>
-							<option value="verify_refuse">不通过</option>
-						</select>
+						<label for="name">请选择审核结果 : 不通过</label> 
 					</div>
-					<div class="form-group" id="div_identityCertificationRefuseReason"
-						style="display: none;">
+					<div class="form-group">
 						<label for="name">拒绝原因</label>
-						<textarea class="form-control"
-							id="ta_identityCertificationRefuseReason" rows="3"></textarea>
+						<textarea class="form-control" id="ta_identityCertificationRefuseReason" rows="3"></textarea>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" onclick="identityCertificationVerify();"
-						class="btn btn-primary">提交</button>
+					<button type="button" id="submit" class="btn btn-primary">提交</button>
 				</div>
 			</div>
 			<!-- /.modal-content -->
