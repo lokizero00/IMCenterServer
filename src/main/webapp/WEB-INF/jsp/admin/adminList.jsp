@@ -27,7 +27,7 @@
 				<tr>
 					<td>用户名：</td>
 					<td>
-						<input type="text" id="userName" name="userName" value="">
+						<input type="text" id="userName" name="userName">
 					</td>
 				</tr>
 				<tr>

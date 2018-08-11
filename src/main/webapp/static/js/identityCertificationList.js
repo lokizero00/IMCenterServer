@@ -182,7 +182,13 @@ var TableInit = function() {
 				title : '状态',
 				field : 'statusName',
 				sortable : true,
-				sortName : 'status'
+				sortName : 'status',
+				formatter:function(value, row, index){
+					if(row.statusName=="待认证"){
+						return "<span style='color:red'>"+value+"</span>";
+					}
+					return value;
+				}
 			}, {
 				title : '审核时间',
 				field : 'verifyTime',

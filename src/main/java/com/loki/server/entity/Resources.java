@@ -20,6 +20,15 @@ public class Resources implements Serializable{
 	private String status;
 	private String pic;
 	private int parentId;
+	private int roleId;
+	
+	
+	public int getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
+	}
 	public int getId() {
 		return id;
 	}

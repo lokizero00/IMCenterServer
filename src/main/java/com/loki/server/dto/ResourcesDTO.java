@@ -2,6 +2,8 @@ package com.loki.server.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResourcesDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -19,10 +21,11 @@ public class ResourcesDTO implements Serializable{
 	private int sort;
 	private String status;
 	private String pic;
-	private int parentId;
+	private Integer parentId;
 	
 	private String adminCreatorName;
 	private String adminUpdaterName;
+	
 	public int getId() {
 		return id;
 	}
@@ -101,10 +104,10 @@ public class ResourcesDTO implements Serializable{
 	public void setPic(String pic) {
 		this.pic = pic;
 	}
-	public int getParentId() {
+	public Integer getParentId() {
 		return parentId;
 	}
-	public void setParentId(int parentId) {
+	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
 	}
 	public String getAdminCreatorName() {

@@ -94,7 +94,8 @@ $(document).ready(function() {
 				pageSize : params.pageSize, // 页面大小
 				pageNo : params.pageNumber, // 页码
 				sortName : params.sortName, // 排序列名
-				sortOrder : params.sortOrder // 排序方式
+				sortOrder : params.sortOrder, // 排序方式
+				'name' : $('#name').val()
 		}
 	}
 	

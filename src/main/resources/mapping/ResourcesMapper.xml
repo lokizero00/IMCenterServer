@@ -84,4 +84,36 @@
 			</otherwise>
 		</choose>
 	</select>
+	
+	<select id="findByParamRoleId" resultMap="resourcesDO">
+		select a.id,a.create_time,a.update_time,a.admin_creator_id,a.admin_updater_id,a.name,a.model,a.url,a.description,a.type,a.sort,a.status,a.pic,a.parent_id,b.role_id as roleId
+		 from resources a left join role_resources b on b.resources_id=a.id
+		<if test="roleId !=null and roleId !=0">
+			and b.role_id=#{roleId}
+		</if>
+		<where>
+			<if test="name !=null and name !=''">
+				<bind name="pattern1" value="'%' + name + '%'" />
+				a.name like #{pattern1}
+			</if>
+			<if test="type !=null and type !=''">
+				and a.type = #{type}
+			</if>
+			<if test="status !=null and status !=''">
+				and a.status = #{status}
+			</if>
+		</where>
+		ORDER BY
+		<choose>
+			<when test="sortName!=null">
+				${sortName}
+				<if test="sortOrder!=null">
+					${sortOrder}
+				</if>
+			</when>
+			<otherwise>
+				sort asc
+			</otherwise>
+		</choose>
+	</select>
 </mapper>

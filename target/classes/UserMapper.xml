@@ -161,4 +161,10 @@
   <select id="userExistCheck" parameterType="String" resultType="int">
   		select count(id) from user where phone=#{_parameter}
   </select>
+  
+  <select id="findPhoneById" parameterType="int" resultType="String">
+		select phone 
+		from user
+		where id=#{_parameter}
+  </select>
 </mapper>

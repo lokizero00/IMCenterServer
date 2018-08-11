@@ -28,14 +28,12 @@
 	    </div>
 	    <div class="panel-body">
 	    	<jsp:include page="identityCertification.jsp" />
-	      	
 	    </div>
 	    <div class="form-group">
 			<div align="center">
-				<button type="button" id="btnVerify" data-toggle='modal'
-				data-target='#icVerifyModal' class="btn btn-primary">审核</button>
-				<button type="button" id="btnBack" onclick="window.history.go(-1);"
-					class="btn btn-primary">返回</button>
+				<button type="button" id="btnVerify" class="btn btn-success">审核通过</button>
+				<button type="button" id="btnVerifyRefuse" class="btn btn-warning">审核不通过</button>
+				<button type="button" id="btnBack" onclick="window.history.go(-1);" class="btn btn-primary">返回</button>
 			</div>
 		</div>
 	</div>

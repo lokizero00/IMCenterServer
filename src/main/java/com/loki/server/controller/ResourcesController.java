@@ -2,6 +2,7 @@ package com.loki.server.controller;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loki.server.dto.ResourceTreeDto;
 import com.loki.server.dto.ResourcesDTO;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.service.ResourcesService;
@@ -46,9 +48,12 @@ public class ResourcesController extends BaseController{
 			map.put("sortName", sortName);
 			map.put("sortOrder", sortOrder);
 			map.put("pageNo",pageNo);
-			map.put("pageSize",pageSize);
-			PagedResult<ResourcesDTO> list=resourcesService.getResourcesList(map);
-    	    return responseSuccess(list);
+			map.put("pageSize",100);
+			List<ResourcesDTO> list=resourcesService.getResourcesList(map);
+			HashMap<String,Object> map1=new HashMap<>();
+			map1.put("rows", list);
+			map1.put("total", list.size());
+    	    return responseSuccess(map1);
     	} catch (Exception e) {
 			return responseFail(e.getMessage());
 		}
@@ -157,4 +162,29 @@ public class ResourcesController extends BaseController{
 			return responseFail(e.getMessage());
 		}
 	}
+	
+	/**
+     * 资源树查询
+     * @return
+     */
+    @RequestMapping(value="/resourcesListTree.do")
+    @ResponseBody
+    public String getResourcesListTree(int id) {
+		try {
+			HashMap<String,Object> map=new HashMap<>();
+			map.put("roleId", id);
+//			map.put("type", type);
+//			map.put("status", status);
+//			map.put("sortName", sortName);
+//			map.put("sortOrder", sortOrder);
+//			map.put("pageNo",pageNo);
+//			map.put("pageSize",pageSize);
+			List<ResourceTreeDto> list=resourcesService.getResourcesListTree(map);
+    	    return responseArraySuccess(list);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+			return responseFail(e.getMessage());
+		}
+    }
+    
 }

@@ -120,9 +120,9 @@ $(document).ready(function() {
 				pageNo : params.pageNumber, // 页码
 				sortName : params.sortName, // 排序列名
 				sortOrder : params.sortOrder, // 排序方式
-				'userName':$('userName').val(),
-				'superAdmin':$('superAdmin').val(),
-				'status':$('status').val()
+				'userName':$('#userName').val(),
+				'superAdmin':$('#superAdmin').val(),
+				'status':$('#status').val()
 		}
 	}
 	
