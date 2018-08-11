@@ -2,6 +2,7 @@ package com.loki.server.controller;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loki.server.dto.RoleDTO;
 import com.loki.server.entity.PagedResult;
+import com.loki.server.entity.RoleResources;
 import com.loki.server.service.RoleService;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.RoleVO;
@@ -166,6 +168,22 @@ public class RoleController extends BaseController{
 	@RequestMapping("/roleAuthorizePage")  
 	public String roleAuthorizePage(int id){
 		return "role/roleAuthorize.jsp?id="+id;
+	}
+	
+	/**
+     * 通过角色获取资源
+     * @return
+     */
+	@RequestMapping(value="/roleResource.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String roleResource(HttpServletRequest request, Integer roleId) {
+		try {
+			List<RoleResources> result=roleService.getResources(roleId);
+			return responseArraySuccess(result);
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+
 	}
 	
 	/**
