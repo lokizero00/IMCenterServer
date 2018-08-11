@@ -17,6 +17,9 @@ import com.loki.server.service.RoleService;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.RoleVO;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 @Controller
 @RequestMapping("/s/role")
 public class RoleController extends BaseController{
@@ -157,14 +160,23 @@ public class RoleController extends BaseController{
 	}
 	
 	/**
+     * 显示授权页
+     * @return
+     */
+	@RequestMapping("/roleAuthorizePage")  
+	public String roleAuthorizePage(int id){
+		return "role/roleAuthorize.jsp?id="+id;
+	}
+	
+	/**
      * 角色授权资源
      * @return
      */
-	@RequestMapping(value="/authRole.do",method=RequestMethod.POST)
+	@RequestMapping(value="/roleAuthorize.do",method=RequestMethod.POST)
 	@ResponseBody
-	public String authRole(HttpServletRequest request, String authJson) {
+	public String authRole(HttpServletRequest request, String resourcesId,int roleId) {
 		try {
-			boolean result=roleService.authRole(authJson);
+			boolean result=roleService.authRole(resourcesId,roleId);
 			if(result) {
 				return responseSuccess();
 			}else {

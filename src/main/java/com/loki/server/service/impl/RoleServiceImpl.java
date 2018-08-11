@@ -142,12 +142,19 @@ public class RoleServiceImpl extends BaseService implements RoleService{
 	}
 
 	@Override
-	public boolean authRole(String authJson) throws ServiceException {
+	public boolean authRole(String authJson,int roleId) throws ServiceException {
 		if(authJson!=null && authJson!="") {
-			JSONArray json = JSONArray.fromObject(authJson);
-			List<RoleResourcesVO> authList= (List<RoleResourcesVO>)JSONArray.toCollection(json, RoleResourcesVO.class);
+			List<RoleResourcesVO> authList=new ArrayList<>();
+			for (String resourceId : authJson.split(",")) {
+				RoleResourcesVO vo=new RoleResourcesVO();
+				vo.setResourcesId(Integer.parseInt(resourceId));
+				vo.setRoleId(roleId);
+				authList.add(vo);
+			}
+//			JSONArray json = JSONArray.fromObject(authJson);
+//			List<RoleResourcesVO> authList= (List<RoleResourcesVO>)JSONArray.toCollection(json, RoleResourcesVO.class);
 			if(authList.size()>0) {
-				int roleId=authList.get(0).getRoleId();
+				roleId=authList.get(0).getRoleId();
 				roleResourcesDao.deleteByRoleId(roleId);
 			}
 			for(RoleResourcesVO roleResourcesVO:authList) {
