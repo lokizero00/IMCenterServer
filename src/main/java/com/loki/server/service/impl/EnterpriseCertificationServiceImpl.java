@@ -65,13 +65,7 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 			if (user != null) {
 				EnterpriseCertification lastCertification = enterpriseCertificationDao
 						.findCurrentByUserId(enterpriseCertificationVO.getUserId());
-				if (lastCertification == null || lastCertification.getStatus().equals("ec_pass")) {
-					if (lastCertification != null) {
-						if (!enterpriseCertificationDao.nullifyByUserId(enterpriseCertificationVO.getUserId())) {
-							returnValue.setResultCode(ResultCodeEnums.DELETE_FAIL);
-							return returnValue;
-						}
-					}
+				if (lastCertification == null) {
 					EnterpriseCertification newCertification = new EnterpriseCertification();
 					newCertification.setUserId(enterpriseCertificationVO.getUserId());
 					newCertification.setPosition(enterpriseCertificationVO.getPosition());
@@ -80,10 +74,10 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 					newCertification.setStatus("ec_verify");
 					enterpriseCertificationDao.insert(newCertification);
 					if (newCertification.getId() > 0) {
-						//关联到用户表
+						// 关联到用户表
 						user.setEnterpriseId(newCertification.getId());
 						userDao.update(user);
-						
+
 						returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 						returnValue.setResultObj(newCertification.getId());
 					} else {
@@ -92,7 +86,7 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 				} else {
 					returnValue.setResultCode(ResultCodeEnums.DATA_INVALID);
 				}
-			}else {
+			} else {
 				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}
 		} else {
@@ -106,28 +100,54 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 		ServiceResult<Void> returnValue = new ServiceResult<>();
 		if (enterpriseCertificationVO != null && enterpriseCertificationVO.getId() > 0
 				&& enterpriseCertificationVO.getUserId() > 0) {
-			EnterpriseCertification enterpriseCertification = enterpriseCertificationDao
-					.findCurrentByUserId(enterpriseCertificationVO.getUserId());
-			if (enterpriseCertification != null) {
-				if (enterpriseCertification.getId() == enterpriseCertificationVO.getId()
-						&& enterpriseCertification.getStatus().equals("ec_refuse")) {
-					enterpriseCertification.setPosition(enterpriseCertificationVO.getPosition());
-					enterpriseCertification.setEnterpriseName(enterpriseCertificationVO.getEnterpriseName());
-					enterpriseCertification.setLicensePic(enterpriseCertificationVO.getLicensePic());
-					enterpriseCertification.setVerifyTime(null);
-					enterpriseCertification.setAdminVerifierId(0);
-					enterpriseCertification.setStatus("ec_verify");
-					enterpriseCertification.setRefuseReason("");
-					if (enterpriseCertificationDao.update(enterpriseCertification)) {
-						returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+			User user = userDao.findById(enterpriseCertificationVO.getUserId());
+			if (user != null) {
+				EnterpriseCertification enterpriseCertification = enterpriseCertificationDao
+						.findCurrentByUserId(enterpriseCertificationVO.getUserId());
+				if (enterpriseCertification != null
+						&& enterpriseCertificationVO.getId() == enterpriseCertification.getId()) {
+					if (enterpriseCertification.getStatus().equals("ec_pass")) {
+						if (!enterpriseCertificationDao.nullifyByUserId(enterpriseCertificationVO.getUserId())) {
+							returnValue.setResultCode(ResultCodeEnums.DELETE_FAIL);
+							return returnValue;
+						}
+						EnterpriseCertification newCertification = new EnterpriseCertification();
+						newCertification.setUserId(enterpriseCertificationVO.getUserId());
+						newCertification.setPosition(enterpriseCertificationVO.getPosition());
+						newCertification.setEnterpriseName(enterpriseCertificationVO.getEnterpriseName());
+						newCertification.setLicensePic(enterpriseCertificationVO.getLicensePic());
+						newCertification.setStatus("ec_verify");
+						enterpriseCertificationDao.insert(newCertification);
+						if (newCertification.getId() > 0) {
+							// 关联到用户表
+							user.setEnterpriseId(newCertification.getId());
+							userDao.update(user);
+
+							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+						} else {
+							returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
+						}
+					} else if (enterpriseCertification.getStatus().equals("ec_refuse")) {
+						enterpriseCertification.setPosition(enterpriseCertificationVO.getPosition());
+						enterpriseCertification.setEnterpriseName(enterpriseCertificationVO.getEnterpriseName());
+						enterpriseCertification.setLicensePic(enterpriseCertificationVO.getLicensePic());
+						enterpriseCertification.setVerifyTime(null);
+						enterpriseCertification.setAdminVerifierId(0);
+						enterpriseCertification.setStatus("ec_verify");
+						enterpriseCertification.setRefuseReason("");
+						if (enterpriseCertificationDao.update(enterpriseCertification)) {
+							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+						} else {
+							returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
+						}
 					} else {
-						returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
+						returnValue.setResultCode(ResultCodeEnums.DATA_INVALID);
 					}
 				} else {
-					returnValue.setResultCode(ResultCodeEnums.DATA_INVALID);
+					returnValue.setResultCode(ResultCodeEnums.DATA_QUERY_FAIL);
 				}
 			} else {
-				returnValue.setResultCode(ResultCodeEnums.DATA_QUERY_FAIL);
+				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
 			}
 		} else {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
@@ -147,11 +167,12 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 			for (EnterpriseCertification enterpriseCertification : enterpriseCertificationList) {
 				EnterpriseCertificationDTO enterpriseCertificationDTO = EnterpriseCertificationConvertor
 						.convertEnterpriseCertification2EnterpriseCertificationDTO(enterpriseCertification);
-				enterpriseCertificationDTO=setDTOExtendFields(enterpriseCertificationDTO,null);
+				enterpriseCertificationDTO = setDTOExtendFields(enterpriseCertificationDTO, null);
 				enterpriseCertificationDTOList.add(enterpriseCertificationDTO);
 			}
-			Page data=(Page) enterpriseCertificationList;
-			PagedResult<EnterpriseCertificationDTO> pageResult=BeanUtil.toPagedResult(enterpriseCertificationDTOList,data.getPageNum(),data.getPageSize(),data.getTotal(),data.getPages());
+			Page data = (Page) enterpriseCertificationList;
+			PagedResult<EnterpriseCertificationDTO> pageResult = BeanUtil.toPagedResult(enterpriseCertificationDTOList,
+					data.getPageNum(), data.getPageSize(), data.getTotal(), data.getPages());
 			if (pageResult != null) {
 				return pageResult;
 			} else {
@@ -171,7 +192,7 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 				EnterpriseCertificationDTO enterpriseCertificationDTO = EnterpriseCertificationConvertor
 						.convertEnterpriseCertification2EnterpriseCertificationDTO(enterpriseCertification);
 				if (enterpriseCertificationDTO != null) {
-					enterpriseCertificationDTO=setDTOExtendFields(enterpriseCertificationDTO,request);
+					enterpriseCertificationDTO = setDTOExtendFields(enterpriseCertificationDTO, request);
 					return enterpriseCertificationDTO;
 				} else {
 					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
@@ -194,17 +215,19 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
 					enterpriseCertification.setAdminVerifierId(adminId);
 					enterpriseCertification.setVerifyTime(new Timestamp(System.currentTimeMillis()));
-					String adminLogContent="管理员 "+getAdminName(adminId)+" 审核";
+					String adminLogContent = "管理员 " + getAdminName(adminId) + " 审核";
 					if (verify.equals("verify_pass")) {
-						adminLogContent+="通过了 用户 "+getUserName(enterpriseCertification.getUserId())+" 的企业认证（"+enterpriseCertification.getEnterpriseName()+"）";
+						adminLogContent += "通过了 用户 " + getUserName(enterpriseCertification.getUserId()) + " 的企业认证（"
+								+ enterpriseCertification.getEnterpriseName() + "）";
 						enterpriseCertification.setStatus("ec_pass");
 					} else {
-						adminLogContent+="拒绝了 用户 "+getUserName(enterpriseCertification.getUserId())+" 的企业认证（"+enterpriseCertification.getEnterpriseName()+"），原因："+refuseReason;
+						adminLogContent += "拒绝了 用户 " + getUserName(enterpriseCertification.getUserId()) + " 的企业认证（"
+								+ enterpriseCertification.getEnterpriseName() + "），原因：" + refuseReason;
 						enterpriseCertification.setStatus("ec_refuse");
 						enterpriseCertification.setRefuseReason(refuseReason);
 					}
 					if (enterpriseCertificationDao.update(enterpriseCertification)) {
-						//管理员日志
+						// 管理员日志
 						addAdminLog(adminLogContent);
 						return true;
 					} else {
@@ -220,18 +243,19 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
-	
-	protected EnterpriseCertificationDTO setDTOExtendFields(EnterpriseCertificationDTO enterpriseCertificationDTO,HttpServletRequest request) {
-		if(enterpriseCertificationDTO!=null) {
+
+	protected EnterpriseCertificationDTO setDTOExtendFields(EnterpriseCertificationDTO enterpriseCertificationDTO,
+			HttpServletRequest request) {
+		if (enterpriseCertificationDTO != null) {
 			enterpriseCertificationDTO.setUserNickName(getUserNickName(enterpriseCertificationDTO.getUserId()));
 			enterpriseCertificationDTO
 					.setAdminVerifierName(getAdminName(enterpriseCertificationDTO.getAdminVerifierId()));
-			enterpriseCertificationDTO.setStatusName(getDictionariesValue("enterprise_certification_status",
-					enterpriseCertificationDTO.getStatus()));
-			if (request!=null && enterpriseCertificationDTO.getLicensePic() != null
+			enterpriseCertificationDTO.setStatusName(
+					getDictionariesValue("enterprise_certification_status", enterpriseCertificationDTO.getStatus()));
+			if (request != null && enterpriseCertificationDTO.getLicensePic() != null
 					&& !(enterpriseCertificationDTO.getLicensePic().equals(""))) {
-				enterpriseCertificationDTO.setLicensePicUrl(
-						getImageRequestUrl(request, enterpriseCertificationDTO.getLicensePic()));
+				enterpriseCertificationDTO
+						.setLicensePicUrl(getImageRequestUrl(request, enterpriseCertificationDTO.getLicensePic()));
 			}
 		}
 		return enterpriseCertificationDTO;
