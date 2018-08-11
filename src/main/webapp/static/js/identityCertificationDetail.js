@@ -2,21 +2,36 @@
 var path = $("#contextPath").val();
 var paramId=getQueryString('id');
 $(document).ready(function() {
-	$("#identityCertificationDetail_verifyResult").change(function(){
-		var currentValue=$(this).children('option:selected').val();
-		if(currentValue==='verify_refuse'){
-			$("#div_identityCertificationRefuseReason").show();
-		}else{
-			$("#div_identityCertificationRefuseReason").hide();
+	$("#btnVerify").click(function(){
+		Ewin.confirm({ message: "确认要审核通过吗？" }).on(function (e) {
+			if(!e){
+				return;
+			}
+			var param = {};
+			param.id=paramId;
+			param.verifyResult="verify_pass";
+			identityCertificationVerify(param);
+		});
+	});
+	$("#btnVerifyRefuse").click(function(){
+		$("#icVerifyModal").modal('show');
+	});
+	
+	$("#submit").click(function(){
+		var refuseReason=$("#ta_identityCertificationRefuseReason").val();
+		if(!refuseReason){
+			toastr.warning('填写内容不正确！');
+			return;
 		}
+		var param = {};
+		param.id=paramId;
+		param.verifyResult="verify_refuse";
+		param.refuseReason=refuseReason;
+		identityCertificationVerify(param);
 	});
 });
 
-function identityCertificationVerify(){
-	var param = {};
-	param.id=paramId;
-	param.verifyResult=$("#identityCertificationDetail_verifyResult").val();
-	param.refuseReason=$("#ta_identityCertificationRefuseReason").val();
+function identityCertificationVerify(param){
 	$.ajax({
 		"type" : 'post',
 		"url" : path + 's/certification/verifyIdentityCertification.do',
@@ -24,17 +39,16 @@ function identityCertificationVerify(){
 		"dataType" : "json",
 		"success" : function(data) {
 			if(data.isError===true){
-				alert('发生错误：'+data.errorMsg);
+				toastr.error('发生错误：'+data.errorMsg);
 			}else{
-				alert('执行成功');
 				window.location = path+'s/certification/identityCertificationListPage';
 			}
 		},
 		error : function(data) {
 			if (data.statusText == 'OK') {
-				alert('您没有相关权限');
+				toastr.error('您没有相关权限');
 			} else {
-				alert(data.statusText);
+				toastr.error(data.statusText);
 			}
 		} 
 	});

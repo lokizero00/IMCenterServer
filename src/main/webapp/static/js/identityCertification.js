@@ -59,7 +59,7 @@ $(document).ready(function() {
 				pmStr+="<div class='carousel-inner'>";
 				if(data.identityFrontUrl!=""){
 					pmStr+="<div class='item active'>";
-					pmStr+="<img src='"+data.identityFrontUrl+"' alt='First slide'>";
+					pmStr+="<img src="+path + "s/io/getImage?name="+data.identityFrontUrl+" alt='First slide'>";
 					pmStr+="<div class='carousel-caption'>正面</div></div>";
 				}
 				if(data.identityBackUrl!=""){
@@ -68,7 +68,7 @@ $(document).ready(function() {
 					}else{
 						pmStr+="<div class='item active'>";
 					}
-					pmStr+="<img src='"+data.identityBackUrl+"' alt='Second slide'>";
+					pmStr+="<img src="+path + "s/io/getImage?name="+data.identityBackUrl+" alt='Second slide'>";
 					pmStr+="<div class='carousel-caption'>反面</div></div></div>";
 				}
 			}
