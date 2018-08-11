@@ -12,4 +12,5 @@ public interface ResourcesDao {
 	List<Resources> findAll();
 	Resources findById(int id);
 	List<Resources>findByParam(Map<String,Object> map);
+	List<Resources> findByParamRoleId(Map<String,Object> map);
 }

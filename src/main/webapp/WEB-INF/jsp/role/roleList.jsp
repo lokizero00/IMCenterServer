@@ -27,7 +27,7 @@
 				<tr>
 					<td>角色名称：</td>
 					<td>
-						<input type="text" id="username" name="username" value="">
+						<input type="text" id="name" name="name" value="">
 					</td>
 				</tr>
 				<tr>

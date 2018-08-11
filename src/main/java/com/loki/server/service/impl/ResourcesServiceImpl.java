@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.loki.server.dao.ResourcesDao;
+import com.loki.server.dto.ResourceTreeDto;
 import com.loki.server.dto.ResourcesDTO;
 import com.loki.server.dto.convertor.ResourcesConvertor;
 import com.loki.server.entity.PagedResult;
@@ -102,11 +103,11 @@ public class ResourcesServiceImpl extends BaseService implements ResourcesServic
 	}
 
 	@Override
-	public PagedResult<ResourcesDTO> getResourcesList(Map<String, Object> map) throws ServiceException {
+	public List<ResourcesDTO> getResourcesList(Map<String, Object> map) throws ServiceException {
 		if (map != null) {
-			int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
-			int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
-			PageHelper.startPage(pageNo, pageSize);
+//			int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
+//			int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
+//			PageHelper.startPage(pageNo, pageSize);
 			List<Resources> resourcesList=resourcesDao.findByParam(map);
 			if(resourcesList!=null) {
 				List<ResourcesDTO> resourcesDTOList=new ArrayList<>();
@@ -115,15 +116,18 @@ public class ResourcesServiceImpl extends BaseService implements ResourcesServic
 					resourcesDTO=ResourcesConvertor.convertResources2ResourcesDTO(resources);
 					resourcesDTO.setAdminCreatorName(getAdminName(resources.getAdminCreatorId()));
 					resourcesDTO.setAdminUpdaterName(getAdminName(resources.getAdminUpdaterId()));
+//					if(resources.getParentId()==0) {
+//						resourcesDTO.setParentId(null);
+//					}
 					resourcesDTOList.add(resourcesDTO);
 				}
-				Page data=(Page) resourcesList;
-				PagedResult<ResourcesDTO> pagedList=BeanUtil.toPagedResult(resourcesDTOList,data.getPageNum(),data.getPageSize(),data.getTotal(),data.getPages());
-				if(pagedList!=null) {
-					return pagedList;
-				}else {
-					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
-				}
+//				Page data=(Page) resourcesList;
+//				PagedResult<ResourcesDTO> pagedList=BeanUtil.toPagedResult(resourcesDTOList,data.getPageNum(),data.getPageSize(),data.getTotal(),data.getPages());
+//				if(pagedList!=null) {
+					return resourcesDTOList;
+//				}else {
+//					throw new ServiceException(ResultCodeEnums.DATA_CONVERT_FAIL);
+//				}
 			}else {
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
@@ -140,5 +144,51 @@ public class ResourcesServiceImpl extends BaseService implements ResourcesServic
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
-
+	
+	@Override
+	public List<ResourceTreeDto> getResourcesListTree(Map<String,Object> map) throws ServiceException {
+		List<Resources> resourcesList=resourcesDao.findByParamRoleId(map);
+		List<ResourceTreeDto> resourcesDTOList=new ArrayList<>();
+		for(Resources resources:resourcesList) {
+			if(resources.getParentId()==0) {
+				ResourceTreeDto resourcesDTO=new ResourceTreeDto();
+				resourcesDTO.setId(resources.getId());
+            	resourcesDTO.setText(resources.getName());
+				resourcesDTO.setNodes(searchSubMenuTree(resources.getId(), resourcesList)); //子菜单
+				if(resources.getRoleId()>0) {
+					resourcesDTO.setSelectable(true);
+				}
+				resourcesDTOList.add(resourcesDTO);
+			}
+		}
+		return resourcesDTOList;
+	}
+	
+	/**
+	 * 设置子菜单
+	 * @param parentCode
+	 * @param sysMenuDTOList
+	 * @return
+	 */
+	private List<ResourceTreeDto> searchSubMenuTree(int parentCode, List<Resources> sysMenuDTOList) {
+	    List<ResourceTreeDto> menuTrees = new ArrayList<ResourceTreeDto>();
+	    if (sysMenuDTOList.size() > 0) {
+	        //遍历所有菜单 设置子菜单
+	        for (Resources sysMenuDTO : sysMenuDTOList) {
+	            if (parentCode==sysMenuDTO.getParentId()) {
+	            	ResourceTreeDto resourcesDTO=new ResourceTreeDto();
+	            	resourcesDTO.setId(sysMenuDTO.getId());
+	            	resourcesDTO.setText(sysMenuDTO.getName());
+	            	if(sysMenuDTO.getRoleId()>0) {
+						resourcesDTO.setSelectable(true);
+					}
+	                //递归
+					resourcesDTO.setNodes(searchSubMenuTree(sysMenuDTO.getId(), sysMenuDTOList));
+	                menuTrees.add(resourcesDTO);
+	            }
+	        }
+	    }
+	    return menuTrees;
+	}
+	
 }

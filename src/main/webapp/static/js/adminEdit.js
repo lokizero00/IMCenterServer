@@ -2,21 +2,38 @@
 var path = $("#contextPath").val();
 var paramId=getQueryString('id');
 $(document).ready(function() {
-	
 	$.ajax({
-		type : 'get',
-		url : path + 's/role/roleDetail.do?id='+ paramId,
-		dataType : "json",
-		success : function(data) {
-			console.log(data);
-			$("#name").val(data.name);
-			$('#description').val(data.description);
+		"type" : 'get',
+		"url" : path + 's/role/roleList.do',
+		"dataType" : "json",
+		"success" : function(data) {
+			var data_list = data;
+			var opts = "<option value='0'>请选择角色</option>";
+			$.each(data.rows,function(index,item){
+				opts += "<option value='" + item.id + "' >"+item.name+"</option>";
+			});
+			$("#roleName").append(opts);
 		}
 	});
 	
+	
+	$.ajax({
+		type : 'get',
+		url : path + 's/admin/adminDetail.do?id='+ paramId,
+		dataType : "json",
+		success : function(data) {
+			$("#userName").val(data.userName);
+			$('#roleName').val(data.roleId);
+			$('#status').val(data.status);
+			$('#superAdmin').val(data.status)
+			if(data.superAdmin){
+				$("#superAdmin").attr("checked", "checked"); 
+			}
+		}
+	});
+
 	$("#btnSubmit").click(function() {
-		console.log(!$('#name').val());
-		if(!$('#name').val()){
+		if(!$('#userName').val()){
 			toastr.warning('填写内容不正确！');
 			return;
 		}
@@ -26,16 +43,18 @@ $(document).ready(function() {
 			}
 			var param = {};
 			param.id=paramId;
-			param.name=$('#name').val();
-			param.description=$('#description').val();
+			param.userName=$('#userName').val();
+			param.roleId=parseInt($('#roleName').val());
+			param.status=$('#status').val();
+			param.superAdmin=$('#superAdmin').is(':checked');
 			$.ajax({
 				type : 'POST',
-				url : path + 's/role/roleEdit.do',
+				url : path + 's/admin/adminEdit.do',
 				dataType : "json",
 				data:param,
 				success : function(data) {
 					if(data.isError==false){
-						window.location = path + 's/role/roleListPage';
+						window.location = path + 's/admin/adminListPage';
 					}else{
 						toastr.error('修改失败！');
 					}
@@ -49,5 +68,5 @@ $(document).ready(function() {
 			});
 		});
 	});
-
+	
 })

@@ -44,7 +44,7 @@ $(document).ready(function() {
             }  
 		}, {
 			title : '用户名',
-			field : 'namuserNamee',
+			field : 'userName',
 		}, {
 			title : '角色',
 			field : 'roleName',
@@ -120,9 +120,9 @@ $(document).ready(function() {
 				pageNo : params.pageNumber, // 页码
 				sortName : params.sortName, // 排序列名
 				sortOrder : params.sortOrder, // 排序方式
-				'username':$('username').val(),
-				'superAdmin':$('superAdmin').val(),
-				'status':$('status').val()
+				'userName':$('#userName').val(),
+				'superAdmin':$('#superAdmin').val(),
+				'status':$('#status').val()
 		}
 	}
 	
