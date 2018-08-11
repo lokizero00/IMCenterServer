@@ -14,16 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.loki.server.cache.RedisCache;
 import com.loki.server.dao.EnterpriseCertificationDao;
 import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserBindCodeDao;
 import com.loki.server.dao.UserDao;
 import com.loki.server.dao.UserTokenDao;
-import com.loki.server.dto.TradeDockingDTO;
 import com.loki.server.dto.UserDTO;
 import com.loki.server.dto.convertor.UserConvertor;
+import com.loki.server.entity.EnterpriseCertification;
+import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.Intention;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.User;
@@ -591,6 +591,41 @@ public class UserServiceImpl extends BaseService implements UserService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
+		}
+		return returnValue;
+	}
+
+	@Override
+	public ServiceResult<String> getEaseNameByUserId(int userId) {
+		ServiceResult<String> returnValue = new ServiceResult<>();
+		if (userId > 0) {
+			User user = userDao.findById(userId);
+			if (user != null) {
+				String easeEnterprise = "企业未认证";
+				String easeIdentity = "未实名用户";
+				String easePhone = user.getPhone();
+				String easeName = "";
+
+				// 判断用户是否认证
+				IdentityCertification ic = identityCertificationDao.findByUserId(user.getId());
+				EnterpriseCertification ec = enterpriseCertificationDao.findCurrentByUserId(user.getId());
+				if (ec != null && ec.getStatus().equals("ec_pass")) {
+					easeName += ec.getEnterpriseName() + "-" + ic.getTrueName() + "-" + ec.getPosition();
+				} else {
+					if (ic != null && ic.getStatus().equals("ic_pass")) {
+						easeName += easeEnterprise + "-" + ic.getTrueName();
+					} else {
+						easeName += easeIdentity + "-" + easePhone;
+					}
+				}
+
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(easeName);
+			} else {
+				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
+			}
+		} else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 		}
 		return returnValue;
 	}

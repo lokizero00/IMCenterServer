@@ -173,7 +173,7 @@
 	            </if>
 	        </when>
 	        <otherwise>
-	            dic.list_order asc
+	            dic.list_order asc,trade.docking_count desc
 	        </otherwise>
 	     </choose>
   </select>

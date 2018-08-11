@@ -22,6 +22,7 @@ public interface UserService {
 	ServiceResult<Void> updatePhone(int userId,String phone,String authCode,int authCodeId);
 	ServiceResult<Void> findPassword(String phone,String newPassword,String authCode,int authCodeId);
 	ServiceResult<User> getUserByEaseId(String easeId) ;
+	ServiceResult<String> getEaseNameByUserId(int userId);
 	
 	//web
 	PagedResult<UserDTO> getUserList(Map<String,Object> map) throws ServiceException;
