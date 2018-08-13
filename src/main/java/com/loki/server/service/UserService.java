@@ -29,7 +29,7 @@ public interface UserService {
 	UserDTO getUser(HttpServletRequest request,int userId) throws ServiceException;
 	UserDTO userVerify(HttpServletRequest request,int userId,String status) throws ServiceException;
 	UserDTO changeUserStatus(HttpServletRequest request,int userId) throws ServiceException;
-	boolean changePassword(int userId,String newPassword) throws ServiceException;
-	boolean changePayPwd(int userId,String newPayPwd) throws ServiceException; 
-	UserDTO rebindPhone(HttpServletRequest request,int userId,String newPhone) throws ServiceException;
+	boolean changePassword(int adminId,String loginIp,int userId, String newPassword) throws ServiceException;
+	boolean changePayPwd(int adminId,String loginIp,int userId,String newPayPwd) throws ServiceException; 
+	UserDTO rebindPhone(HttpServletRequest request,int adminId,String loginIp,int userId,String newPhone) throws ServiceException;
 }

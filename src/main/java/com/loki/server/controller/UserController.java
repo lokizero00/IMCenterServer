@@ -100,7 +100,9 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public String changePassword(HttpServletRequest request, int id, String newPassword) {
 		try {
-			boolean result=userService.changePassword(id, newPassword);
+			int adminId=(int) request.getSession().getAttribute("adminId");
+			String loginIp=(String) request.getSession().getAttribute("loginIp");
+			boolean result=userService.changePassword(adminId,loginIp,id, newPassword);
 			if(result) {
 				return responseSuccess();
 			}else {
@@ -119,7 +121,9 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public String changePayPwd(HttpServletRequest request, int id, String newPayPwd) {
 		try {
-			boolean result=userService.changePayPwd(id, newPayPwd);
+			int adminId=(int) request.getSession().getAttribute("adminId");
+			String loginIp=(String) request.getSession().getAttribute("loginIp");
+			boolean result=userService.changePayPwd(adminId,loginIp,id, newPayPwd);
 			if(result) {
 				return responseSuccess();
 			}else {
@@ -138,7 +142,9 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public String rebindPhone(HttpServletRequest request, int id, String newPhone) {
 		try {
-			UserDTO userDTO=userService.rebindPhone(request, id, newPhone);
+			int adminId=(int) request.getSession().getAttribute("adminId");
+			String loginIp=(String) request.getSession().getAttribute("loginIp");
+			UserDTO userDTO=userService.rebindPhone(request,adminId,loginIp, id, newPhone);
 			return responseSuccess(userDTO);
 		}catch(Exception e) {
 			return responseFail(e.getMessage());
