@@ -212,7 +212,8 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 			EnterpriseCertification enterpriseCertification = enterpriseCertificationDao.findById(id);
 			if (enterpriseCertification != null) {
 				if (enterpriseCertification.getStatus().equals("ec_verify")) {
-					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
+					int adminId=(int) request.getSession().getAttribute("adminId");
+					String loginIp=(String) request.getSession().getAttribute("loginIp");
 					enterpriseCertification.setAdminVerifierId(adminId);
 					enterpriseCertification.setVerifyTime(new Timestamp(System.currentTimeMillis()));
 					String adminLogContent = "管理员 " + getAdminName(adminId) + " 审核";
@@ -228,7 +229,7 @@ public class EnterpriseCertificationServiceImpl extends BaseService implements E
 					}
 					if (enterpriseCertificationDao.update(enterpriseCertification)) {
 						// 管理员日志
-						addAdminLog(adminLogContent);
+						addAdminLog(adminLogContent,adminId,loginIp);
 						return true;
 					} else {
 						throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);

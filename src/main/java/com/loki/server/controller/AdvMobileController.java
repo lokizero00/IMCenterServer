@@ -10,20 +10,20 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.loki.server.entity.Carousel;
-import com.loki.server.service.CarouselService;
+import com.loki.server.dto.AdvDTO;
+import com.loki.server.service.AdvService;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.vo.ServiceResult;
 
 @Controller
-@RequestMapping("/s/api/carousel")
-public class CarouselMobileController {
-	@Autowired CarouselService carouselService;
+@RequestMapping("/s/api/adv")
+public class AdvMobileController {
+	@Autowired AdvService advService;
 	
-	//获取轮播列表
-	@RequestMapping(value="/getCarouselList",method=RequestMethod.GET)
-	public String getCarouselList(HttpServletRequest request, Integer size,ModelMap mm) {
-		ServiceResult<List<Carousel>> returnValue=carouselService.getCarouselList(size);
+	//获取广告列表
+	@RequestMapping(value="/getAdvList",method=RequestMethod.GET)
+	public String getAdvList(HttpServletRequest request, Integer size,ModelMap mm) {
+		ServiceResult<List<AdvDTO>> returnValue=advService.getAdvList_mobile(size);
 		if (returnValue!=null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

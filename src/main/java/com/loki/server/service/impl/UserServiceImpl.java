@@ -435,7 +435,8 @@ public class UserServiceImpl extends BaseService implements UserService {
 		if (userId > 0) {
 			User user = userDao.findById(userId);
 			if (user != null) {
-				int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
+				int adminId=(int) request.getSession().getAttribute("adminId");
+				String loginIp=(String) request.getSession().getAttribute("loginIp");
 				String adminLogContent = "管理员 " + getAdminName(adminId);
 				if (user.getStatus().equals("us_on")) {
 					adminLogContent += " 停用 ";
@@ -448,7 +449,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 				}
 				adminLogContent += "了用户 " + user.getUserName() + " 的账户";
 				if (userDao.update(user)) {
-					addAdminLog(adminLogContent);
+					addAdminLog(adminLogContent,adminId,loginIp);
 					UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
 					if (userDTO != null) {
 						userDTO = setDTOExtendFields(userDTO, request);
@@ -496,15 +497,14 @@ public class UserServiceImpl extends BaseService implements UserService {
 	}
 
 	@Override
-	public boolean changePassword(int userId, String newPassword) throws ServiceException {
+	public boolean changePassword(int adminId,String loginIp,int userId, String newPassword) throws ServiceException {
 		if (userId > 0 && newPassword != null && !(newPassword.equals(""))) {
 			User user = userDao.findById(userId);
 			if (user != null) {
 				String newMd5Password = MD5.getMD5Str(newPassword);
 				user.setPassword(newMd5Password);
 				if (userDao.update(user)) {
-					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
-					addAdminLog("管理员 " + getAdminName(adminId) + " 修改了用户 " + user.getUserName() + " 的登录密码");
+					addAdminLog("管理员 " + getAdminName(adminId) + " 修改了用户 " + user.getUserName() + " 的登录密码",adminId,loginIp);
 					return true;
 				} else {
 					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
@@ -516,17 +516,16 @@ public class UserServiceImpl extends BaseService implements UserService {
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
-
+	
 	@Override
-	public boolean changePayPwd(int userId, String newPayPwd) throws ServiceException {
+	public boolean changePayPwd(int adminId,String loginIp,int userId, String newPayPwd) throws ServiceException {
 		if (userId > 0 && newPayPwd != null && !(newPayPwd.equals(""))) {
 			User user = userDao.findById(userId);
 			if (user != null) {
 				String newMd5PayPwd = MD5.getMD5Str(newPayPwd);
 				user.setPayPwd(newMd5PayPwd);
 				if (userDao.update(user)) {
-					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
-					addAdminLog("管理员 " + getAdminName(adminId) + " 修改了用户 " + user.getUserName() + " 的支付密码");
+					addAdminLog("管理员 " + getAdminName(adminId) + " 修改了用户 " + user.getUserName() + " 的支付密码",adminId,loginIp);
 					return true;
 				} else {
 					throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
@@ -540,15 +539,14 @@ public class UserServiceImpl extends BaseService implements UserService {
 	}
 
 	@Override
-	public UserDTO rebindPhone(HttpServletRequest request, int userId, String newPhone) throws ServiceException {
+	public UserDTO rebindPhone(HttpServletRequest request,int adminId,String loginIp, int userId, String newPhone) throws ServiceException {
 		if (userId > 0 && newPhone != null && !(newPhone.equals(""))) {
 			User user = userDao.findById(userId);
 			if (user != null) {
 				user.setPhone(newPhone);
 				if (userDao.update(user)) {
-					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
 					addAdminLog("管理员 " + getAdminName(adminId) + " 重新绑定了 " + user.getUserName() + " 的手机号，新手机号为 "
-							+ newPhone);
+							+ newPhone,adminId,loginIp);
 					UserDTO userDTO = UserConvertor.convertUser2UserDTO(user);
 					if (userDTO != null) {
 						userDTO = setDTOExtendFields(userDTO, request);

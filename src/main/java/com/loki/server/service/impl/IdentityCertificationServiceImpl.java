@@ -199,7 +199,8 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 			IdentityCertification identityCertification = identityCertificationDao.findById(id);
 			if (identityCertification != null) {
 				if (identityCertification.getStatus().equals("ic_verify")) {
-					int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
+					int adminId=(int) request.getSession().getAttribute("adminId");
+					String loginIp=(String) request.getSession().getAttribute("loginIp");
 					identityCertification.setAdminVerifierId(adminId);
 					identityCertification.setVerifyTime(new Timestamp(System.currentTimeMillis()));
 					String adminLogContent="管理员 "+getAdminName(adminId)+" 审核";
@@ -213,7 +214,7 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 					}
 					if (identityCertificationDao.update(identityCertification)) {
 						//管理员日志
-						addAdminLog(adminLogContent);
+						addAdminLog(adminLogContent,adminId,loginIp);
 						return true;
 					} else {
 						throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);

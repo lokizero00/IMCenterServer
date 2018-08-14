@@ -178,12 +178,10 @@ public class BaseService {
 		}
 	}
 
-	protected void addAdminLog(String logContent) {
-		int adminId = (int) SessionContext.getInstance().getSessionAttribute("adminId");
-		String ip = (String) SessionContext.getInstance().getSessionAttribute("loginIp");
+	protected void addAdminLog(String logContent,int adminId,String loginIp) {
 		AdminLog adminLog = new AdminLog();
 		adminLog.setAdminId(adminId);
-		adminLog.setIp(ip);
+		adminLog.setIp(loginIp);
 		adminLog.setContent(logContent);
 		adminLogDao.insert(adminLog);
 	}
