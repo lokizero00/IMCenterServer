@@ -11,7 +11,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>实名认证详情</title>
-<link type="image/x-icon" rel="shortcut icon" href="/images/favicon.png" />
+<link href="images/favicon.png" rel="icon" />
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=basePath%>static/bootstrap/css/style.css" rel="stylesheet">
 <link href="<%=basePath%>static/css/toastr.min.css" rel="stylesheet" />

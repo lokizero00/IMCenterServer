@@ -81,7 +81,8 @@ $(document).ready(function() {
 				if(data.status=='ic_verify'){
 					$('#btnVerify').removeAttr("disabled");
 				}else{
-					$('#btnVerify').attr('disabled',"true");
+					$('#btnVerify').hide();
+					$("#btnVerifyRefuse").hide();
 				}
 			}
 		}

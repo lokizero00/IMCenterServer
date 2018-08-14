@@ -10,7 +10,6 @@ $(document).ready(function() {
 		url : path + 's/resources/resourcesDetail.do?id='+ paramId,
 		dataType : "json",
 		success : function(data) {
-			console.log(2);
 			$("#name").val(data.name);type
 			$('#model').val(data.model);
 			$('#type').val(data.type);
@@ -18,12 +17,6 @@ $(document).ready(function() {
 			$('#description').val(data.description);
 			$('#status').val(data.status);
 			parentId=data.parentId;
-			console.log(parentId);
-			if(data.parentId!=0){
-				$('#tree').treeview('checkNode', data.parentId, {
-	                silent : true
-	            });
-			}
 			if(data.type=="menu"){
 				$('#treeDiv').hide();
 			}else{
@@ -108,17 +101,17 @@ $(document).ready(function() {
         dataType:"json",
         url:path+"s/resources/resourcesListTree.do?id=0",
         success:function(defaultData){
-        	console.log(parentId);
         	$.each(defaultData,function(index,value){
-        		console.log(value);
-//        		if(value.id==parentId){
-//        			value["state"]["checked"] = true;
-//        		}
+        		value["state"] = {};
+        		if(value.id==61){
+        			value["state"]["checked"] = true;
+        		}
         		value["selectable"] = false;
     			$.each(value.nodes,function(index,value1){
-//    				if(value1.id==parentId){
-//    					value1["state"]["checked"] = true;
-//	        		}
+    				value1["state"] = {};
+    				if(value1.id==61){
+    					value1["state"]["checked"] = true;
+	        		}
     				value1["selectable"] = false;
     				value1.nodes=[];
             	});

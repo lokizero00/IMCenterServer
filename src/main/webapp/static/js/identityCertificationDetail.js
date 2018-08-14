@@ -20,7 +20,7 @@ $(document).ready(function() {
 	$("#submit").click(function(){
 		var refuseReason=$("#ta_identityCertificationRefuseReason").val();
 		if(!refuseReason){
-			toastr.warning('填写内容不正确！');
+			toastr.warning('请填写拒绝原因！');
 			return;
 		}
 		var param = {};

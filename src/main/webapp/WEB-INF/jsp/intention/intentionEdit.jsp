@@ -11,6 +11,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>意向金修改</title>
+<link href="images/favicon.png" rel="icon" />
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=basePath%>static/css/toastr.min.css" rel="stylesheet" />
 <link href="<%=basePath%>static/bootstrap/css/style.css" rel="stylesheet">

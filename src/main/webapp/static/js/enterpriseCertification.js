@@ -35,7 +35,7 @@ $(document).ready(function() {
 			str+="</td>";
 			str+="</tr>";
 			str+="<tr>";
-			str+="<td>状态</td><td>";
+			str+="<td>状态</td><td>"; 
 			str+=data.statusName+"</td>";
 			str+="<td>当前关联</td><td>";
 			if(data.deleted){
@@ -68,7 +68,7 @@ $(document).ready(function() {
 				pmStr+="<div class='carousel-inner'>";
 				if(data.licensePicUrl!=""){
 					pmStr+="<div class='item active'>";
-					pmStr+="<img src='"+data.licensePicUrl+"' alt='First slide'>";
+					pmStr+="<img src="+path + "s/io/getImage?name="+data.licensePicUrl+" alt='First slide'>";
 					pmStr+="<div class='carousel-caption'>正面</div></div>";
 				}
 			}
@@ -81,7 +81,8 @@ $(document).ready(function() {
 				if(data.status=='ec_verify'){
 					$('#btnVerify').removeAttr("disabled");
 				}else{
-					$('#btnVerify').attr('disabled',"true");
+					$('#btnVerify').hide();
+					$("#btnVerifyRefuse").hide();
 				}
 			}
 		}

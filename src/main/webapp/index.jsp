@@ -8,7 +8,7 @@ String basePath = "//" + request.getHeader("host")+ path + "/";
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, maximum-scale=1">
 <title>Home</title>
-<link rel="icon" href="favicon.png" type="image/png">
+<link href="images/favicon.png" rel="icon" />
 <link href="<%=basePath%>static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="<%=basePath%>static/css/style.css" rel="stylesheet" type="text/css">
 <link href="<%=basePath%>static/css/font-awesome.css" rel="stylesheet" type="text/css">

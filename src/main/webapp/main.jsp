@@ -8,6 +8,7 @@ String basePath = "//" + request.getHeader("host")+ path + "/";
 <html>
 <head>
 <title>互联制造</title>
+<link href="images/favicon.png" rel="icon" />
 <style>
 	body{
 		font-size:15px;

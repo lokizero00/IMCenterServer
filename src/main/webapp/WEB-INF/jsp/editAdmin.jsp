@@ -10,6 +10,7 @@ String basePath = "//" + request.getHeader("host")+ path + "/";
     <base href="<%=basePath%>">
     
     <title>编辑管理员</title>
+    <link href="images/favicon.png" rel="icon" />
     
 	<script type="text/javascript">
 	function updateAdmin(){

@@ -36,7 +36,7 @@ public class AdminController extends BaseController{
      */
     @RequestMapping(value="/adminList.do", method= RequestMethod.GET)
     @ResponseBody
-    public String getAdminList(Integer adminCreatorId,Integer adminUpdaterId,String userName,boolean superAdmin,String status,Integer pageSize,Integer pageNo,String sortName,String sortOrder) {
+    public String getAdminList(Integer adminCreatorId,Integer adminUpdaterId,String userName,Integer superAdmin,String status,Integer pageSize,Integer pageNo,String sortName,String sortOrder) {
 		try {
 			HashMap<String,Object> map=new HashMap<>();
 			map.put("adminCreatorId", adminCreatorId);
