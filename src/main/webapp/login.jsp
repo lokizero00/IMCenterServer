@@ -10,7 +10,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>用户登陆</title>
-<link type="image/x-icon" rel="shortcut icon" href="/images/favicon.png" />
+<link href="images/favicon.png" rel="icon" />
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
 <link href="<%=basePath%>static/bootstrap/css/font-awesome.css"

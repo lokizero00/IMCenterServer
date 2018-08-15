@@ -10,6 +10,7 @@ String basePath = "//" + request.getHeader("host")+ path + "/";
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>文件上传实例</title>
+<link href="images/favicon.png" rel="icon" />
 </head>
 <body>
 	<form action="<%=basePath%>s/io/uploadImage" method="post" enctype="multipart/form-data">  

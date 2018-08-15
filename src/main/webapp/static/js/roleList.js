@@ -70,7 +70,7 @@ $(document).ready(function() {
 		}, {
 			title : '操作',
 			field : 'operate',
-			width : '12%',
+			width : '14%',
 			formatter : function(value,row,index){
 				var operate = ' <a class="authorize" href="'
 					+ (path + 's/role/roleAuthorizePage?id=')

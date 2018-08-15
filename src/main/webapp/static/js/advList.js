@@ -189,7 +189,13 @@ var TableInit = function() {
 				title : '状态',
 				field : 'state',
 				sortable : true,
-				sortName : 'state'
+				sortName : 'state',
+				formatter : function(value, row, index) {  
+					if(row.state==1){
+						return "显示";
+					}
+					return "隐藏";
+				}
 			}, {
 				title : '阅读量',
 				field : 'clickCount',
@@ -198,7 +204,7 @@ var TableInit = function() {
 			}, {
 				title : '操作',
 				field : 'operate',
-				width : '12%',
+				width : '14%',
 				events : operateEvents,
 				formatter : operateFormatter
 			} ]

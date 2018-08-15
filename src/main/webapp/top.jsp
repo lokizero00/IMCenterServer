@@ -11,6 +11,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link href="images/favicon.png" rel="icon" />
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
 </head>

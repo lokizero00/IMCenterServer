@@ -11,6 +11,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>修改广告</title>
+<link href="images/favicon.png" rel="icon" />
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
 <link href="<%=basePath%>static/summernote/css/summernote.css"

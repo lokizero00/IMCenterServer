@@ -99,7 +99,7 @@ $(document).ready(function() {
 		}, {
 			title : '操作',
 			field : 'operate',
-			width : '8%',
+			width : '10%',
 			formatter : function(value,row,index){
 				var operate = ' <a class="edit" href="'
 					+ (path + 's/admin/adminEditPage?id=')
