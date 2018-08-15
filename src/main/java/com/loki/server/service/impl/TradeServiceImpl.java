@@ -651,6 +651,13 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 				// 字段code处理
 				tradeComplex.setStatusName(getDictionariesValue("trade_status", tradeComplex.getStatus()));
 				tradeComplex.setTypeName(getDictionariesValue("trade_type", tradeComplex.getType()));
+				tradeComplex.setIdentityName(getIdentityName(tradeComplex.getIdentityId()));
+				tradeComplex.setEnterpriseName(getEnterpriseName(tradeComplex.getEnterpriseId()));
+				tradeComplex.setTradeAttachmentList(tradeAttachmentDao.findByTradeId(tradeComplex.getId()));
+				tradeComplex.setTradeIndustryList(tradeIndustryDao.findByTradeId(tradeComplex.getId()));
+				tradeComplex.setTradeInvoiceList(tradeInvoiceDao.findByTradeId(tradeComplex.getId()));
+				tradeComplex.setTradePaycodeList(tradePaycodeDao.findByTradeId(tradeComplex.getId()));
+				
 				return tradeComplex;
 			} else {
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);

@@ -154,7 +154,7 @@ public class IntentionMobileController {
 		map.put("pageNo",pageNo);
 		map.put("pageSize",pageSize);
 		
-		ServiceResult<PagedResult<IntentionJournal>> returnValue = payService.getIntentionJournal(map);
+		ServiceResult<PagedResult<IntentionJournal>> returnValue = payService.getIntentionJournal_mobile(map);
 		if (returnValue != null) {
 			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
 			mm.addAttribute("msg", returnValue.getResultCode().getMessage());

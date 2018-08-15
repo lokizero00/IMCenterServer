@@ -10,5 +10,6 @@ import com.loki.server.vo.ServiceResult;
 
 public interface PayService {
 	public ServiceResult<RechargeDTO> intentionRecharge(IntentionRechargeDTO intentionRechargeDTO,String ip);
-	public ServiceResult<PagedResult<IntentionJournal>> getIntentionJournal(Map<String,Object> map);
+	public ServiceResult<PagedResult<IntentionJournal>> getIntentionJournal_mobile(Map<String,Object> map);
+	public PagedResult<IntentionJournal> getIntentionJournal(Map<String,Object> map);
 }

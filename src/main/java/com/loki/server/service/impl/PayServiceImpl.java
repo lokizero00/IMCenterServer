@@ -21,6 +21,7 @@ import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.BillConst;
 import com.loki.server.utils.OrderNoGenerator;
 import com.loki.server.utils.ResultCodeEnums;
+import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ServiceResult;
 
 @Service
@@ -74,7 +75,7 @@ public class PayServiceImpl implements PayService {
 	}
 
 	@Override
-	public ServiceResult<PagedResult<IntentionJournal>> getIntentionJournal(Map<String, Object> map) {
+	public ServiceResult<PagedResult<IntentionJournal>> getIntentionJournal_mobile(Map<String, Object> map) {
 		ServiceResult<PagedResult<IntentionJournal>> returnValue = new ServiceResult<>();
 		try {
 			if (map != null) {
@@ -96,6 +97,28 @@ public class PayServiceImpl implements PayService {
 			returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
 		}
 		return returnValue;
+	}
+
+	@Override
+	public PagedResult<IntentionJournal> getIntentionJournal(Map<String, Object> map) {
+		try {
+			if (map != null) {
+				int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
+				int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
+				PageHelper.startPage(pageNo, pageSize);
+				PagedResult<IntentionJournal> intentionJournalList = BeanUtil.toPagedResult(intentionJournalDao.findByParam(map));
+				if (intentionJournalList != null) {
+					return intentionJournalList;
+				} else {
+					throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+				}
+			} else {
+				throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(ResultCodeEnums.UNKNOW_ERROR);
+		}
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.loki.server.controller;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,22 +9,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.loki.server.dto.IntentionDTO;
 import com.loki.server.dto.IntentionLogDTO;
+import com.loki.server.entity.IntentionJournal;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.service.IntentionService;
+import com.loki.server.service.PayService;
 import com.loki.server.utils.ResultCodeEnums;
-import com.loki.server.vo.AdvVO;
-
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/s/intention")
 public class IntentionController extends BaseController{
 	@Autowired IntentionService intentionService;
+	@Autowired 
+	PayService payService;
 
 	/**
      * 显示意向金详情页
@@ -72,6 +70,37 @@ public class IntentionController extends BaseController{
 			return responseFail(e.getMessage());
 		}
 	}
+	
+	/**
+     * 获取意向金日志(新)
+     * @return
+     */
+	@RequestMapping(value="/intentionJournal.do",method=RequestMethod.GET)
+	@ResponseBody
+	public String getIntentionJournal(HttpServletRequest request, String type,Integer intentionId,Integer userId,String innerBusiNo,String state,String checkState,String thirdChannel,String isReturn,String outRequestNo,Integer pageNo,Integer pageSize,String sortName,String sortOrder) {
+		try {
+			HashMap<String,Object> map=new HashMap<>();
+			map.put("type", type);
+			map.put("intentionId", intentionId);
+			map.put("userId", userId);
+			map.put("innerBusiNo", innerBusiNo);
+			map.put("state", state);
+			map.put("checkState", checkState);
+			map.put("thirdChannel", thirdChannel);
+			map.put("isReturn", isReturn);
+			map.put("outRequestNo", outRequestNo);
+			map.put("sortName", sortName);
+			map.put("sortOrder", sortOrder);
+			map.put("pageNo",pageNo);
+			map.put("pageSize",pageSize);
+			
+			PagedResult<IntentionJournal> returnValue = payService.getIntentionJournal(map);
+			return responseSuccess(returnValue);
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+	}
+	
 	
 	/**
      * 获取用户意向金详情
