@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.UserExtensionDao">
+	<cache eviction="LRU" type="com.loki.server.cache.RedisCache" />
+	<resultMap id="userExtensionDO" type="com.loki.server.entity.UserExtension">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="ali_account" jdbcType="VARCHAR" property="aliAccount" />
+		<result column="ali_bind" jdbcType="INTEGER" property="aliBind" />
+		<result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount" />
+		<result column="wechat_bind" jdbcType="INTEGER" property="wechatBind" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,user_id,ali_account,ali_bind,wechat_account,wechat_bind
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.loki.server.entity.UserExtension">
+		insert into
+		user_extension(user_id,ali_account,ali_bind,wechat_account,wechat_bind)
+		values(#{userId},#{aliAccount},#{aliBind},#{wechatAccount},#{wechatBind})
+	</insert>
+
+	<update id="update" parameterType="com.loki.server.entity.UserExtension">
+		update user_extension SET
+		user_id=#{userId},ali_account=#{aliAccount},ali_bind=#{aliBind},wechat_account=#{wechatAccount},wechat_bind=#{wechatBind}
+		where id=#{id}
+	</update>
+
+	<select id="findById" parameterType="int" resultMap="userExtensionDO">
+		select
+		<include refid="Base_Column_List" />
+		from user_extension
+		where id=#{_parameter}
+	</select>
+
+	<select id="findAll" resultMap="userExtensionDO">
+		select
+		<include refid="Base_Column_List" />
+		from user_extension
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from user_extension
+		where id=#{_parameter}
+	</delete>
+
+	<select id="findByUserId" parameterType="int" resultMap="userExtensionDO">
+		select
+		<include refid="Base_Column_List" />
+		from user_extension where user_id=#{_parameter}
+	</select>
+
+	<delete id="deleteByUserId" parameterType="int">
+		delete from user_extension
+		where user_id=#{_parameter}
+	</delete>
+	
+	<update id="updateByUserId" parameterType="com.loki.server.entity.UserExtension">
+		update user_extension SET
+		ali_account=#{aliAccount},ali_bind=#{aliBind},wechat_account=#{wechatAccount},wechat_bind=#{wechatBind}
+		where user_id=#{userId}
+	</update>
+</mapper>

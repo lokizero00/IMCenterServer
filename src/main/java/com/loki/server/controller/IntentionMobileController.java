@@ -168,11 +168,10 @@ public class IntentionMobileController {
 	
 	// 意向金提现申请
 	@RequestMapping(value = "/intentionRefundRequest", method = RequestMethod.POST)
-	public String intentionRefundRequest(HttpServletRequest request,Integer userId,Integer refundChannel,String refundAccount,BigDecimal amount,ModelMap mm) {
+	public String intentionRefundRequest(HttpServletRequest request,Integer userId,Integer refundChannel,BigDecimal amount,ModelMap mm) {
 		IntentionRefundRequestDTO intentionRefundRequestDTO=new IntentionRefundRequestDTO();
 		intentionRefundRequestDTO.setUserId(userId);
 		intentionRefundRequestDTO.setRefundChannel(refundChannel);
-		intentionRefundRequestDTO.setRefundAccount(refundAccount);
 		intentionRefundRequestDTO.setAmount(amount);
 		ServiceResult<Void> returnValue = intentionService.returnIntention(intentionRefundRequestDTO);
 		if (returnValue != null) {

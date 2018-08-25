@@ -258,6 +258,7 @@
 		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
 		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id,name) _attachment on _attachment.trade_id=trade.id
 		left join user as _user on _user.id=trade.user_id
+		where trade.status='trade_tendering'
 		ORDER BY create_time desc limit 10
   </select>
   

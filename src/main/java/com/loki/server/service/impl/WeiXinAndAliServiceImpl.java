@@ -1,6 +1,7 @@
 package com.loki.server.service.impl;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,16 +9,22 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeCloseRequest;
+import com.alipay.api.request.AlipayUserInfoShareRequest;
+import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeCloseResponse;
+import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
@@ -27,11 +34,14 @@ import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
+import com.loki.server.dao.UserExtensionDao;
 import com.loki.server.dto.AliRechargeDTO;
 import com.loki.server.dto.RechargeDTO;
 import com.loki.server.dto.WxRechargeDTO;
+import com.loki.server.entity.UserExtension;
 import com.loki.server.service.WeiXinAndAliService;
 import com.loki.server.utils.AliPayProperties;
+import com.loki.server.utils.OrderNoGenerator;
 import com.loki.server.utils.PayConst;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
@@ -55,6 +65,9 @@ public class WeiXinAndAliServiceImpl implements WeiXinAndAliService {
 
 	@Resource(name = "wxPayService")
 	private WxPayService wxPayService;
+
+	@Resource
+	private UserExtensionDao userExtensionDao;
 
 	@Override
 	public ServiceResult<RechargeDTO> unifiedOrder(String outTradeNo, BigDecimal totalAmount, String requestHost,
@@ -384,4 +397,128 @@ public class WeiXinAndAliServiceImpl implements WeiXinAndAliService {
 		return SpringUtils.getBean(PayConst.ALI_CONFIG_NAME, AliPayProperties.class);
 	}
 
+	/**
+	 * 获取支付宝登录infoStr
+	 * 
+	 * @return
+	 */
+	public ServiceResult<String> awakenAliAuthInfoStr(){
+		AliPayProperties baseAliProperties = new AliPayProperties();
+		ServiceResult<String> resultDO = new ServiceResult<>();
+		String targetId = OrderNoGenerator.getPayOrderNo(2);
+		String infoStr = "apiname=com.alipay.account.auth" + "&app_id=" + baseAliProperties.getAppId() + "&app_name=mc"
+				+ "&auth_type=AUTHACCOUNT" + "&biz_type=openservice" + "&method=alipay.open.auth.sdk.code.get" + "&pid="
+				+ baseAliProperties.getPid() + "&product_id=APP_FAST_LOGIN" + "&scope=kuaijie" + "&sign_type=RSA2"
+				+ "&target_id=" + targetId + "&sign_type=RSA2";
+		try {
+			String sign = AlipaySignature.rsaSign(infoStr, baseAliProperties.getAppPrivateKey(), "UTF-8", "RSA2");
+			infoStr = infoStr + "&sign=" + URLEncoder.encode(sign, "UTF-8");
+			resultDO.setResultObj(infoStr);
+			resultDO.setResultCode(ResultCodeEnums.SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultDO.setResultCode(ResultCodeEnums.ALIPAY_AUTH_ERROR);
+		}
+
+		return resultDO;
+	}
+
+	/**
+	 * 支付宝验证 --使用auth_code获取access_token与user_id
+	 * 
+	 * @author XiongXiaobo
+	 */
+	@Override
+	public ServiceResult<Void> getAlipayAccount(String authCode, int userId) {
+		ServiceResult<Void> returnValue = new ServiceResult<>();
+		try {
+			AliPayProperties baseAliProperties = new AliPayProperties();
+			// 校验参数
+			if (!StringUtils.isEmpty(authCode)) {
+				try {
+					AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",
+							baseAliProperties.getAppId(), baseAliProperties.getAppPrivateKey(), "json", "UTF-8",
+							baseAliProperties.getAliPayPublicKey(), "RSA2");
+					// 使用auth_code获取access_token与user_id
+					AlipaySystemOauthTokenRequest requests = new AlipaySystemOauthTokenRequest();
+					requests.setCode(authCode);
+					requests.setGrantType("authorization_code");
+					AlipaySystemOauthTokenResponse oauthTokenResponse = alipayClient.execute(requests);
+					if (oauthTokenResponse.isSuccess()) {
+						AlipayUserInfoShareRequest requestUser = new AlipayUserInfoShareRequest();
+						AlipayUserInfoShareResponse userinfoShareResponse = alipayClient.execute(requestUser,
+								oauthTokenResponse.getAccessToken());
+						if (userinfoShareResponse != null) {
+							String aliUserId = userinfoShareResponse.getUserId();
+							// 绑定支付宝数据
+							UserExtension userExtension = userExtensionDao.findByUserId(userId);
+							if (null != userExtension) {
+								userExtension.setAliAccount(aliUserId);
+								userExtension.setAliBind(1);
+								userExtensionDao.update(userExtension);
+							} else {
+								userExtension = new UserExtension();
+								userExtension.setUserId(userId);
+								userExtension.setAliAccount(aliUserId);
+								userExtension.setAliBind(1);
+								userExtensionDao.insert(userExtension);
+							}
+							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+						}
+					}else {
+						logger.error("支付宝获取用户信息失败，原因："+oauthTokenResponse.getMsg());
+						returnValue.setResultCode(ResultCodeEnums.ALIPAY_BIND_ACCOUNT_ERROR);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					returnValue.setResultCode(ResultCodeEnums.ALIPAY_BIND_ACCOUNT_ERROR);
+				}
+			} else {
+				returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
+		}
+		
+		return returnValue;
+	}
+	
+	/**
+	 * 识别得到用户id必须的一个值
+	 * 
+	 * @param code
+	 * @return
+	 */
+	// 根据用户的code得到用户OpenId
+	public ServiceResult<Void> getWxOpenid(String code, int userId) {
+		ServiceResult<Void> returnValue=new ServiceResult<>();
+		try{
+			WeixinUserInfoServiceImpl weixinGetCode = new WeixinUserInfoServiceImpl();
+			Map<String, Object> result = weixinGetCode.oauth2GetOpenid(code);
+			if(result!=null) {
+				String openId = (String) result.get("Openid");// 得到用户id
+				// 绑定支付宝数据
+				UserExtension userExtension = userExtensionDao.findByUserId(userId);
+				if (null != userExtension) {
+					userExtension.setWechatAccount(openId);
+					userExtension.setWechatBind(1);
+					userExtensionDao.update(userExtension);
+				} else {
+					userExtension = new UserExtension();
+					userExtension.setUserId(userId);
+					userExtension.setWechatAccount(openId);
+					userExtension.setWechatBind(1);
+					userExtensionDao.insert(userExtension);
+				}
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+			}else {
+				returnValue.setResultCode(ResultCodeEnums.WX_AUTH_ERROR);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
+		}
+		return returnValue;
+	}
 }

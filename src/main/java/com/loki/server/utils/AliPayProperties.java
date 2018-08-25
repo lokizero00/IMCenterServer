@@ -9,7 +9,16 @@ public class AliPayProperties {
     private String notifyUrl="https://www.bestimade.com/payNotify/unified/alipay";
     private String subject="互联制造预上线版";
     
-    private static AliPayProperties instance;
+    private String pid="2088131300990534";
+    
+    public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+	private static AliPayProperties instance;
     
     public AliPayProperties() {}
     

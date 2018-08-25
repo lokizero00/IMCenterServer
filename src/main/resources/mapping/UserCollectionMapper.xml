@@ -69,4 +69,9 @@
   <delete id="delete" parameterType="int">
 		delete from user_collection where id=#{_parameter}
 	</delete>
+	
+	<select id="checkExist" resultType="int">
+		select count(id)
+		from user_collection where trade_id=#{tradeId} and user_id=#{userId}
+  </select>
 </mapper>

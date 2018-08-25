@@ -2,7 +2,7 @@ package com.loki.server.utils;
 
 public enum ResultCodeEnums {
 	SUCCESS(1,"成功"),
-	UNKNOW_ERROR(-1,"未知错误"),
+	UNKNOW_ERROR(-1,"服务器错误"),
 	USER_NOT_EXIST(-2,"用户名或密码错误"),
 	PARAM_ERROR(-3,"参数错误"),
 	TOKEN_EXPIRED(-4,"令牌已失效"),
@@ -44,7 +44,12 @@ public enum ResultCodeEnums {
 	ROLE_NOT_EXIST(-40,"角色不可用"),
 	ADMIN_INSERT_FAIL(-41,"管理员添加失败"),
 	ADMIN_UPDATE_FAIL(-42,"管理员更新失败"),
-	ADMIN_INSERT_ROLE_FAIL(-43,"绑定角色失败")
+	ADMIN_INSERT_ROLE_FAIL(-43,"绑定角色失败"),
+	ALIPAY_AUTH_ERROR(-44,"支付宝授权失败"),
+	ALIPAY_BIND_ACCOUNT_ERROR(-45,"支付宝账号绑定失败"),
+	WX_AUTH_ERROR(-46,"微信授权失败"),
+	WX_BIND_OPENID_ERROR(-47,"微信账号绑定失败"),
+	REFUND_ACCOUNT_NOT_BIND(-48,"提现账户未绑定")
 	;
 
 	public int code;  

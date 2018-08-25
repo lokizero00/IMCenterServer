@@ -22,17 +22,24 @@ public class UserCollectionServiceImpl extends BaseService implements UserCollec
 	public ServiceResult<Void> addCollection(Integer userId, Integer tradeId, String type) {
 		ServiceResult<Void> returnValue = new ServiceResult<>();
 		if (userId != null && tradeId != null && userId > 0 && tradeId > 0) {
-			UserCollection uc = new UserCollection();
-			uc.setCreatorId(userId);
-			uc.setTradeId(tradeId);
-			uc.setUserId(userId);
-			uc.setType(type);
-			userCollectionDao.insert(uc);
-			if (uc.getId() > 0) {
-				tradeDao.updateCollectionCountAdd(tradeId);
+			//校验是否已收藏
+			int collectionCount=userCollectionDao.checkExist(tradeId, userId);
+			if(collectionCount<=0) {
+				UserCollection uc = new UserCollection();
+				uc.setCreatorId(userId);
+				uc.setTradeId(tradeId);
+				uc.setUserId(userId);
+				uc.setType(type);
+				userCollectionDao.insert(uc);
+				
+				if (uc.getId() > 0) {
+					tradeDao.updateCollectionCountAdd(tradeId);
+					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				} else {
+					returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
+				}
+			}else {
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-			} else {
-				returnValue.setResultCode(ResultCodeEnums.SAVE_FAIL);
 			}
 		} else {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);

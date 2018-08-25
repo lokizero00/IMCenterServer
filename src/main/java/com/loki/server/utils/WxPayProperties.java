@@ -45,8 +45,18 @@ public class WxPayProperties {
      * apiclient_cert.p12文件的绝对路径，或者如果放在项目中，请以classpath:开头指定
      */
     private String keyPath="/home/cert/wxpay/apiclient_cert.p12";
+    
+    private String appSecret="1880b57f05c8b604e63c70510f9e2d63";
 
-    /**
+    public String getAppSecret() {
+		return appSecret;
+	}
+
+	public void setAppSecret(String appSecret) {
+		this.appSecret = appSecret;
+	}
+
+	/**
      * 微信支付异步回掉地址，通知url必须为直接可访问的url，不能携带参数。
      */
     private String notifyUrl="https://www.bestimade.com/payNotify/unified/wxpay";

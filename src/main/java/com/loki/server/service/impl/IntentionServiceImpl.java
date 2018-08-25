@@ -18,6 +18,7 @@ import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.IntentionLogDao;
 import com.loki.server.dao.IntentionRefundDao;
 import com.loki.server.dao.UserBankcardDao;
+import com.loki.server.dao.UserExtensionDao;
 import com.loki.server.dto.IntentionDTO;
 import com.loki.server.dto.IntentionLogDTO;
 import com.loki.server.dto.IntentionRefundRequestDTO;
@@ -28,6 +29,7 @@ import com.loki.server.entity.IntentionLog;
 import com.loki.server.entity.IntentionRefund;
 import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.UserBankcard;
+import com.loki.server.entity.UserExtension;
 import com.loki.server.service.IntentionService;
 import com.loki.server.utils.BeanUtil;
 import com.loki.server.utils.ResultCodeEnums;
@@ -42,6 +44,7 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 	@Resource UserBankcardDao userBankcardDao;
 	@Resource DictionariesDao dictionariesDao;
 	@Resource IntentionRefundDao intentionRefundDao;
+	@Resource UserExtensionDao userExtensionDao;
 	
 	DozerBeanMapper mapper = new DozerBeanMapper();
 	
@@ -251,25 +254,36 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
     		if(intentionRefundRequestDTO!=null && intentionRefundRequestDTO.getAmount().compareTo(BigDecimal.ZERO)==1) {
     			//拿到账户
     	        Intention intention=intentionDao.findByUserId(intentionRefundRequestDTO.getUserId());
-    	        if(intention!=null) {
-    	        		if (!(intention.getAvailable().compareTo(intentionRefundRequestDTO.getAmount())==-1)) {
-    	        			IntentionRefund intentionRefund=new IntentionRefund();
-    	        			intentionRefund.setIntentionId(intention.getId());
-    	        			intentionRefund.setUserId(intention.getUserId());
-    	        			intentionRefund.setRequestTime(new Timestamp(System.currentTimeMillis()));
-    	        			intentionRefund.setAmount(intentionRefundRequestDTO.getAmount());
-    	        			intentionRefund.setRefundItem(0);
-    	        			intentionRefund.setState(0);
-    	        			intentionRefund.setRefundType(1);
-    	        			intentionRefund.setRefundChannel(intentionRefundRequestDTO.getRefundChannel());
-    	        			intentionRefund.setRefundAccount(intentionRefundRequestDTO.getRefundAccount());
-    	        			intentionRefundDao.insert(intentionRefund);
-    	        			returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-    	        		}else {
-    	        			returnValue.setResultCode(ResultCodeEnums.INTENTION_AVAILABLE_NOT_ENOUGH);
-    	        		}
+    	        UserExtension userExtension=userExtensionDao.findByUserId(intentionRefundRequestDTO.getUserId());
+    	        String refundAccount="";
+    	        if(intentionRefundRequestDTO.getRefundChannel()==0) {
+    	        		refundAccount=userExtension.getWechatAccount();
+    	        }else if(intentionRefundRequestDTO.getRefundChannel()==1) {
+    	        		refundAccount=userExtension.getAliAccount();
+    	        }
+    	        if(userExtension!=null && refundAccount!=null && refundAccount!="") {
+	    	        	if(intention!=null) {
+	    	        		if (!(intention.getAvailable().compareTo(intentionRefundRequestDTO.getAmount())==-1)) {
+	    	        			IntentionRefund intentionRefund=new IntentionRefund();
+	    	        			intentionRefund.setIntentionId(intention.getId());
+	    	        			intentionRefund.setUserId(intention.getUserId());
+	    	        			intentionRefund.setRequestTime(new Timestamp(System.currentTimeMillis()));
+	    	        			intentionRefund.setAmount(intentionRefundRequestDTO.getAmount());
+	    	        			intentionRefund.setRefundItem(0);
+	    	        			intentionRefund.setState(0);
+	    	        			intentionRefund.setRefundType(1);
+	    	        			intentionRefund.setRefundChannel(intentionRefundRequestDTO.getRefundChannel());
+	    	        			intentionRefund.setRefundAccount(refundAccount);
+	    	        			intentionRefundDao.insert(intentionRefund);
+	    	        			returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+	    	        		}else {
+	    	        			returnValue.setResultCode(ResultCodeEnums.INTENTION_AVAILABLE_NOT_ENOUGH);
+	    	        		}
+	    	        }else {
+	    	        		returnValue.setResultCode(ResultCodeEnums.INTENTION_NOT_EXIST);
+	    	        }
     	        }else {
-    	        		returnValue.setResultCode(ResultCodeEnums.INTENTION_NOT_EXIST);
+    	        		returnValue.setResultCode(ResultCodeEnums.REFUND_ACCOUNT_NOT_BIND);
     	        }
     		}else {
     			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);

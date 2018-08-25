@@ -245,6 +245,10 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 					if(trade.getUserId()==userId) {
 						map.remove("userId");
 					}
+					if(trade.getStatus().equals("trade_docking")) {
+						int dockingTradeId=trade.getDockingId();
+						map.put("id", dockingTradeId);
+					}
 					int pageNo = map.get("pageNo") == null ? 1 : (int) map.get("pageNo");
 					int pageSize = map.get("pageSize") == null ? 10 : (int) map.get("pageSize");
 					PageHelper.startPage(pageNo, pageSize);
@@ -259,10 +263,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 						tradeDockingDTO.setEnterpriseName(getEnterpriseName(tradeDockingDTO.getEnterpriseId()));
 						tradeDockingDTO.setDockerAvatar(fetchUserAvatar(tradeDockingDTO.getUserId()));
 						tradeDockingDTO.setIsChoose(trade.getDockingId()==tradeDocking.getId() ? 1:0);
-						//对接中，只显示已对接的申请人
-						if(trade.getStatus().equals("trade_docking") && trade.getDockingId()==tradeDocking.getId()) {
-							tradeDockingDTOList.add(tradeDockingDTO);
-						}
+						tradeDockingDTOList.add(tradeDockingDTO);
 					}
 					Page data=(Page) tradeDockingList;
 					PagedResult<TradeDockingDTO> pagedList=BeanUtil.toPagedResult(tradeDockingDTOList,data.getPageNum(),data.getPageSize(),data.getTotal(),data.getPages());

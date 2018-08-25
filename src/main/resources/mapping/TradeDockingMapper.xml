@@ -64,6 +64,9 @@
 			<if test="type != null and type !=''">
 				and type=#{type}
 			</if>
+			<if test="id !=null and id !=0">
+				and id=#{id}
+			</if>
 		</where>
 		ORDER BY
 		<choose>

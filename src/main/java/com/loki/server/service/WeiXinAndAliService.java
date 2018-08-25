@@ -24,4 +24,9 @@ public interface WeiXinAndAliService {
      * @throws BizException
      */
     public String closeOrder(String outTradeNo,int payType) throws ServiceException ;
+    
+    public ServiceResult<String> awakenAliAuthInfoStr();
+    
+    public ServiceResult<Void> getAlipayAccount(String authCode, int userId) ;
+    public ServiceResult<Void> getWxOpenid(String code, int userId) ;
 }
