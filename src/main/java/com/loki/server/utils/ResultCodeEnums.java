@@ -49,7 +49,10 @@ public enum ResultCodeEnums {
 	ALIPAY_BIND_ACCOUNT_ERROR(-45,"支付宝账号绑定失败"),
 	WX_AUTH_ERROR(-46,"微信授权失败"),
 	WX_BIND_OPENID_ERROR(-47,"微信账号绑定失败"),
-	REFUND_ACCOUNT_NOT_BIND(-48,"提现账户未绑定")
+	REFUND_ACCOUNT_NOT_BIND(-48,"提现账户未绑定"),
+	ALIPAY_REFUND_ERROR(-49,"支付宝转账失败"),
+	WX_REFUND_ERROR(-50,"微信转账失败"),
+	INTENTION_REFUND_CHANNEL_ERROR(-51,"转账方式错误")
 	;
 
 	public int code;  

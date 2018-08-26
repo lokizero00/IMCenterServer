@@ -122,9 +122,9 @@ public class TradeController extends BaseController{
      */
 	@RequestMapping(value="/tradeVerify.do",method=RequestMethod.POST)
 	@ResponseBody
-	public String tradeVerify(HttpServletRequest request,HttpSession httpSession, Integer tradeId, String verifyResult, String refuseReason) {
+	public String tradeVerify(HttpServletRequest request,Integer tradeId, String verifyResult, String refuseReason) {
 		try {
-			int adminId=(int) httpSession.getAttribute("adminId");
+			int adminId=(int) request.getSession().getAttribute("adminId");
 			tradeService.tradeVerify(tradeId, verifyResult, refuseReason, adminId);
 			return responseSuccess();
 		}catch(Exception e) {

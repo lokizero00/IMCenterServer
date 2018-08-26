@@ -24,7 +24,7 @@ public class IntentionController extends BaseController{
 	@Autowired IntentionService intentionService;
 	@Autowired 
 	PayService payService;
-
+	
 	/**
      * 显示意向金详情页
      * @return
@@ -170,4 +170,16 @@ public class IntentionController extends BaseController{
 			return responseFail(e.getMessage());
 		}
 	}
+	
+    @ResponseBody
+    @RequestMapping(value = "/passIntentionCash.do",method = RequestMethod.POST)
+    public String passIntentionCash(HttpServletRequest request,Integer intentionRefundId) {
+    		try {
+    			int adminId=(int) request.getSession().getAttribute("adminId");
+			intentionService.passIntentionCash(intentionRefundId, adminId);
+			return responseSuccess();
+		}catch(Exception e) {
+			return responseFail(e.getMessage());
+		}
+    }
 }

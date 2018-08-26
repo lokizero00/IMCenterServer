@@ -31,7 +31,10 @@ import com.loki.server.entity.PagedResult;
 import com.loki.server.entity.UserBankcard;
 import com.loki.server.entity.UserExtension;
 import com.loki.server.service.IntentionService;
+import com.loki.server.service.WeiXinAndAliService;
 import com.loki.server.utils.BeanUtil;
+import com.loki.server.utils.BillConst;
+import com.loki.server.utils.OrderNoGenerator;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ServiceResult;
@@ -45,6 +48,8 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 	@Resource DictionariesDao dictionariesDao;
 	@Resource IntentionRefundDao intentionRefundDao;
 	@Resource UserExtensionDao userExtensionDao;
+	
+	@Resource WeiXinAndAliService weiXinAndAliService;
 	
 	DozerBeanMapper mapper = new DozerBeanMapper();
 	
@@ -255,15 +260,18 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
     			//拿到账户
     	        Intention intention=intentionDao.findByUserId(intentionRefundRequestDTO.getUserId());
     	        UserExtension userExtension=userExtensionDao.findByUserId(intentionRefundRequestDTO.getUserId());
+    	        
     	        String refundAccount="";
-    	        if(intentionRefundRequestDTO.getRefundChannel()==0) {
+    	        if(userExtension!=null && intentionRefundRequestDTO.getRefundChannel()==0) {
     	        		refundAccount=userExtension.getWechatAccount();
-    	        }else if(intentionRefundRequestDTO.getRefundChannel()==1) {
+    	        }else if(userExtension!=null && intentionRefundRequestDTO.getRefundChannel()==1) {
     	        		refundAccount=userExtension.getAliAccount();
     	        }
+    	        
     	        if(userExtension!=null && refundAccount!=null && refundAccount!="") {
 	    	        	if(intention!=null) {
 	    	        		if (!(intention.getAvailable().compareTo(intentionRefundRequestDTO.getAmount())==-1)) {
+	    	        			String businessNo=OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.CASH.getKey());
 	    	        			IntentionRefund intentionRefund=new IntentionRefund();
 	    	        			intentionRefund.setIntentionId(intention.getId());
 	    	        			intentionRefund.setUserId(intention.getUserId());
@@ -274,7 +282,20 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 	    	        			intentionRefund.setRefundType(1);
 	    	        			intentionRefund.setRefundChannel(intentionRefundRequestDTO.getRefundChannel());
 	    	        			intentionRefund.setRefundAccount(refundAccount);
-	    	        			intentionRefundDao.insert(intentionRefund);
+	    	        			intentionRefund.setOutRequestNo(businessNo);
+	    	        			
+	    	        			// 意向金冻结
+    						intention.setAvailable(intention.getAvailable().add(intentionRefundRequestDTO.getAmount().negate()));
+    						intention.setTotal(intention.getAvailable().add(intentionRefundRequestDTO.getAmount().negate()));
+    						intention.setFreeze(intention.getFreeze().add(intentionRefundRequestDTO.getAmount()));
+    						intentionDao.update(intention);
+    						// 创建意向金日志
+    						String intentionLogContent="您申请了意向金提现，冻结金额："+intentionRefundRequestDTO.getAmount();
+    						int journalId=addIntentionJournal("02",intention.getId(),intention.getUserId(),businessNo,"",intentionRefundRequestDTO.getAmount().negate(),intentionLogContent);
+    						
+    						intentionRefund.setJournalId(journalId);
+    						intentionRefundDao.insert(intentionRefund);
+    						
 	    	        			returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 	    	        		}else {
 	    	        			returnValue.setResultCode(ResultCodeEnums.INTENTION_AVAILABLE_NOT_ENOUGH);
@@ -313,5 +334,33 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 			throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
 		}
 	}
+	
+	/**
+     * 通过提现申请
+     * @param intentionRefundId
+     * @return
+     */
+    @Override
+    public void passIntentionCash(int intentionRefundId,int adminPayerId) throws ServiceException{
+    		try {
+    			if(intentionRefundId<=0) {
+    				throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+    			}
+    			
+    			IntentionRefund intentionRefund=intentionRefundDao.findById(intentionRefundId);
+    			if(intentionRefund==null) {
+    				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+    			}
+    			
+    			if(intentionRefund.getState()!=0) {
+    				throw new ServiceException(ResultCodeEnums.DATA_INVALID);
+    			}
+    			
+    			weiXinAndAliService.refund(intentionRefund,adminPayerId);
+    		}catch(Exception e) {
+    			e.printStackTrace();
+    			throw new ServiceException(ResultCodeEnums.UNKNOW_ERROR);
+    		}
+    }
 
 }

@@ -3,6 +3,7 @@ package com.loki.server.service;
 import java.math.BigDecimal;
 
 import com.loki.server.dto.RechargeDTO;
+import com.loki.server.entity.IntentionRefund;
 import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ServiceResult;
 
@@ -29,4 +30,6 @@ public interface WeiXinAndAliService {
     
     public ServiceResult<Void> getAlipayAccount(String authCode, int userId) ;
     public ServiceResult<Void> getWxOpenid(String code, int userId) ;
+    
+    public void refund(IntentionRefund intentionRefund,int adminPayerId) throws ServiceException;
 }

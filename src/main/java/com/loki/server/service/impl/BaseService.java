@@ -67,7 +67,7 @@ public class BaseService {
 		tradeLogDao.insert(tradeLog);
 	}
 
-	protected void addIntentionJournal(String type,int intentionId,int userId,String innerBusiNo, BigDecimal amount, String logContent) {
+	protected int addIntentionJournal(String type,int intentionId,int userId,String innerBusiNo,String outRequestNo, BigDecimal amount, String logContent) {
 		IntentionJournal intentionJournal = new IntentionJournal();
 		intentionJournal.setType(type);
 		intentionJournal.setIntentionId(intentionId);
@@ -79,7 +79,9 @@ public class BaseService {
 		intentionJournal.setOpTime(new Timestamp(System.currentTimeMillis()));
 		intentionJournal.setNeedThirdConfirm(0);
 		intentionJournal.setMemo(logContent);
+		intentionJournal.setOutRequestNo(outRequestNo);
 		intentionJournalDao.insert(intentionJournal);
+		return intentionJournal.getId();
 	}
 
 	protected String getDictionariesValue(String type, String code) {

@@ -21,6 +21,7 @@ public interface IntentionService {
 	IntentionDTO getIntention(int intentionId) throws ServiceException;
 	PagedResult<IntentionLogDTO> getIntentionLog(Map<String,Object> map);
 	boolean editIntention(IntentionDTO intentionDto) throws ServiceException;
+	void passIntentionCash(int intentionRefundId,int adminPayerId) throws ServiceException;
 	
 	//mobile
 	ServiceResult<Intention> getIntention_mobile(int userId);

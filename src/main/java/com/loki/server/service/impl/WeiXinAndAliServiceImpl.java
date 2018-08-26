@@ -1,7 +1,10 @@
 package com.loki.server.service.impl;
 
 import java.math.BigDecimal;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +12,7 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.alipay.api.AlipayApiException;
@@ -17,10 +21,12 @@ import com.alipay.api.AlipayResponse;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeCloseRequest;
 import com.alipay.api.request.AlipayUserInfoShareRequest;
+import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeCloseResponse;
@@ -34,22 +40,33 @@ import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
+import com.loki.server.dao.IntentionDao;
+import com.loki.server.dao.IntentionJournalDao;
+import com.loki.server.dao.IntentionRefundDao;
 import com.loki.server.dao.UserExtensionDao;
 import com.loki.server.dto.AliRechargeDTO;
 import com.loki.server.dto.RechargeDTO;
+import com.loki.server.dto.Transfer;
 import com.loki.server.dto.WxRechargeDTO;
+import com.loki.server.entity.Intention;
+import com.loki.server.entity.IntentionJournal;
+import com.loki.server.entity.IntentionRefund;
 import com.loki.server.entity.UserExtension;
 import com.loki.server.service.WeiXinAndAliService;
 import com.loki.server.utils.AliPayProperties;
+import com.loki.server.utils.BillConst;
+import com.loki.server.utils.ForwardRequest;
 import com.loki.server.utils.OrderNoGenerator;
 import com.loki.server.utils.PayConst;
 import com.loki.server.utils.ResultCodeEnums;
 import com.loki.server.utils.ServiceException;
 import com.loki.server.utils.SpringUtils;
+import com.loki.server.utils.WxPayProperties;
+import com.loki.server.utils.XmlUtil;
 import com.loki.server.vo.ServiceResult;
 
 @Service
-public class WeiXinAndAliServiceImpl implements WeiXinAndAliService {
+public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAliService {
 
 	private static final String SUCCESS = "SUCCESS";
 	//
@@ -68,6 +85,15 @@ public class WeiXinAndAliServiceImpl implements WeiXinAndAliService {
 
 	@Resource
 	private UserExtensionDao userExtensionDao;
+
+	@Resource
+	private IntentionRefundDao intentionRefundDao;
+
+	@Resource
+	private IntentionDao intentionDao;
+
+	@Resource
+	IntentionJournalDao intentionJournalDao;
 
 	@Override
 	public ServiceResult<RechargeDTO> unifiedOrder(String outTradeNo, BigDecimal totalAmount, String requestHost,
@@ -402,7 +428,8 @@ public class WeiXinAndAliServiceImpl implements WeiXinAndAliService {
 	 * 
 	 * @return
 	 */
-	public ServiceResult<String> awakenAliAuthInfoStr(){
+	@Override
+	public ServiceResult<String> awakenAliAuthInfoStr() {
 		AliPayProperties baseAliProperties = new AliPayProperties();
 		ServiceResult<String> resultDO = new ServiceResult<>();
 		String targetId = OrderNoGenerator.getPayOrderNo(2);
@@ -465,8 +492,8 @@ public class WeiXinAndAliServiceImpl implements WeiXinAndAliService {
 							}
 							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 						}
-					}else {
-						logger.error("支付宝获取用户信息失败，原因："+oauthTokenResponse.getMsg());
+					} else {
+						logger.error("支付宝获取用户信息失败，原因：" + oauthTokenResponse.getMsg());
 						returnValue.setResultCode(ResultCodeEnums.ALIPAY_BIND_ACCOUNT_ERROR);
 					}
 				} catch (Exception e) {
@@ -476,27 +503,28 @@ public class WeiXinAndAliServiceImpl implements WeiXinAndAliService {
 			} else {
 				returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
 		}
-		
+
 		return returnValue;
 	}
-	
+
 	/**
 	 * 识别得到用户id必须的一个值
 	 * 
 	 * @param code
 	 * @return
 	 */
+	@Override
 	// 根据用户的code得到用户OpenId
 	public ServiceResult<Void> getWxOpenid(String code, int userId) {
-		ServiceResult<Void> returnValue=new ServiceResult<>();
-		try{
+		ServiceResult<Void> returnValue = new ServiceResult<>();
+		try {
 			WeixinUserInfoServiceImpl weixinGetCode = new WeixinUserInfoServiceImpl();
 			Map<String, Object> result = weixinGetCode.oauth2GetOpenid(code);
-			if(result!=null) {
+			if (result != null) {
 				String openId = (String) result.get("Openid");// 得到用户id
 				// 绑定支付宝数据
 				UserExtension userExtension = userExtensionDao.findByUserId(userId);
@@ -512,13 +540,205 @@ public class WeiXinAndAliServiceImpl implements WeiXinAndAliService {
 					userExtensionDao.insert(userExtension);
 				}
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
-			}else {
+			} else {
 				returnValue.setResultCode(ResultCodeEnums.WX_AUTH_ERROR);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			returnValue.setResultCode(ResultCodeEnums.UNKNOW_ERROR);
 		}
 		return returnValue;
+	}
+	
+	/**
+     * 退款- 根据orderType字段退款
+     * @param acctJournal
+     * @param acctRefundBill
+     * @return
+     * @throws BizException
+     */
+	@Override
+    public void refund(IntentionRefund intentionRefund,int adminPayerId) throws ServiceException {
+        switch (intentionRefund.getRefundChannel()){
+            case 1://支付宝
+                //支付宝转账
+                AlipayFundTransToaccountTransferResponse response=aliTransfer(intentionRefund,adminPayerId);
+                if(!response.getCode().equals("10000")){
+                    throw new ServiceException(ResultCodeEnums.ALIPAY_REFUND_ERROR);
+                }
+                break;
+            case 2://微信
+                //微信转账
+                Map<String, String> map=WxTransfer(intentionRefund,adminPayerId);
+                if (!"SUCCESS".equals(map.get("result_code"))) {
+                	throw new ServiceException(ResultCodeEnums.WX_REFUND_ERROR);
+                }
+                break;
+            default:
+            		throw new ServiceException(ResultCodeEnums.INTENTION_REFUND_CHANNEL_ERROR);
+        }
+    }
+
+	/**
+	 * 支付宝转账
+	 * 
+	 * @return
+	 */
+	private AlipayFundTransToaccountTransferResponse aliTransfer(IntentionRefund intentionRefund,int adminPayerId) {
+		AliPayProperties depProperties = aliUnifiedOrder();
+		AlipayClient alipayClient = new DefaultAlipayClient(depProperties.getGatewayUrl(), depProperties.getAppId(),
+				depProperties.getAppPrivateKey(), PayConst.FORMAT, PayConst.CHARSET, depProperties.getAliPayPublicKey(),
+				PayConst.SIGN_TYPE);
+		AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
+		AlipayFundTransToaccountTransferResponse response = null;
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, String> requestMap = new HashMap<>();
+		requestMap.put("out_biz_no", intentionRefund.getOutRequestNo());
+		requestMap.put("payee_type", "ALIPAY_USERID");
+		requestMap.put("payee_account", intentionRefund.getRefundAccount());
+		requestMap.put("amount", intentionRefund.getAmount() + "");
+		requestMap.put("remark", "互联制造意向金提现");
+		try {
+			request.setBizContent(mapper.writeValueAsString(requestMap));
+			response = alipayClient.execute(request);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		} catch (AlipayApiException e) {
+			e.printStackTrace();
+		}
+		// 则为退款成功
+		if (response.getCode().equals("10000")) {
+			returnDepositHandle(true, intentionRefund,null,adminPayerId);
+		} else {
+			returnDepositHandle(false, intentionRefund,response.getSubMsg(),adminPayerId);
+		}
+		// 则转账成功
+		return response;
+	}
+
+	/**
+	 * 微信转账
+	 * 
+	 * @return
+	 */
+	private Map<String, String> WxTransfer(IntentionRefund intentionRefund,int adminPayerId) {
+		String TRANSFER_URL="https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+		// 微信转账
+		Transfer transfer = new Transfer();
+		transfer.setMch_appid(WxPayProperties.getInstance().getAppId());
+		transfer.setMchid(WxPayProperties.getInstance().getMchId());
+		// 拿到openid
+		transfer.setOpenid(intentionRefund.getRefundAccount());
+		// 将单位元转换为分
+		BigDecimal money = null;
+		money = intentionRefund.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN);
+		transfer.setAmount(money.intValue());
+//		transfer.setRe_user_name(acctRefundBill.getUserName());
+		transfer.setPartner_trade_no(intentionRefund.getOutRequestNo());
+		String nonceStr = OrderNoGenerator.getRandomStr(12);// 随机生成一段字符串
+		transfer.setNonce_str(nonceStr);
+		// 拿到IP
+		InetAddress address = null;// 获取的是本地的IP地址 //PC-20140317PXKX/192.168.0.121
+		try {
+			address = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		String hostAddress = address.getHostAddress();// 192.168.0.121
+		transfer.setSpbill_create_ip(hostAddress);
+
+		HashMap hashMap = new HashMap();
+		hashMap.put("mch_appid", transfer.getMch_appid());
+		hashMap.put("mchid", transfer.getMchid());
+		hashMap.put("nonce_str", transfer.getNonce_str());
+		hashMap.put("partner_trade_no", transfer.getPartner_trade_no());
+		hashMap.put("openid", transfer.getOpenid());
+		hashMap.put("check_name", transfer.getCheck_name());
+//		hashMap.put("re_user_name", transfer.getRe_user_name());
+		hashMap.put("amount", transfer.getAmount() + "");
+		hashMap.put("desc", transfer.getDesc());
+		hashMap.put("spbill_create_ip", transfer.getSpbill_create_ip());
+		// 拿到签名
+		String sign = SignUtils.createSign(hashMap, WxPayConstants.SignType.MD5, WxPayProperties.getInstance().getMchKey(),
+				false);
+		transfer.setSign(sign);// 设置签名
+		// 转化成xml格式 便于发送请求
+		String requestXml = XmlUtil.objToXml(transfer, "utf-8");
+		// 发送请求
+		String responseDate = ForwardRequest.httpPostSsl(TRANSFER_URL, requestXml, "UTF-8",
+				wxPayService.getConfig().getKeyPath(), wxPayService.getConfig().getMchId());
+		Map<String, String> map = new HashMap<>();
+		if (StringUtils.isEmpty(responseDate)) {
+			// 转换格式
+			map = XmlUtil.xmlStrToMap(responseDate);
+			if (map.size() > 0) {
+				if (map.get("result_code").equals("SUCCESS") && map.get("return_code").equals("SUCCESS")) {
+					returnDepositHandle(true,intentionRefund,null,adminPayerId);
+				} else {
+					returnDepositHandle(false,intentionRefund,map.get("return_msg"),adminPayerId);
+				}
+			}
+		}
+		return map;
+	}
+
+	/**
+	 * 退押金回调业务处理
+	 * 
+	 * @param refundStatus
+	 *            交易状态
+	 * @param intentionRefund
+	 * @throws RuntimeException
+	 */
+	private void returnDepositHandle(Boolean refundStatus, IntentionRefund intentionRefund,String errorMsg,int adminPayerId) throws RuntimeException {
+		if (refundStatus) {
+			// 交易成功
+			intentionRefund.setState(PayConst.DepositPayBackType.RETURN_SUCCESS.getIndex());
+		} else {
+			// 交易失败
+			intentionRefund.setState(PayConst.DepositPayBackType.RETURN_ERROR.getIndex());
+			intentionRefund.setErrorMsg(errorMsg);
+
+		}
+		intentionRefund.setAdminPayerId(adminPayerId);
+		intentionRefund.setFinishTime(new Timestamp(System.currentTimeMillis()));
+		intentionRefundDao.update(intentionRefund);
+
+		// 退押金成功则更新账户
+		if (refundStatus) {
+			try {
+				Intention intention = intentionDao.findById(intentionRefund.getIntentionId());
+				// 退款成功，清楚冻结的提现金额
+				intention.setFreeze(intention.getFreeze().add(intentionRefund.getAmount().negate()));
+				intentionDao.update(intention);
+				// 更新流水状态
+				IntentionJournal intentionJournal = intentionJournalDao.findById(intentionRefund.getJournalId());
+				if (intentionJournal != null) {
+					intentionJournal.setState("01");
+					intentionJournal.setThirdReceiptTime(new Timestamp(System.currentTimeMillis()));
+					intentionJournalDao.update(intentionJournal);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				Intention intention = intentionDao.findById(intentionRefund.getIntentionId());
+				// 退款失败，退还冻结的提现金额
+				intention.setFreeze(intention.getFreeze().add(intentionRefund.getAmount().negate()));
+				intention.setAvailable(intention.getAvailable().add(intentionRefund.getAmount()));
+				intention.setTotal(intention.getAvailable().add(intentionRefund.getAmount()));
+				intentionDao.update(intention);
+				// 更新流水状态
+				IntentionJournal intentionJournal = intentionJournalDao.findById(intentionRefund.getJournalId());
+				if (intentionJournal != null) {
+					intentionJournal.setState("02");
+					intentionJournal.setThirdReceiptTime(new Timestamp(System.currentTimeMillis()));
+					intentionJournalDao.update(intentionJournal);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

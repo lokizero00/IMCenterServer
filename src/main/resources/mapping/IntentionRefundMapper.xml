@@ -18,19 +18,20 @@
     <result column="refund_channel" jdbcType="INTEGER" property="refundChannel" />
     <result column="refund_account" jdbcType="VARCHAR" property="refundAccount" />
     <result column="admin_payer_id" jdbcType="INTEGER" property="adminPayerId" />
+    <result column="error_msg" jdbcType="VARCHAR" property="errorMsg" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id,intention_id,user_id,request_time,amount,refund_item,finish_time,journal_id,state,out_request_no,refund_type,refund_channel,refund_account,admin_payer_id
+    id,intention_id,user_id,request_time,amount,refund_item,finish_time,journal_id,state,out_request_no,refund_type,refund_channel,refund_account,admin_payer_id,error_msg
   </sql>
   
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.IntentionRefund">
-		insert into intention_refund(intention_id,user_id,request_time,amount,refund_item,finish_time,journal_id,state,out_request_no,refund_type,refund_channel,refund_account,admin_payer_id) 
-		values(#{intentionId},#{userId},now(),#{amount},#{refundItem},#{finishTime},#{journalId},#{state},#{outRequestNo},#{refundType},#{refundChannel},#{refundAccount},#{adminPayerId})
+		insert into intention_refund(intention_id,user_id,request_time,amount,refund_item,finish_time,journal_id,state,out_request_no,refund_type,refund_channel,refund_account,admin_payer_id,error_msg) 
+		values(#{intentionId},#{userId},now(),#{amount},#{refundItem},#{finishTime},#{journalId},#{state},#{outRequestNo},#{refundType},#{refundChannel},#{refundAccount},#{adminPayerId},#{errorMsg})
 	</insert>
 
   <update id="update" parameterType="com.loki.server.entity.IntentionRefund">
-  	update intention_refund SET intention_id=#{intentionId},user_id=#{userId},request_time=#{requestTime},amount=#{amount},refund_item=#{refundItem},finish_time=#{finishTime},journal_id=#{journalId},state=#{state},out_request_no=#{outRequestNo},refund_type=#{refundType},refund_channel=#{refundChannel},refund_account=#{refundAccount},admin_payer_id=#{adminPayerId} where id=#{id}
+  	update intention_refund SET intention_id=#{intentionId},user_id=#{userId},request_time=#{requestTime},amount=#{amount},refund_item=#{refundItem},finish_time=#{finishTime},journal_id=#{journalId},state=#{state},out_request_no=#{outRequestNo},refund_type=#{refundType},refund_channel=#{refundChannel},refund_account=#{refundAccount},admin_payer_id=#{adminPayerId},error_msg=#{errorMsg} where id=#{id}
   </update>
   
   <select id="findById" parameterType="int" resultMap="intentionRefundDO">
