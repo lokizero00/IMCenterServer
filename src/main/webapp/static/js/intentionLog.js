@@ -23,7 +23,7 @@ var TableInit = function() {
 		$('#tb_intentionLog')
 				.bootstrapTable(
 						{
-							url : path + 's/intention/intentionLog.do', // 请求后台的URL（*）
+							url : path + 's/intention/intentionJournal.do', // 请求后台的URL（*）
 							method : 'get', // 请求方式（*）
 							toolbar : '#toolbar', // 工具按钮用哪个容器
 							striped : true, // 是否显示行间隔色
@@ -65,34 +65,37 @@ var TableInit = function() {
 													+ index + 1;
 										}
 									}, {
-										title : '日志',
-										field : 'content',
-										sortable : false
-									}, {
-										title : '变更',
-										field : 'changeAmount',
-										sortable : false
-									}, {
-										title : '可用',
-										field : 'availableAmount',
-										sortable : false
-									}, {
-										title : '角色',
-										field : 'logRoleName',
-										sortable : false
-									}, {
-										title : '用户',
-										field : 'logOperatorName',
-										sortable : false
+										title : '用户名',
+										field : 'userName'
 									}, {
 										title : '类型',
-										field : 'relationTypeName',
+										field : 'type',
+										formatter : function(value, row, index) {
+											if(row.type=="01"){
+												return "预存款(充值)";
+											}else if(row.type=="02"){
+												return "意向金提现";
+											}else if(row.type=="03"){
+												return "意向金冻结";
+											}else if(row.type=="04"){
+												return "意向金解冻";
+											}
+										}
+									}, {
+										title : '内部业务编号',
+										field : 'innerBusiNo'
+									}, {
+										title : '金额',
+										field : 'amount'
+									}, {
+										title : '备注',
+										field : 'memo',
 										sortable : false
 									}, {
 										title : '时间',
-										field : 'createTime',
+										field : 'opTime',
 										sortable : true,
-										sortName : 'create_time',
+										sortName : 'opTime',
 										formatter : operateDateFormatter
 									} ]
 						});

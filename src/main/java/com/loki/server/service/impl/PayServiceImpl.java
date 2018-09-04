@@ -25,7 +25,7 @@ import com.loki.server.utils.ServiceException;
 import com.loki.server.vo.ServiceResult;
 
 @Service
-public class PayServiceImpl implements PayService {
+public class PayServiceImpl extends BaseService implements PayService {
 	@Resource IntentionJournalDao intentionJournalDao;
 	@Resource WeiXinAndAliService weiXinAndAliService;
 	@Resource IntentionDao intentionDao;
@@ -108,6 +108,9 @@ public class PayServiceImpl implements PayService {
 				PageHelper.startPage(pageNo, pageSize);
 				PagedResult<IntentionJournal> intentionJournalList = BeanUtil.toPagedResult(intentionJournalDao.findByParam(map));
 				if (intentionJournalList != null) {
+					for(IntentionJournal intentionJournal : intentionJournalList.getRows()) {
+						intentionJournal.setUserName(getUserName(intentionJournal.getUserId()));;
+					}
 					return intentionJournalList;
 				} else {
 					throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);

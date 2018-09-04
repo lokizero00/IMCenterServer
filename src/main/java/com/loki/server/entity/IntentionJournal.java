@@ -11,6 +11,7 @@ public class IntentionJournal implements Serializable{
 	private String type;
 	private int intentionId;
 	private int userId;
+	private String userName;
 	private String innerBusiNo;
 	private BigDecimal amount;
 	private String state;
@@ -125,5 +126,11 @@ public class IntentionJournal implements Serializable{
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }

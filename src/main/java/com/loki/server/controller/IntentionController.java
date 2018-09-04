@@ -171,15 +171,5 @@ public class IntentionController extends BaseController{
 		}
 	}
 	
-    @ResponseBody
-    @RequestMapping(value = "/passIntentionCash.do",method = RequestMethod.POST)
-    public String passIntentionCash(HttpServletRequest request,Integer intentionRefundId) {
-    		try {
-    			int adminId=(int) request.getSession().getAttribute("adminId");
-			intentionService.passIntentionCash(intentionRefundId, adminId);
-			return responseSuccess();
-		}catch(Exception e) {
-			return responseFail(e.getMessage());
-		}
-    }
+    
 }

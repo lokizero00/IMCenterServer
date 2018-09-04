@@ -362,5 +362,33 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
     			throw new ServiceException(ResultCodeEnums.UNKNOW_ERROR);
     		}
     }
+    
+    /**
+     * 不通过提现申请
+     * @param intentionRefundId
+     * @return
+     */
+    @Override
+    public void notPassIntentionCash(int intentionRefundId,int adminPayerId) throws ServiceException{
+    		try {
+    			if(intentionRefundId<=0) {
+    				throw new ServiceException(ResultCodeEnums.PARAM_ERROR);
+    			}
+    			
+    			IntentionRefund intentionRefund=intentionRefundDao.findById(intentionRefundId);
+    			if(intentionRefund==null) {
+    				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
+    			}
+    			
+    			if(intentionRefund.getState()!=0) {
+    				throw new ServiceException(ResultCodeEnums.DATA_INVALID);
+    			}
+    			
+    			weiXinAndAliService.refund(intentionRefund,adminPayerId);
+    		}catch(Exception e) {
+    			e.printStackTrace();
+    			throw new ServiceException(ResultCodeEnums.UNKNOW_ERROR);
+    		}
+    }
 
 }

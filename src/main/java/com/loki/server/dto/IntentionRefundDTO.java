@@ -1,10 +1,10 @@
-package com.loki.server.entity;
+package com.loki.server.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class IntentionRefund implements Serializable{
+public class IntentionRefundDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
@@ -19,14 +19,11 @@ public class IntentionRefund implements Serializable{
 	private String outRequestNo;
 	private int refundType;
 	private int refundChannel;
-	public int getRefundChannel() {
-		return refundChannel;
-	}
-	public void setRefundChannel(int refundChannel) {
-		this.refundChannel = refundChannel;
-	}
+	private String userName;
+	private String phone;
 	private String refundAccount;
 	private int adminPayerId;
+	
 	public int getId() {
 		return id;
 	}
@@ -93,6 +90,24 @@ public class IntentionRefund implements Serializable{
 	public void setRefundType(int refundType) {
 		this.refundType = refundType;
 	}
+	public int getRefundChannel() {
+		return refundChannel;
+	}
+	public void setRefundChannel(int refundChannel) {
+		this.refundChannel = refundChannel;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 	public String getRefundAccount() {
 		return refundAccount;
 	}
@@ -105,4 +120,7 @@ public class IntentionRefund implements Serializable{
 	public void setAdminPayerId(int adminPayerId) {
 		this.adminPayerId = adminPayerId;
 	}
+	
+	
+
 }
