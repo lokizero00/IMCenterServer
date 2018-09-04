@@ -204,15 +204,22 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 					identityCertification.setAdminVerifierId(adminId);
 					identityCertification.setVerifyTime(new Timestamp(System.currentTimeMillis()));
 					String adminLogContent="管理员 "+getAdminName(adminId)+" 审核";
+					String noticeContent="您的实名认证";
 					if (verify.equals("verify_pass")) {
 						adminLogContent+="通过了 用户 "+getUserName(identityCertification.getUserId())+" 的实名认证";
 						identityCertification.setStatus("ic_pass");
+						noticeContent+="已通过";
 					} else {
 						adminLogContent+="拒绝了 用户 "+getUserName(identityCertification.getUserId())+" 的实名认证，原因："+refuseReason;
 						identityCertification.setStatus("ic_refuse");
 						identityCertification.setRefuseReason(refuseReason);
+						noticeContent+="已拒绝";
 					}
 					if (identityCertificationDao.update(identityCertification)) {
+						List<Integer> userNoticeIds=new ArrayList<>();
+						userNoticeIds.add(identityCertification.getUserId());
+						addNotice(3, noticeContent, 0,userNoticeIds);
+						
 						//管理员日志
 						addAdminLog(adminLogContent,adminId,loginIp);
 						return true;

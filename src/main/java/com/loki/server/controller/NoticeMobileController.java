@@ -63,4 +63,19 @@ public class NoticeMobileController {
 		}
 		return "mobileResultJson";
 	}
+	
+	//清除未读消息
+	@RequestMapping(value="/clearUnread",method=RequestMethod.POST)
+	public String clearUnread(HttpServletRequest request,int userId,ModelMap mm) {
+		ServiceResult<Void> returnValue=noticeService.clearUnreadCount_mobile(userId);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+		return "mobileResultJson";
+	}
 }

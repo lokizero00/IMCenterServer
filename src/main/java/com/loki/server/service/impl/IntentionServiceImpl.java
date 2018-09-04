@@ -25,6 +25,7 @@ import com.loki.server.dto.IntentionRefundRequestDTO;
 import com.loki.server.dto.convertor.IntentionConvertor;
 import com.loki.server.dto.convertor.IntentionLogConvertor;
 import com.loki.server.entity.Intention;
+import com.loki.server.entity.IntentionJournal;
 import com.loki.server.entity.IntentionLog;
 import com.loki.server.entity.IntentionRefund;
 import com.loki.server.entity.PagedResult;
@@ -286,7 +287,6 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 	    	        			
 	    	        			// 意向金冻结
     						intention.setAvailable(intention.getAvailable().add(intentionRefundRequestDTO.getAmount().negate()));
-    						intention.setTotal(intention.getAvailable().add(intentionRefundRequestDTO.getAmount().negate()));
     						intention.setFreeze(intention.getFreeze().add(intentionRefundRequestDTO.getAmount()));
     						intentionDao.update(intention);
     						// 创建意向金日志
@@ -384,7 +384,22 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
     				throw new ServiceException(ResultCodeEnums.DATA_INVALID);
     			}
     			
-    			weiXinAndAliService.refund(intentionRefund,adminPayerId);
+    			Intention intention=intentionDao.findByUserId(intentionRefund.getIntentionId());
+    			// 意向金解冻
+			intention.setAvailable(intention.getAvailable().add(intentionRefund.getAmount()));
+			intention.setFreeze(intention.getFreeze().add(intentionRefund.getAmount().negate()));
+			intentionDao.update(intention);
+			
+			IntentionJournal intentionJournal=intentionJournalDao.findById(intentionRefund.getJournalId());
+			intentionJournal.setState("02");
+			intentionJournal.setIsReturn("00");
+			intentionJournal.setMemo("意向金提现【"+intentionJournal.getAmount()+"】已拒绝");
+			intentionJournalDao.update(intentionJournal);
+    			
+    			intentionRefund.setAdminPayerId(adminPayerId);
+    			intentionRefund.setState(2);
+    			intentionRefund.setFinishTime(new Timestamp(System.currentTimeMillis()));
+    			intentionRefundDao.update(intentionRefund);
     		}catch(Exception e) {
     			e.printStackTrace();
     			throw new ServiceException(ResultCodeEnums.UNKNOW_ERROR);

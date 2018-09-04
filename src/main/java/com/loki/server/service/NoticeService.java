@@ -22,4 +22,5 @@ public interface NoticeService {
 	ServiceResult<PagedResult<NoticeComplex>> getNoticeList_mobile(int userId,Integer pageNo,Integer pageSize);
 	ServiceResult<NoticeComplex> getNotice_mobile(int noticeId,int userId);
 	ServiceResult<Integer> getUnreadCount_mobile(int userId);
+	ServiceResult<Void> clearUnreadCount_mobile(int userId);
 }

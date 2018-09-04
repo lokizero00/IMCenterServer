@@ -78,7 +78,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 									intention.setFreeze(intention.getFreeze().add(tradeDockingDTO.getIntention()));
 									intentionDao.update(intention);
 									// 创建意向金日志
-									addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeDockingDTO.getIntention().negate(),logTradeType + " 对接成功,冻结意向金 " + tradeDockingDTO.getIntention());
+									addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeDockingDTO.getIntention().negate(),logTradeType + " 对接申请成功,冻结意向金 " + tradeDockingDTO.getIntention());
 								}
 								
 								TradeDocking tradeDocking = new TradeDocking();
@@ -95,6 +95,10 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 
 								trade.setDockingCount(trade.getDockingCount() + 1);
 								tradeDao.update(trade);
+								
+								List<Integer> userNoticeIds=new ArrayList<>();
+								userNoticeIds.add(trade.getUserId());
+								addNotice(2, "贸易有人对接", trade.getId(),userNoticeIds);
 								
 								returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 								returnValue.setResultObj(trade.getId());
@@ -179,6 +183,9 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 					for(TradeDocking tradeDocking:tradeDockingList) {
 						if(tradeDocking.getId()==tradeDockingId) {
 							dockerId=tradeDocking.getUserId();
+							List<Integer> userNoticeIds=new ArrayList<>();
+							userNoticeIds.add(tradeDocking.getUserId());
+							addNotice(2, "贸易对接申请通过啦", trade.getId(),userNoticeIds);
 						}else {
 							Intention intention = intentionDao.findByUserId(tradeDocking.getUserId());
 							BigDecimal unfreezeIntention = tradeDocking.getIntention();
@@ -191,6 +198,10 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 								// 创建意向金日志
 								addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 对接申请已作废，解冻意向金 " + tradeDocking.getIntention());
 							}
+							
+							List<Integer> userNoticeIds=new ArrayList<>();
+							userNoticeIds.add(tradeDocking.getUserId());
+							addNotice(2, "贸易对接申请已被拒绝", trade.getId(),userNoticeIds);
 						}
 					}
 					String tradeLogContent = "您的 " + logTradeType + " 已成功对接，对接方为 "
@@ -213,6 +224,10 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 						}
 						addTopLineNews(newsTitle, "tln_trade", trade.getId());
 					}
+					
+					List<Integer> userNoticeIds=new ArrayList<>();
+					userNoticeIds.add(trade.getUserId());
+					addNotice(2, "贸易对接成功，当前状态【对接中】", trade.getId(),userNoticeIds);
 					
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 					returnValue.setResultObj(trade.getId());

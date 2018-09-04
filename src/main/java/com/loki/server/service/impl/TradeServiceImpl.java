@@ -156,6 +156,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 					}
 
 					String tradeLogContent = "您发布了 " + logTradeType;
+					String noticeTradeStatus="待审核";
 
 					if (trade.getStatus().equals("trade_tendering")) {
 						// 意向金冻结
@@ -165,6 +166,8 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 						// 创建意向金日志
 						addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeVO.getFreezeIntention().negate(),logTradeType + " 发布成功,冻结意向金 " + tradeVO.getFreezeIntention());
 						tradeLogContent += "，冻结意向金 " + tradeVO.getFreezeIntention();
+						
+						noticeTradeStatus="招标中";
 					} else {
 						tradeLogContent += "，请耐心等待管理员审核";
 					}
@@ -183,6 +186,10 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 						}
 						addTopLineNews(newsTitle, "tln_trade", trade.getId());
 					}
+					
+					List<Integer> userNoticeIds=new ArrayList<>();
+					userNoticeIds.add(trade.getUserId());
+					addNotice(2, "您发布了一条贸易，当前状态【"+noticeTradeStatus+"】", trade.getId(),userNoticeIds);
 
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 					returnValue.setResultObj(trade.getId());
@@ -328,9 +335,11 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 				if (trade.getStatus().equals("trade_verify")) {
 					String tradeTypeName = getDictionariesValue("trade_type", trade.getType());
 					String tradeLogContent = tradeTypeName;
+					String noticeContent="您发布的贸易已";
 					if (verifyResult.equals("verify_pass")) {
 						tradeLogContent += " 审核通过";
 						trade.setStatus("trade_tendering");
+						noticeContent+="审核通过";
 					} else {
 						tradeLogContent += " 已被管理员下架";
 						// 解冻意向金
@@ -348,8 +357,13 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 						}
 						tradeLogContent += "，原因：" + refuseReason;
 						trade.setStatus("trade_under_carriage");
+						noticeContent+="拒绝";
 					}
 					if (tradeDao.update(trade)) {
+						
+						List<Integer> userNoticeIds=new ArrayList<>();
+						userNoticeIds.add(trade.getUserId());
+						addNotice(2, noticeContent, trade.getId(),userNoticeIds);
 						addTradeLog(trade.getId(), "admin", adminId, trade.getStatus(), tradeLogContent);
 					} else {
 						throw new ServiceException(ResultCodeEnums.UPDATE_FAIL);
@@ -382,6 +396,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 						}
 						String tradeTypeName = getDictionariesValue("trade_type", trade.getType());
 						String tradeLogContent = "您上架了 " + tradeTypeName;
+						String noticeTradeStatus="待审核";
 						if (tradeIntention.compareTo(BigDecimal.ZERO) == 1) {
 							if (intention.getAvailable().compareTo(tradeIntention) == -1) {
 								// 意向金账户可用余额不足，返回错误信息
@@ -392,6 +407,8 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 								trade.setIntention(tradeIntention);
 								trade.setStatus("trade_tendering");
 								tradeLogContent += "，冻结意向金 " + tradeIntention;
+								
+								noticeTradeStatus="招标中";
 							}
 						} else {
 							// 意向金为0，需审核
@@ -412,6 +429,11 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 								addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeIntention.negate(),tradeTypeName + " 上架成功，冻结意向金 " + tradeIntention);
 							}
 							addTradeLog(trade.getId(), "user", trade.getUserId(), trade.getStatus(), tradeLogContent);
+							
+							List<Integer> userNoticeIds=new ArrayList<>();
+							userNoticeIds.add(trade.getUserId());
+							addNotice(2, "贸易已上架，当前状态【"+noticeTradeStatus+"】", trade.getId(),userNoticeIds);
+							
 							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 						} else {
 							returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
@@ -599,6 +621,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 						trade.setIntention(BigDecimal.ZERO);
 						if (tradeDao.update(trade)) {
 							String tradeLogContent = "您下架了 " + tradeTypeName;
+							String noticeTradeStatus="已下架";
 							if (tradeIntention.compareTo(BigDecimal.ZERO) == 1) {
 								// 解冻意向金
 								Intention intention = intentionDao.findByUserId(trade.getUserId());
@@ -611,6 +634,11 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 								tradeLogContent += "，解冻意向金 " + tradeIntention;
 							}
 							addTradeLog(trade.getId(), "user", userId, "trade_under_carriage", tradeLogContent);
+							
+							List<Integer> userNoticeIds=new ArrayList<>();
+							userNoticeIds.add(trade.getUserId());
+							addNotice(2, "贸易被下架了，当前状态【"+noticeTradeStatus+"】", trade.getId(),userNoticeIds);
+							
 							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 						} else {
 							returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
@@ -720,13 +748,20 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 			if (userId != null && userId > 0 && tradeId != null && tradeId > 0) {
 				Trade trade = tradeDao.findByIdAndUserId(tradeId, userId);
 				if (trade != null) {
-					if (trade.getStatus().equals("trade_docking")) {
+					TradeDocking tradeDocking = tradeDockingDao.findById(trade.getDockingId());
+					if (trade.getStatus().equals("trade_docking") && tradeDocking!=null) {
 						String logTradeType = trade.getType().equals("trade_demand") ? "需求" : "供应";
 						trade.setStatus("trade_own_cancel");
 						boolean result = tradeDao.update(trade);
 						if (result) {
+							String noticeTradeStatus="发布方取消中";
 							String tradeLogContent = logTradeType + " 取消申请已提交，请等待对接方确认";
 							addTradeLog(trade.getId(), "user", userId, "trade_own_cancel", tradeLogContent);
+							
+							List<Integer> userNoticeIds=new ArrayList<>();
+							userNoticeIds.add(trade.getUserId());
+							userNoticeIds.add(tradeDocking.getUserId());
+							addNotice(2, "发布方取消了贸易，当前状态【"+noticeTradeStatus+"】", trade.getId(),userNoticeIds);
 							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 						} else {
 							returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
@@ -761,8 +796,14 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 							trade.setStatus("trade_3rd_cancel");
 							boolean result = tradeDao.update(trade);
 							if (result) {
+								String noticeTradeStatus="对接方取消中";
 								String tradeLogContent = logTradeType + " 取消申请已提交，请等待发布方确认";
 								addTradeLog(trade.getId(), "user", userId, "trade_3rd_cancel", tradeLogContent);
+								
+								List<Integer> userNoticeIds=new ArrayList<>();
+								userNoticeIds.add(tradeDocking.getUserId());
+								userNoticeIds.add(trade.getUserId());
+								addNotice(2, "对接方取消了贸易，当前状态【"+noticeTradeStatus+"】", trade.getId(),userNoticeIds);
 								returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 							} else {
 								returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
@@ -812,6 +853,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 							String tradeLogContent = logTradeType + " 的对接已取消，重新等待对接";
 							addTradeLog(trade.getId(), "user", userId, "trade_tendering", tradeLogContent);
 
+							String noticeTradeStatus="招标中";
 							// // 解冻发布方意向金
 							// Intention intention = intentionDao.findByUserId(pubUserId);
 							// BigDecimal unfreezeIntention = trade.getIntention();
@@ -842,6 +884,11 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 								addIntentionJournal("04",intention_docker.getId(),intention_docker.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 已取消，解冻意向金 " + tradeDocking.getIntention());
 							}
 
+							List<Integer> userNoticeIds=new ArrayList<>();
+							userNoticeIds.add(trade.getUserId());
+							userNoticeIds.add(dockerId);
+							addNotice(2, "贸易已取消，当前状态【"+noticeTradeStatus+"】", trade.getId(),userNoticeIds);
+							
 							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 						} else {
 							returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
@@ -869,6 +916,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 			if (userId != null && userId > 0 && tradeId != null && tradeId > 0) {
 				Trade trade = tradeDao.findByIdAndUserId(tradeId, userId);
 				if (trade != null) {
+					TradeDocking tradeDocking = tradeDockingDao.findById(trade.getDockingId());
 					String logTradeType = trade.getType().equals("trade_demand") ? "需求" : "供应";
 					if (trade.getStatus().equals("trade_docking")) {
 						trade.setStatus("trade_own_success");
@@ -876,6 +924,11 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 						if (result) {
 							String tradeLogContent = logTradeType + " 发布方已确认成功，请等待对接方确认";
 							addTradeLog(trade.getId(), "user", userId, "trade_own_success", tradeLogContent);
+							String noticeTradeStatus="发布方成功";
+							List<Integer> userNoticeIds=new ArrayList<>();
+							userNoticeIds.add(trade.getUserId());
+							userNoticeIds.add(tradeDocking.getUserId());
+							addNotice(2, "发布方完成了贸易对接，当前状态【"+noticeTradeStatus+"】", trade.getId(),userNoticeIds);
 							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 						} else {
 							returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
@@ -912,6 +965,12 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 							if (result) {
 								String tradeLogContent = logTradeType + " 对接方已确认成功，请等待发布方确认";
 								addTradeLog(trade.getId(), "user", userId, "trade_3rd_success", tradeLogContent);
+								
+								String noticeTradeStatus="对接方成功";
+								List<Integer> userNoticeIds=new ArrayList<>();
+								userNoticeIds.add(trade.getUserId());
+								userNoticeIds.add(tradeDocking.getUserId());
+								addNotice(2, "对接方完成了贸易对接，当前状态【"+noticeTradeStatus+"】", trade.getId(),userNoticeIds);
 								returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 							} else {
 								returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
@@ -1006,6 +1065,12 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 								}
 								addTopLineNews(newsTitle, "tln_trade", trade.getId());
 							}
+							
+							String noticeTradeStatus="已成功";
+							List<Integer> userNoticeIds=new ArrayList<>();
+							userNoticeIds.add(trade.getUserId());
+							userNoticeIds.add(tradeDocking.getUserId());
+							addNotice(2, "贸易对接已成功，当前状态【"+noticeTradeStatus+"】", trade.getId(),userNoticeIds);
 
 							returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 						} else {

@@ -263,6 +263,12 @@
             <artifactId>aliyun-sdk-alipay</artifactId>
             <version>1.0</version>
         </dependency>
+        
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
 
         <!--微信支付-->
         <dependency>

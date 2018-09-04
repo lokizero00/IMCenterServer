@@ -212,4 +212,19 @@ public class NoticeServiceImpl extends BaseService implements NoticeService {
 		}
 		return returnValue;
 	}
+
+	@Override
+	public ServiceResult<Void> clearUnreadCount_mobile(int userId) {
+		ServiceResult<Void> returnValue=new ServiceResult<>();
+		if(userId>0) {
+			if(userNoticeDao.clearUnreadCount(userId)) {
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+			}else {
+				returnValue.setResultCode(ResultCodeEnums.UPDATE_FAIL);
+			}
+		}else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
 }

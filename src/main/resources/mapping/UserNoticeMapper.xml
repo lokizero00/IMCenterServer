@@ -106,4 +106,8 @@
 	<select id="findUnreadCount" parameterType="int" resultType="int">
 		select count(id) from user_notice where user_id=#{_parameter} and is_read=0
 	</select>
+	
+	<update id="clearUnreadCount" parameterType="int">
+		update user_notice set is_read=1 where user_id=#{_parameter} and is_read=0
+	</update>
 </mapper>
