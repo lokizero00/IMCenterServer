@@ -403,7 +403,7 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		String thirdTransNo = null;
 		switch (payType) {
 		case 1:
-			AliPayProperties baseAliProperties = aliUnifiedOrder(); // 获取押金对象
+			AliPayProperties baseAliProperties = AliPayProperties.getInstance(); // 获取押金对象
 			AlipayTradeCloseResponse alipayTradeCloseResponse = closeAli(baseAliProperties, outTradeNo);
 			thirdTransNo = alipayTradeCloseResponse.getTradeNo();
 			break;
@@ -416,12 +416,12 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		return thirdTransNo;
 	}
 
-	/**
-	 * 支付宝-获取账户信息
-	 */
-	private AliPayProperties aliUnifiedOrder() {
-		return SpringUtils.getBean(PayConst.ALI_CONFIG_NAME, AliPayProperties.class);
-	}
+//	/**
+//	 * 支付宝-获取账户信息
+//	 */
+//	private AliPayProperties aliUnifiedOrder() {
+//		return SpringUtils.getBean(PayConst.ALI_CONFIG_NAME, AliPayProperties.class);
+//	}
 
 	/**
 	 * 获取支付宝登录infoStr
@@ -564,14 +564,14 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
                 //支付宝转账
                 AlipayFundTransToaccountTransferResponse response=aliTransfer(intentionRefund,adminPayerId);
                 if(!response.getCode().equals("10000")){
-                    throw new ServiceException(ResultCodeEnums.ALIPAY_REFUND_ERROR);
+//                    throw new ServiceException(ResultCodeEnums.ALIPAY_REFUND_ERROR);
                 }
                 break;
             case 2://微信
                 //微信转账
                 Map<String, String> map=WxTransfer(intentionRefund,adminPayerId);
                 if (!"SUCCESS".equals(map.get("result_code"))) {
-                	throw new ServiceException(ResultCodeEnums.WX_REFUND_ERROR);
+//                	throw new ServiceException(ResultCodeEnums.WX_REFUND_ERROR);
                 }
                 break;
             default:
@@ -585,7 +585,7 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 	 * @return
 	 */
 	private AlipayFundTransToaccountTransferResponse aliTransfer(IntentionRefund intentionRefund,int adminPayerId) {
-		AliPayProperties depProperties = aliUnifiedOrder();
+		AliPayProperties depProperties = AliPayProperties.getInstance();
 		AlipayClient alipayClient = new DefaultAlipayClient(depProperties.getGatewayUrl(), depProperties.getAppId(),
 				depProperties.getAppPrivateKey(), PayConst.FORMAT, PayConst.CHARSET, depProperties.getAliPayPublicKey(),
 				PayConst.SIGN_TYPE);
