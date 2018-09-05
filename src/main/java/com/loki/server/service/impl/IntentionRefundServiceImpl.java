@@ -92,10 +92,23 @@ public class IntentionRefundServiceImpl  extends BaseService implements Intentio
 		if(id>0) {
 			IntentionRefund intentionRefund=intentionRefundDao.findById(id);
 			if(intentionRefund!=null) {
-				IntentionRefundDTO intentionRefundDto=new IntentionRefundDTO();
-				intentionRefundDto.setUserName(getUserName(intentionRefund.getUserId()));
-				intentionRefundDto.setPhone(getUserPhoneByUserId(intentionRefund.getUserId()));
-				return intentionRefundDto;
+				IntentionRefundDTO refundDto=new IntentionRefundDTO();
+				refundDto.setUserName(getUserName(intentionRefund.getUserId()));
+				refundDto.setPhone(getUserPhoneByUserId(intentionRefund.getUserId()));
+				refundDto.setId(intentionRefund.getId());
+				refundDto.setIntentionId(intentionRefund.getIntentionId());
+				refundDto.setUserId(intentionRefund.getUserId());
+				refundDto.setRequestTime(intentionRefund.getRequestTime());
+				refundDto.setAmount(intentionRefund.getAmount());
+				refundDto.setRefundItem(intentionRefund.getRefundItem());
+				refundDto.setFinishTime(intentionRefund.getFinishTime());
+				refundDto.setJournalId(intentionRefund.getJournalId());
+				refundDto.setState(intentionRefund.getState());
+				refundDto.setOutRequestNo(intentionRefund.getOutRequestNo());
+				refundDto.setRefundType(intentionRefund.getRefundType());
+				refundDto.setRefundChannel(intentionRefund.getRefundChannel());
+				refundDto.setErrorMsg(intentionRefund.getErrorMsg());
+				return refundDto;
 			}else {
 				throw new ServiceException(ResultCodeEnums.DATA_QUERY_FAIL);
 			}
@@ -118,6 +131,19 @@ public class IntentionRefundServiceImpl  extends BaseService implements Intentio
 					IntentionRefundDTO refundDto=new IntentionRefundDTO();
 					refundDto.setUserName(getUserName(intentionRefund.getUserId()));
 					refundDto.setPhone(getUserPhoneByUserId(intentionRefund.getUserId()));
+					refundDto.setId(intentionRefund.getId());
+					refundDto.setIntentionId(intentionRefund.getIntentionId());
+					refundDto.setUserId(intentionRefund.getUserId());
+					refundDto.setRequestTime(intentionRefund.getRequestTime());
+					refundDto.setAmount(intentionRefund.getAmount());
+					refundDto.setRefundItem(intentionRefund.getRefundItem());
+					refundDto.setFinishTime(intentionRefund.getFinishTime());
+					refundDto.setJournalId(intentionRefund.getJournalId());
+					refundDto.setState(intentionRefund.getState());
+					refundDto.setOutRequestNo(intentionRefund.getOutRequestNo());
+					refundDto.setRefundType(intentionRefund.getRefundType());
+					refundDto.setRefundChannel(intentionRefund.getRefundChannel());
+					refundDto.setErrorMsg(intentionRefund.getErrorMsg());
 					refundDTOList.add(refundDto);
 				}
 				Page data=(Page) intentionRefundList;

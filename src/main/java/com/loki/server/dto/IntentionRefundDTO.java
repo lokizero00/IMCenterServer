@@ -23,7 +23,14 @@ public class IntentionRefundDTO implements Serializable{
 	private String phone;
 	private String refundAccount;
 	private int adminPayerId;
+	private String errorMsg;
 	
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
 	public int getId() {
 		return id;
 	}
