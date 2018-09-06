@@ -5,7 +5,9 @@ import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -416,12 +418,12 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		return thirdTransNo;
 	}
 
-//	/**
-//	 * 支付宝-获取账户信息
-//	 */
-//	private AliPayProperties aliUnifiedOrder() {
-//		return SpringUtils.getBean(PayConst.ALI_CONFIG_NAME, AliPayProperties.class);
-//	}
+	// /**
+	// * 支付宝-获取账户信息
+	// */
+	// private AliPayProperties aliUnifiedOrder() {
+	// return SpringUtils.getBean(PayConst.ALI_CONFIG_NAME, AliPayProperties.class);
+	// }
 
 	/**
 	 * 获取支付宝登录infoStr
@@ -549,42 +551,43 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		}
 		return returnValue;
 	}
-	
+
 	/**
-     * 退款- 根据orderType字段退款
-     * @param acctJournal
-     * @param acctRefundBill
-     * @return
-     * @throws BizException
-     */
+	 * 退款- 根据orderType字段退款
+	 * 
+	 * @param acctJournal
+	 * @param acctRefundBill
+	 * @return
+	 * @throws BizException
+	 */
 	@Override
-    public void refund(IntentionRefund intentionRefund,int adminPayerId) throws ServiceException {
-        switch (intentionRefund.getRefundChannel()){
-            case 1://支付宝
-                //支付宝转账
-                AlipayFundTransToaccountTransferResponse response=aliTransfer(intentionRefund,adminPayerId);
-                if(!response.getCode().equals("10000")){
-//                    throw new ServiceException(ResultCodeEnums.ALIPAY_REFUND_ERROR);
-                }
-                break;
-            case 2://微信
-                //微信转账
-                Map<String, String> map=WxTransfer(intentionRefund,adminPayerId);
-                if (!"SUCCESS".equals(map.get("result_code"))) {
-//                	throw new ServiceException(ResultCodeEnums.WX_REFUND_ERROR);
-                }
-                break;
-            default:
-            		throw new ServiceException(ResultCodeEnums.INTENTION_REFUND_CHANNEL_ERROR);
-        }
-    }
+	public void refund(IntentionRefund intentionRefund, int adminPayerId) throws ServiceException {
+		switch (intentionRefund.getRefundChannel()) {
+		case 0:// 微信
+			// 微信转账
+			Map<String, String> map = WxTransfer(intentionRefund, adminPayerId);
+			if (!"SUCCESS".equals(map.get("result_code"))) {
+				// throw new ServiceException(ResultCodeEnums.WX_REFUND_ERROR);
+			}
+			break;
+		case 1:// 支付宝
+				// 支付宝转账
+			AlipayFundTransToaccountTransferResponse response = aliTransfer(intentionRefund, adminPayerId);
+			if (!response.getCode().equals("10000")) {
+				// throw new ServiceException(ResultCodeEnums.ALIPAY_REFUND_ERROR);
+			}
+			break;
+		default:
+			throw new ServiceException(ResultCodeEnums.INTENTION_REFUND_CHANNEL_ERROR);
+		}
+	}
 
 	/**
 	 * 支付宝转账
 	 * 
 	 * @return
 	 */
-	private AlipayFundTransToaccountTransferResponse aliTransfer(IntentionRefund intentionRefund,int adminPayerId) {
+	private AlipayFundTransToaccountTransferResponse aliTransfer(IntentionRefund intentionRefund, int adminPayerId) {
 		AliPayProperties depProperties = AliPayProperties.getInstance();
 		AlipayClient alipayClient = new DefaultAlipayClient(depProperties.getGatewayUrl(), depProperties.getAppId(),
 				depProperties.getAppPrivateKey(), PayConst.FORMAT, PayConst.CHARSET, depProperties.getAliPayPublicKey(),
@@ -608,9 +611,9 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		}
 		// 则为退款成功
 		if (response.getCode().equals("10000")) {
-			returnDepositHandle(true, intentionRefund,null,adminPayerId);
+			returnDepositHandle(true, intentionRefund, null, adminPayerId);
 		} else {
-			returnDepositHandle(false, intentionRefund,response.getSubMsg(),adminPayerId);
+			returnDepositHandle(false, intentionRefund, response.getSubMsg(), adminPayerId);
 		}
 		// 则转账成功
 		return response;
@@ -621,8 +624,8 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 	 * 
 	 * @return
 	 */
-	private Map<String, String> WxTransfer(IntentionRefund intentionRefund,int adminPayerId) {
-		String TRANSFER_URL="https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+	private Map<String, String> WxTransfer(IntentionRefund intentionRefund, int adminPayerId) {
+		String TRANSFER_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
 		// 微信转账
 		Transfer transfer = new Transfer();
 		transfer.setMch_appid(WxPayProperties.getInstance().getAppId());
@@ -633,7 +636,7 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		BigDecimal money = null;
 		money = intentionRefund.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN);
 		transfer.setAmount(money.intValue());
-//		transfer.setRe_user_name(acctRefundBill.getUserName());
+		// transfer.setRe_user_name(acctRefundBill.getUserName());
 		transfer.setPartner_trade_no(intentionRefund.getOutRequestNo());
 		String nonceStr = OrderNoGenerator.getRandomStr(12);// 随机生成一段字符串
 		transfer.setNonce_str(nonceStr);
@@ -654,13 +657,13 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		hashMap.put("partner_trade_no", transfer.getPartner_trade_no());
 		hashMap.put("openid", transfer.getOpenid());
 		hashMap.put("check_name", transfer.getCheck_name());
-//		hashMap.put("re_user_name", transfer.getRe_user_name());
+		// hashMap.put("re_user_name", transfer.getRe_user_name());
 		hashMap.put("amount", transfer.getAmount() + "");
 		hashMap.put("desc", transfer.getDesc());
 		hashMap.put("spbill_create_ip", transfer.getSpbill_create_ip());
 		// 拿到签名
-		String sign = SignUtils.createSign(hashMap, WxPayConstants.SignType.MD5, WxPayProperties.getInstance().getMchKey(),
-				false);
+		String sign = SignUtils.createSign(hashMap, WxPayConstants.SignType.MD5,
+				WxPayProperties.getInstance().getMchKey(), false);
 		transfer.setSign(sign);// 设置签名
 		// 转化成xml格式 便于发送请求
 		String requestXml = XmlUtil.objToXml(transfer, "utf-8");
@@ -673,9 +676,9 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 			map = XmlUtil.xmlStrToMap(responseDate);
 			if (map.size() > 0) {
 				if (map.get("result_code").equals("SUCCESS") && map.get("return_code").equals("SUCCESS")) {
-					returnDepositHandle(true,intentionRefund,null,adminPayerId);
+					returnDepositHandle(true, intentionRefund, null, adminPayerId);
 				} else {
-					returnDepositHandle(false,intentionRefund,map.get("return_msg"),adminPayerId);
+					returnDepositHandle(false, intentionRefund, map.get("return_msg"), adminPayerId);
 				}
 			}
 		}
@@ -690,15 +693,21 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 	 * @param intentionRefund
 	 * @throws RuntimeException
 	 */
-	private void returnDepositHandle(Boolean refundStatus, IntentionRefund intentionRefund,String errorMsg,int adminPayerId) throws RuntimeException {
+	private void returnDepositHandle(Boolean refundStatus, IntentionRefund intentionRefund, String errorMsg,
+			int adminPayerId) throws RuntimeException {
 		if (refundStatus) {
 			// 交易成功
 			intentionRefund.setState(PayConst.DepositPayBackType.RETURN_SUCCESS.getIndex());
+			List<Integer> userNoticeIds=new ArrayList<>();
+			userNoticeIds.add(intentionRefund.getUserId());
+			addNotice(4, "意向金提现成功", null,userNoticeIds);
 		} else {
 			// 交易失败
 			intentionRefund.setState(PayConst.DepositPayBackType.RETURN_ERROR.getIndex());
 			intentionRefund.setErrorMsg(errorMsg);
-
+			List<Integer> userNoticeIds=new ArrayList<>();
+			userNoticeIds.add(intentionRefund.getUserId());
+			addNotice(4, "意向金提现失败", null,userNoticeIds);
 		}
 		intentionRefund.setAdminPayerId(adminPayerId);
 		intentionRefund.setFinishTime(new Timestamp(System.currentTimeMillis()));

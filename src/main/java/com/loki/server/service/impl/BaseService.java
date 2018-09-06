@@ -240,6 +240,11 @@ public class BaseService {
 				notice.setContent(content);
 				notice.setRelationType("certification");
 				break;
+			case 4:
+				notice.setTitle("提现通知");
+				notice.setContent(content);
+				notice.setRelationType("cash");
+				break;
 			}
 			noticeDao.insert(notice);
 			

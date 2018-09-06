@@ -44,7 +44,7 @@ public class WxPayProperties {
     /**
      * apiclient_cert.p12文件的绝对路径，或者如果放在项目中，请以classpath:开头指定
      */
-    private String keyPath="/home/cert/wxpay/apiclient_cert.p12";
+    private String keyPath="/Users/lokizero00/Documents/bestimade_wxpay_cert/apiclient_cert.p12";
     
     private String appSecret="1880b57f05c8b604e63c70510f9e2d63";
 

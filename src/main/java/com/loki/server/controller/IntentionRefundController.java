@@ -72,7 +72,7 @@ public class IntentionRefundController  extends BaseController{
     public String notPassIntentionCash(HttpServletRequest request,Integer intentionRefundId) {
     		try {
     			int adminId=(int) request.getSession().getAttribute("adminId");
-			intentionService.passIntentionCash(intentionRefundId, adminId);
+			intentionService.notPassIntentionCash(intentionRefundId, adminId);
 			return responseSuccess();
 		}catch(Exception e) {
 			return responseFail(e.getMessage());

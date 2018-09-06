@@ -400,6 +400,10 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
     			intentionRefund.setState(2);
     			intentionRefund.setFinishTime(new Timestamp(System.currentTimeMillis()));
     			intentionRefundDao.update(intentionRefund);
+    			
+    			List<Integer> userNoticeIds=new ArrayList<>();
+			userNoticeIds.add(intention.getUserId());
+			addNotice(4, "意向金提现被拒绝", null,userNoticeIds);
     		}catch(Exception e) {
     			e.printStackTrace();
     			throw new ServiceException(ResultCodeEnums.UNKNOW_ERROR);
