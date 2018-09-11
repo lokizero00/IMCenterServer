@@ -219,7 +219,7 @@ public class BaseService {
 		}
 	}
 
-	protected void addNotice(Integer noticeType, String content, Integer relationId,List<Integer> userIdList) {
+	protected void addNotice(Integer noticeType, String title,String content, Integer relationId,List<Integer> userIdList) {
 		if (noticeType != null && noticeType > 0) {
 			Notice notice = new Notice();
 			switch (noticeType) {
@@ -230,9 +230,9 @@ public class BaseService {
 				notice.setRelationId(relationId);
 				break;
 			case 2:
-				notice.setTitle("交易信息");
+				notice.setTitle(title);
 				notice.setContent(content);
-				notice.setRelationType("trade");
+				notice.setRelationType("trade_demand");
 				notice.setRelationId(relationId);
 				break;
 			case 3:
@@ -245,7 +245,14 @@ public class BaseService {
 				notice.setContent(content);
 				notice.setRelationType("cash");
 				break;
+			case 5:
+				notice.setTitle(title);
+				notice.setContent(content);
+				notice.setRelationType("trade_supply");
+				notice.setRelationId(relationId);
+				break;
 			}
+			
 			noticeDao.insert(notice);
 			
 			for(int userId:userIdList) {

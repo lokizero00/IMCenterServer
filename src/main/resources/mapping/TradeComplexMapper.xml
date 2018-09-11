@@ -91,6 +91,7 @@
 			<if test="enterpriseStatus!=null and enterpriseStatus!=''">
 				and _ec.status=#{enterpriseStatus}
 			</if>
+			and trade.status != 'trade_under_carriage'
 		</where>
 		ORDER BY
 		 <choose>
@@ -224,6 +225,8 @@
 				and trade.id in(
 				select trade_id from trade_paycode where code=#{payCode})
 			</if>
+			
+			and trade.status != 'trade_under_carriage'
 		</where>
 		ORDER BY
 		 <choose>
@@ -301,6 +304,8 @@
 				and trade.id in(
 				select trade_id from trade_paycode where code=#{payCode})
 			</if>
+			
+			and trade.status != 'trade_under_carriage'
 		</where>
 		ORDER BY intention ,collection_count ,read_count ,docking_count desc
   </select>

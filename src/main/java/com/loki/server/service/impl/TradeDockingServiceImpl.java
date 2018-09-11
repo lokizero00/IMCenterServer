@@ -98,7 +98,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 								
 								List<Integer> userNoticeIds=new ArrayList<>();
 								userNoticeIds.add(trade.getUserId());
-								addNotice(2, "贸易有人对接", trade.getId(),userNoticeIds);
+								addNotice(trade.getType().equals("trade_demand") ? 2 : 5,trade.getTitle(), "贸易有人对接", trade.getId(),userNoticeIds);
 								
 								returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 								returnValue.setResultObj(trade.getId());
@@ -185,7 +185,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 							dockerId=tradeDocking.getUserId();
 							List<Integer> userNoticeIds=new ArrayList<>();
 							userNoticeIds.add(tradeDocking.getUserId());
-							addNotice(2, "贸易对接申请通过啦", trade.getId(),userNoticeIds);
+							addNotice(trade.getType().equals("trade_demand") ? 2 : 5,trade.getTitle(), "贸易对接申请通过啦", trade.getId(),userNoticeIds);
 						}else {
 							Intention intention = intentionDao.findByUserId(tradeDocking.getUserId());
 							BigDecimal unfreezeIntention = tradeDocking.getIntention();
@@ -201,7 +201,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 							
 							List<Integer> userNoticeIds=new ArrayList<>();
 							userNoticeIds.add(tradeDocking.getUserId());
-							addNotice(2, "贸易对接申请已被拒绝", trade.getId(),userNoticeIds);
+							addNotice(trade.getType().equals("trade_demand") ? 2 : 5,trade.getTitle(), "贸易对接申请已被拒绝", trade.getId(),userNoticeIds);
 						}
 					}
 					String tradeLogContent = "您的 " + logTradeType + " 已成功对接，对接方为 "
@@ -227,7 +227,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 					
 					List<Integer> userNoticeIds=new ArrayList<>();
 					userNoticeIds.add(trade.getUserId());
-					addNotice(2, "贸易对接成功，当前状态【对接中】", trade.getId(),userNoticeIds);
+					addNotice(trade.getType().equals("trade_demand") ? 2 : 5,trade.getTitle(), "贸易对接成功，当前状态【对接中】", trade.getId(),userNoticeIds);
 					
 					returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 					returnValue.setResultObj(trade.getId());
@@ -247,7 +247,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 	public ServiceResult<PagedResult<TradeDockingDTO>> getTradeDockingList(Map<String,Object> map) {
 		ServiceResult<PagedResult<TradeDockingDTO>> returnValue=new ServiceResult<>();
 		try {
-			if(map!=null) {
+			if(map!=null && map.containsKey("userId") && map.containsKey("tradeId")) {
 				int tradeId=(int) map.get("tradeId");
 				Trade trade=tradeDao.findById(tradeId);
 				if(trade!=null) {

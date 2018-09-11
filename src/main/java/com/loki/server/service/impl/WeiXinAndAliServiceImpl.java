@@ -45,6 +45,7 @@ import com.github.binarywang.wxpay.util.SignUtils;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.IntentionJournalDao;
 import com.loki.server.dao.IntentionRefundDao;
+import com.loki.server.dao.SettingDao;
 import com.loki.server.dao.UserExtensionDao;
 import com.loki.server.dto.AliRechargeDTO;
 import com.loki.server.dto.RechargeDTO;
@@ -96,6 +97,9 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 
 	@Resource
 	IntentionJournalDao intentionJournalDao;
+	
+	@Resource
+	SettingDao settingDao;
 
 	@Override
 	public ServiceResult<RechargeDTO> unifiedOrder(String outTradeNo, BigDecimal totalAmount, String requestHost,
@@ -599,7 +603,15 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		requestMap.put("out_biz_no", intentionRefund.getOutRequestNo());
 		requestMap.put("payee_type", "ALIPAY_USERID");
 		requestMap.put("payee_account", intentionRefund.getRefundAccount());
-		requestMap.put("amount", intentionRefund.getAmount() + "");
+		
+		//扣除手续费，0.006
+		String aliCashServiceFee=settingDao.findByName("aliCashServiceFee");
+		if(aliCashServiceFee==null || aliCashServiceFee=="") {
+			aliCashServiceFee="0.006";
+		}
+		
+		BigDecimal money=(intentionRefund.getAmount().multiply(BigDecimal.ONE.subtract(new BigDecimal(aliCashServiceFee)))).setScale(2, BigDecimal.ROUND_DOWN);
+		requestMap.put("amount", money + "");
 		requestMap.put("remark", "互联制造意向金提现");
 		try {
 			request.setBizContent(mapper.writeValueAsString(requestMap));
@@ -611,7 +623,7 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		}
 		// 则为退款成功
 		if (response.getCode().equals("10000")) {
-			returnDepositHandle(true, intentionRefund, null, adminPayerId);
+			returnDepositHandle(true, intentionRefund, "提现成功，金额："+money, adminPayerId);
 		} else {
 			returnDepositHandle(false, intentionRefund, response.getSubMsg(), adminPayerId);
 		}
@@ -634,8 +646,14 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		transfer.setOpenid(intentionRefund.getRefundAccount());
 		// 将单位元转换为分
 		BigDecimal money = null;
-		money = intentionRefund.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN);
-		transfer.setAmount(money.intValue());
+		money = intentionRefund.getAmount();
+		//扣除手续费，0.006
+		String wxCashServiceFee=settingDao.findByName("wxCashServiceFee");
+		if(wxCashServiceFee==null || wxCashServiceFee=="") {
+			wxCashServiceFee="0.006";
+		}
+		money=(money.multiply(BigDecimal.ONE.subtract(new BigDecimal(wxCashServiceFee)))).setScale(2, BigDecimal.ROUND_DOWN);
+		transfer.setAmount((money.multiply(BigDecimal.TEN).multiply(BigDecimal.TEN)).intValue());
 		// transfer.setRe_user_name(acctRefundBill.getUserName());
 		transfer.setPartner_trade_no(intentionRefund.getOutRequestNo());
 		String nonceStr = OrderNoGenerator.getRandomStr(12);// 随机生成一段字符串
@@ -676,7 +694,7 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 			map = XmlUtil.xmlStrToMap(responseDate);
 			if (map.size() > 0) {
 				if (map.get("result_code").equals("SUCCESS") && map.get("return_code").equals("SUCCESS")) {
-					returnDepositHandle(true, intentionRefund, null, adminPayerId);
+					returnDepositHandle(true, intentionRefund, "提现成功，金额："+money, adminPayerId);
 				} else {
 					returnDepositHandle(false, intentionRefund, map.get("return_msg"), adminPayerId);
 				}
@@ -700,15 +718,15 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 			intentionRefund.setState(PayConst.DepositPayBackType.RETURN_SUCCESS.getIndex());
 			List<Integer> userNoticeIds=new ArrayList<>();
 			userNoticeIds.add(intentionRefund.getUserId());
-			addNotice(4, "意向金提现成功", null,userNoticeIds);
+			addNotice(4,null, "意向金提现成功", null,userNoticeIds);
 		} else {
 			// 交易失败
 			intentionRefund.setState(PayConst.DepositPayBackType.RETURN_ERROR.getIndex());
-			intentionRefund.setErrorMsg(errorMsg);
 			List<Integer> userNoticeIds=new ArrayList<>();
 			userNoticeIds.add(intentionRefund.getUserId());
-			addNotice(4, "意向金提现失败", null,userNoticeIds);
+			addNotice(4,null, "意向金提现失败", null,userNoticeIds);
 		}
+		intentionRefund.setErrorMsg(errorMsg);
 		intentionRefund.setAdminPayerId(adminPayerId);
 		intentionRefund.setFinishTime(new Timestamp(System.currentTimeMillis()));
 		intentionRefundDao.update(intentionRefund);
@@ -719,6 +737,7 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 				Intention intention = intentionDao.findById(intentionRefund.getIntentionId());
 				// 退款成功，清楚冻结的提现金额
 				intention.setFreeze(intention.getFreeze().add(intentionRefund.getAmount().negate()));
+				intention.setTotal(intention.getTotal().add(intentionRefund.getAmount().negate()));
 				intentionDao.update(intention);
 				// 更新流水状态
 				IntentionJournal intentionJournal = intentionJournalDao.findById(intentionRefund.getJournalId());
@@ -736,7 +755,6 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 				// 退款失败，退还冻结的提现金额
 				intention.setFreeze(intention.getFreeze().add(intentionRefund.getAmount().negate()));
 				intention.setAvailable(intention.getAvailable().add(intentionRefund.getAmount()));
-				intention.setTotal(intention.getAvailable().add(intentionRefund.getAmount()));
 				intentionDao.update(intention);
 				// 更新流水状态
 				IntentionJournal intentionJournal = intentionJournalDao.findById(intentionRefund.getJournalId());

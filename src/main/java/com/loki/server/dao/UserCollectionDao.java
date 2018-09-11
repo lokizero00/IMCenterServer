@@ -15,4 +15,5 @@ public interface UserCollectionDao {
 	boolean delete(int id);
 	List<UserCollection> findByParam(Map<String,Object> map);
 	int checkExist(@Param("tradeId") int tradeId,@Param("userId") int userId);
+	boolean deleteByTradeId(int tradeId);
 }

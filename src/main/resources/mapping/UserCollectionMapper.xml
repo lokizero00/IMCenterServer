@@ -74,4 +74,8 @@
 		select count(id)
 		from user_collection where trade_id=#{tradeId} and user_id=#{userId}
   </select>
+  
+  <delete id="deleteByTradeId" parameterType="int">
+		delete from user_collection where trade_id=#{_parameter}
+	</delete>
 </mapper>

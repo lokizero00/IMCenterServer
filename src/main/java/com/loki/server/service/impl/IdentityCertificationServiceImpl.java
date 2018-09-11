@@ -218,7 +218,7 @@ public class IdentityCertificationServiceImpl extends BaseService implements Ide
 					if (identityCertificationDao.update(identityCertification)) {
 						List<Integer> userNoticeIds=new ArrayList<>();
 						userNoticeIds.add(identityCertification.getUserId());
-						addNotice(3, noticeContent, 0,userNoticeIds);
+						addNotice(3,null, noticeContent, 0,userNoticeIds);
 						
 						//管理员日志
 						addAdminLog(adminLogContent,adminId,loginIp);

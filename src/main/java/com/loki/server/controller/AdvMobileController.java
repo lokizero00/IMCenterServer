@@ -35,4 +35,20 @@ public class AdvMobileController {
 			
 		return "mobileResultJson";
 	}
+	
+	//获取广告详情
+	@RequestMapping(value="/getAdvDetail",method=RequestMethod.GET)
+	public String getAdvDetail(HttpServletRequest request, Integer advId,ModelMap mm) {
+		ServiceResult<AdvDTO> returnValue=advService.getAdv_mobile(advId);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+			
+		return "mobileResultJson";
+	}
 }

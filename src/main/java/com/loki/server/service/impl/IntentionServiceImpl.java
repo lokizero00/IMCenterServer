@@ -314,7 +314,6 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
 
 	@Override
 	public boolean editIntention(IntentionDTO intentionDto) throws ServiceException {
-		// TODO Auto-generated method stub
 		if(intentionDto!=null && intentionDto.getId()>0) {
 			Intention intention= intentionDao.findById(intentionDto.getId());
 			if(intention!=null) {
@@ -403,7 +402,7 @@ public class IntentionServiceImpl extends BaseService implements IntentionServic
     			
     			List<Integer> userNoticeIds=new ArrayList<>();
 			userNoticeIds.add(intention.getUserId());
-			addNotice(4, "意向金提现被拒绝", null,userNoticeIds);
+			addNotice(4,null, "意向金提现被拒绝", null,userNoticeIds);
     		}catch(Exception e) {
     			e.printStackTrace();
     			throw new ServiceException(ResultCodeEnums.UNKNOW_ERROR);
