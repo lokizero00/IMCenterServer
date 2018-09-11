@@ -1,0 +1,165 @@
+*{margin: 0;padding: 0;}
+input, button, select, textarea {
+	outline: none;
+	-webkit-appearance: none;
+	border-radius: 0;
+}
+ul,ol {
+    list-style: none;
+}
+.content{
+	width: 6.7rem;
+	height: auto;
+	position: relative;
+	margin: 0 auto;
+	font-family: "微软雅黑";
+}
+.th_1{
+	font-size:.36rem;
+	color:#363c40;
+	text-align:left;
+	font-weight:bold;
+	position: absolute;
+	top: 0.2rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tr_1{
+	font-size:.24rem;
+	color:#b3b3b3;
+	text-align:left;
+	position: absolute;
+	top: 0.92rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tr_2{
+	position: absolute;
+	top: 1.41rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.img_1{
+	width: .36rem;
+	margin: 0 auto;
+	display: block;
+}
+.p_bold{
+	font-size:.28rem;
+	color:#363c40;
+	text-align:left;
+	font-weight:bold;
+}
+.p_normal{
+	font-size:.28rem;
+	color:#b3b3b3;
+	text-align:left;
+	font-weight:bold;
+}
+.tr_3{
+	position: absolute;
+	top: 2.17rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tr_4{
+	position: absolute;
+	top: 2.93rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.img_2{
+	width: 3.27rem;
+	height:3.27rem;
+	margin: 0 auto;
+	display: block;
+}
+td{
+	padding-right: .24rem;
+}
+.tr_5{
+	position: absolute;
+	top: 6.68rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tr_6{
+	position: absolute;
+	top: 7.3rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tr_7{
+	position: absolute;
+	top: 7.92rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tr_8{
+	position: absolute;
+	top: 8.54rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tr_9{
+	position: absolute;
+	top: 9.16rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tr_10{
+	position: absolute;
+	top: 9.78rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tr_11{
+	position: absolute;
+	top: 10.4rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.div_line{
+	position: relative;
+	border:1px solid #cdcdcd;
+	margin-top: 11.2rem;
+}
+.div_2{
+	width: 6.7rem;
+	height: auto;
+	position: relative;
+	margin: 0 auto;
+	position: relative;
+	font-family: "微软雅黑";
+}
+.tb2_tr_2{
+	position: absolute;
+	top: 1.54rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tb2_tr_3{
+	position: absolute;
+	top: 2.16rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.tb2_tr_4{
+	position: absolute;
+	top: 2.78rem;
+	left: -3.6rem;
+	margin-left: 50%;
+}
+.btn{
+	position: absolute;
+	top: 3.26rem;
+	width: 6.78rem;
+	height: 0.78rem;
+	margin: 0.36rem;
+	background-color: dodgerblue;
+	border:1px solid dodgerblue;
+	border-radius:25px;
+	font-size:.32rem;
+	color:white;
+	font-weight: bold;
+}
