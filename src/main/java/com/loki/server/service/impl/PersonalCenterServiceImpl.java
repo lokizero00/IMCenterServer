@@ -9,6 +9,7 @@ import com.loki.server.dao.EnterpriseCertificationDao;
 import com.loki.server.dao.IdentityCertificationDao;
 import com.loki.server.dao.IntentionDao;
 import com.loki.server.dao.UserDao;
+import com.loki.server.dto.UserHideInfoDTO;
 import com.loki.server.entity.EnterpriseCertification;
 import com.loki.server.entity.IdentityCertification;
 import com.loki.server.entity.Intention;
@@ -45,6 +46,43 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 				
 				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
 				returnValue.setResultObj(personalCenterVO);
+			}
+		}else {
+			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
+		}
+		return returnValue;
+	}
+	
+	@Override
+	public ServiceResult<UserHideInfoDTO> getUserHideInfo(int userId) {
+		ServiceResult<UserHideInfoDTO> returnValue=new ServiceResult<UserHideInfoDTO>();
+		if (userId>0) {
+			User user=userDao.findById(userId);
+			if(null==user) {
+				returnValue.setResultCode(ResultCodeEnums.USER_NOT_EXIST);
+			}else {
+				IdentityCertification identityCertification=identityCertificationDao.findById(user.getIdentityId());
+				EnterpriseCertification enterpriseCertification=enterpriseCertificationDao.findById(user.getEnterpriseId());
+				Intention intention=intentionDao.findByUserId(user.getId());
+				UserHideInfoDTO userHideInfoDTO=new UserHideInfoDTO();
+				
+				if(identityCertification!=null && identityCertification.getStatus().equals("ic_pass")) {
+					userHideInfoDTO.setTrueName(identityCertification.getTrueName().substring(0, 1) + "**");
+				}else {
+					userHideInfoDTO.setTrueName("***(未认证)");
+				}
+				
+				if(enterpriseCertification!=null && enterpriseCertification.getStatus().equals("ec_pass")) {
+					userHideInfoDTO.setEnterpriseName(enterpriseCertification.getEnterpriseName().substring(0, 2) + "***********");
+					userHideInfoDTO.setPosition("***(已认证)");
+				}else {
+					userHideInfoDTO.setTrueName("***********(未认证)");
+					userHideInfoDTO.setPosition("***(未认证)");
+				}
+				userHideInfoDTO.setPhone(user.getPhone().substring(0, 3) + "****" + user.getPhone().substring(7, user.getPhone().length()));
+				
+				returnValue.setResultCode(ResultCodeEnums.SUCCESS);
+				returnValue.setResultObj(userHideInfoDTO);
 			}
 		}else {
 			returnValue.setResultCode(ResultCodeEnums.PARAM_ERROR);
