@@ -67,13 +67,13 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 				UserHideInfoDTO userHideInfoDTO=new UserHideInfoDTO();
 				
 				if(identityCertification!=null && identityCertification.getStatus().equals("ic_pass")) {
-					userHideInfoDTO.setTrueName(identityCertification.getTrueName().substring(0, 1) + "**");
+					userHideInfoDTO.setTrueName(identityCertification.getTrueName().substring(0, 1) + "**(已认证)");
 				}else {
 					userHideInfoDTO.setTrueName("***(未认证)");
 				}
 				
 				if(enterpriseCertification!=null && enterpriseCertification.getStatus().equals("ec_pass")) {
-					userHideInfoDTO.setEnterpriseName(enterpriseCertification.getEnterpriseName().substring(0, 2) + "***********");
+					userHideInfoDTO.setEnterpriseName(enterpriseCertification.getEnterpriseName().substring(0, 2) + "***********(已认证)");
 					userHideInfoDTO.setPosition("***(已认证)");
 				}else {
 					userHideInfoDTO.setTrueName("***********(未认证)");
