@@ -54,7 +54,7 @@ $(document).ready(function() {
 			sortable : true,
 			sortName : 'requestTime',
 		}, {
-			title : '退款项目',
+			title : '提现项目',
 			field : 'refundItem',
 			formatter : function(value,row,index){
 				if(row.refundItem==0){
@@ -77,25 +77,36 @@ $(document).ready(function() {
 				}
 			}
 		}, {
-			title : '退款方式',
+			title : '提现方式',
 			field : 'refundChannel',
 			formatter : function(value,row,index){
 				if(row.refundType==0){
-					return "普通退款";
+					return "普通提现";
 				}else if(row.refundType==1){
-					return "转账退款";
+					return "转账提现";
 				}
 			}
 		}, {
-			title : '退还时间',
+			title : '提现时间',
 			field : 'finishTime',
 			sortable : true,
 			sortName : 'finishTime',
 		}, {
 			title : '退款单号',
 			field : 'outRequestNo',
+		}, {
+			title : '备注',
+			field : 'errorMsg',
+			formatter : function(value,row,index){
+				if(row.errorMsg.length>12){
+					
+					return '<p class="tooltip-options" ><a data-toggle="tooltip" title='+row.errorMsg+'>查看</a></p>';
+				}else{
+					return row.errorMsg;
+				}
+			}
 		},{
-			title : '退还状态',
+			title : '提现状态',
 			width : '12%',
 			formatter : function(value,row,index){
 				var operate='';
@@ -103,14 +114,16 @@ $(document).ready(function() {
 					operate += ' <button type="button" onclick="passIntention('+row.id+')" class="btn btn-success">申请通过</button>';
 					operate += ' <button type="button" onclick="notPassIntention('+row.id+')" class="btn btn-danger">不通过</button>';
 				}else if(row.state==1){
-					operate="退还成功";
+					operate="提现成功";
 				}else if(row.state==2){
-					operate="退还失败";
+					operate="提现失败";
 				}
 				return operate;
 			}
 		} ],
-		
+		 onLoadSuccess: function(){
+			 $(".tooltip-options a").tooltip({html : true });
+		 }
 		
 	});
 	
@@ -129,9 +142,7 @@ $(document).ready(function() {
 		$('#table_intentionRefundList').bootstrapTable('refresh');
 	});
 	
-	
 });
-
 //申请通过
 function passIntention(id){
 	Ewin.confirm({ message: "确认要申请通过吗？" }).on(function (e) {

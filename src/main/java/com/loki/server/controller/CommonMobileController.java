@@ -29,15 +29,6 @@ public class CommonMobileController extends BaseController{
 	public String getTrade(HttpServletRequest request, Integer tradeId) {
 		try {
 			ServiceResult<TradeComplex> returnValue=tradeService.getTrade_mobile(tradeId,0);
-//		if (returnValue!=null) {
-//			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
-//			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
-//			mm.addAttribute("resultObj", returnValue.getResultObj());
-//		}else {
-//			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
-//			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
-//		}
-			
 			return responseSuccess(returnValue);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -47,6 +38,7 @@ public class CommonMobileController extends BaseController{
 	
 	//个人信息
 	@RequestMapping(value="/getPersonalData",method=RequestMethod.GET)
+	@ResponseBody
 	public String getPersonalData(HttpServletRequest request,int userId,ModelMap mm) {
 		try {
 			ServiceResult<UserHideInfoDTO> returnValue=personalCenterService.getUserHideInfo(userId);

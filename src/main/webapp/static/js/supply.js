@@ -31,13 +31,37 @@ $(document).ready(function(){
 					$('#invoiceName').html(obj.invoiceName);
 					var str="";
 					$.each(obj.tradeAttachmentList,function(index,value){
-						str+="<td><img class='img_2' src='https://www.bestimade.com/s/io/getImage?name="+value.name+"'></td>";
+						str+=" <li><img src='https://www.bestimade.com/s/io/getImage?name="+value.name+"'></li>";
 					});
 					$('#tradeImg').html(str);
+					var scrollImg = $.mggScrollImg('.imgbox ul',{
+				        loop : true,//循环切换
+				        auto : true,//自动切换
+				        auto_wait_time:3000,//轮播间隔
+				        scroll_time:300,//滚动时长
+				        callback : function(ind){//这里传过来的是索引值
+//				            $('#page').text(ind+1);
+				        }
+				    });
 					
 					$('#quantity').html(obj.quantity);
 					$('#deliveryTime').html(obj.deliveryTime);
 					$('#budget').html(obj.budget);
+					
+					$.ajax({
+						type : 'get',
+						url :"http://localhost:8080/IMCenterServer/api/common/getPersonalData?userId="+obj.userId,
+						dataType : "json",
+						success : function(data) {
+							if(data.isError==false){
+								var user=data.resultObj;
+								$('#enterpriseName').html(user.enterpriseName);
+								$('#trueName').html(user.trueName);
+								$('#position').html(user.position);
+								$('#phone').html(user.phone);
+							}
+						}
+					});
 				}
 			}
 		});

@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>意向金退还列表</title>
+<title>提现列表</title>
 <link href="images/favicon.png" rel="icon" />
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=basePath%>static/bootstrap/css/bootstrap-table.css" rel="stylesheet">
@@ -20,7 +20,7 @@
 <body>
 <div class="panel panel-default">
 	    <div class="panel-heading" >
-	       	<h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 意向金退还管理</h3>
+	       	<h3 class="panel-title"><span class="glyphicon glyphicon-book"></span> 提现管理</h3>
 	    </div>
 	    <div class="panel-body">
 	       	 <table class="tbInfo">
@@ -46,7 +46,7 @@
 	</div>
 	<div class="panel panel-default">
 	    <div class="panel-heading" >
-	       	<span class="glyphicon glyphicon-list-alt"></span>意向金退还列表
+	       	<span class="glyphicon glyphicon-list-alt"></span>提现列表
 	    </div>
 	    <div class="panel-body" style="padding-top: 1px;">
 	       	 <input type="hidden" id="contextPath" value="${contextPath}" />

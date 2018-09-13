@@ -75,7 +75,23 @@ $(document).ready(function() {
 			str+="<td></td><td>";
 			str+="</td>";
 			str+="</tr>";
+			str+="<tr><td>图片</td><td>";
+			str+="<button type='button' id='btnViewIdentityPic' data-toggle='modal' data-target='#viewIdentityPicModal' class='btn btn-primary'>查看</button>";
+			str+="</td></tr>";
 			$("#tb_tradeDetail").html(str);
+			
+			var pmStr="";
+			if(data.tradeAttachmentList.length==0){
+				pmStr+="<span class='label label-danger'>无附件图片</span>";
+			}else{
+				pmStr+="<div class='carousel-inner'>";
+				
+				$.each(data.tradeAttachmentList,function(index,value){
+					pmStr+="<div class='item active'><img src='https://www.bestimade.com/s/io/getImage?name="+value.name+"' alt='First slide' width='800px' height='600px'><div class='carousel-caption'>"+(index+1)+"/"+data.tradeAttachmentList.length+"</div></div>";
+				});
+			}
+			pmStr+="</div><a class='carousel-control left' href='#myCarousel' data-slide='prev'>&lsaquo;</a> <a class='carousel-control right' href='#myCarousel' data-slide='next'>&rsaquo;</a>";
+			$("#myCarousel").html(pmStr);
 		}
 	});
 });

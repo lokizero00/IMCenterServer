@@ -34,7 +34,7 @@ $(document).ready(function() {
 			if(data.previewUrl){
 				str+="<tr>";
 				str+="<td>缩略图</td><td colspan='3'>";
-				str+= "<img src="+path + "s/io/getImage?name="+data.previewUrl+" width='100px' height='100px'></td>";
+				str+= "<img src="+path + "s/io/getImage?name="+data.previewUrl+" width='360px' height='145px'></td>";
 				str+="</tr>";
 			}
 			str+="<tr>";
