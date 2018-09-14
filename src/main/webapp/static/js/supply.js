@@ -47,21 +47,6 @@ $(document).ready(function(){
 					$('#quantity').html(obj.quantity);
 					$('#deliveryTime').html(obj.deliveryTime);
 					$('#budget').html(obj.budget);
-					
-					$.ajax({
-						type : 'get',
-						url :"http://localhost:8080/IMCenterServer/api/common/getPersonalData?userId="+obj.userId,
-						dataType : "json",
-						success : function(data) {
-							if(data.isError==false){
-								var user=data.resultObj;
-								$('#enterpriseName').html(user.enterpriseName);
-								$('#trueName').html(user.trueName);
-								$('#position').html(user.position);
-								$('#phone').html(user.phone);
-							}
-						}
-					});
 				}
 			}
 		});

@@ -149,47 +149,24 @@ td{
 	left: -3.6rem;
 	margin-left: 50%;
 }
-.div_line{
-	position: relative;
-	border:1px solid #cdcdcd;
-	margin-top: 11.2rem;
-}
-.div_2{
-	width: 6.7rem;
-	height: auto;
-	position: relative;
-	margin: 0 auto;
-	position: relative;
-	font-family: "微软雅黑";
-}
-.tb2_tr_2{
+.tr_12{
 	position: absolute;
-	top: 1.54rem;
-	left: -3.6rem;
-	margin-left: 50%;
+	top: 11rem;
 }
-.tb2_tr_3{
+.tr_13{
 	position: absolute;
-	top: 2.16rem;
-	left: -3.6rem;
-	margin-left: 50%;
-}
-.tb2_tr_4{
-	position: absolute;
-	top: 2.78rem;
-	left: -3.6rem;
-	margin-left: 50%;
+	top: 10.4rem;
 }
 .btn{
-	position: absolute;
-	top: 3.26rem;
+	position: relative;
 	width: 6.78rem;
 	height: 0.78rem;
-	margin: 0.36rem;
 	background-color: dodgerblue;
 	border:1px solid dodgerblue;
 	border-radius:25px;
 	font-size:.32rem;
 	color:white;
 	font-weight: bold;
+	left: -3.4rem;
+	margin-left: 50%;
 }
