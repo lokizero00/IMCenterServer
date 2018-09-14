@@ -180,12 +180,15 @@ td{
 	left: -3.6rem;
 	margin-left: 50%;
 }
+.tb2_tr_5{
+	left: -3.4rem;
+	margin-left: 50%;
+}
 .btn{
 	position: absolute;
-	top: 3.26rem;
+	top: 3.4rem;
 	width: 6.78rem;
 	height: 0.78rem;
-	margin: 0.36rem;
 	background-color: dodgerblue;
 	border:1px solid dodgerblue;
 	border-radius:25px;
