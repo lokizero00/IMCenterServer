@@ -52,7 +52,14 @@ $(document).ready(function(){
 		});
 	}
 	$('.btn').click(function(){
-		window.location.href="https://www.baidu.com/";
+		 var u = navigator.userAgent, app = navigator.appVersion;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isAndroid) {
+            window.location.href="https://www.bestimade.com/appDownload/imadedownload.apk";
+        }else  if (isIOS) {
+            window.location.href = 'itms-apps://itunes.apple.com/app/id1195496579';
+        }
 	});
 	
  });
