@@ -164,7 +164,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 						intention.setFreeze(intention.getFreeze().add(tradeVO.getFreezeIntention()));
 						intentionDao.update(intention);
 						// 创建意向金日志
-						addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeVO.getFreezeIntention().negate(),logTradeType + " 发布成功,冻结意向金 " + tradeVO.getFreezeIntention());
+						addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeVO.getFreezeIntention().negate(),logTradeType + " 发布成功,冻结意向金 " + tradeVO.getFreezeIntention().setScale(2, BigDecimal.ROUND_DOWN));
 						tradeLogContent += "，冻结意向金 " + tradeVO.getFreezeIntention();
 						
 						noticeTradeStatus="招标中";
@@ -353,7 +353,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 							intention.setAvailable(intention.getAvailable().add(tradeIntention));
 							intention.setFreeze(intention.getFreeze().add(tradeIntention.negate()));
 							intentionDao.update(intention);
-							String intentionLogContent = tradeTypeName + " 已被下架，解冻意向金 " + tradeIntention;
+							String intentionLogContent = tradeTypeName + " 已被下架，解冻意向金 " + tradeIntention.setScale(2, BigDecimal.ROUND_DOWN);
 							
 							addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeIntention,intentionLogContent);
 						}
@@ -431,7 +431,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 								intention.setFreeze(intention.getFreeze().add(tradeIntention));
 								intentionDao.update(intention);
 								// 创建日志
-								addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeIntention.negate(),tradeTypeName + " 上架成功，冻结意向金 " + tradeIntention);
+								addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeIntention.negate(),tradeTypeName + " 上架成功，冻结意向金 " + tradeIntention.setScale(2, BigDecimal.ROUND_DOWN));
 							}
 							addTradeLog(trade.getId(), "user", trade.getUserId(), trade.getStatus(), tradeLogContent);
 							
@@ -636,7 +636,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 								intention.setAvailable(intention.getAvailable().add(tradeIntention));
 								intention.setFreeze(intention.getFreeze().add(tradeIntention.negate()));
 								intentionDao.update(intention);
-								String intentionLogContent = tradeTypeName + " 已被下架，解冻意向金 " + tradeIntention;
+								String intentionLogContent = tradeTypeName + " 已被下架，解冻意向金 " + tradeIntention.setScale(2, BigDecimal.ROUND_DOWN);
 								
 								addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeIntention,intentionLogContent);
 								tradeLogContent += "，解冻意向金 " + tradeIntention;
@@ -889,7 +889,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 								intentionDao.update(intention_docker);
 								// 创建意向金日志
 								
-								addIntentionJournal("04",intention_docker.getId(),intention_docker.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 已取消，解冻意向金 " + tradeDocking.getIntention());
+								addIntentionJournal("04",intention_docker.getId(),intention_docker.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 已取消，解冻意向金 " + tradeDocking.getIntention().setScale(2, BigDecimal.ROUND_DOWN));
 							}
 
 							List<Integer> userNoticeIds=new ArrayList<>();
@@ -1036,7 +1036,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 								intention.setFreeze(intention.getFreeze().add(trade.getIntention().negate()));
 								intentionDao.update(intention);
 								// 创建意向金日志
-								addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,trade.getIntention(),logTradeType + " 已成功，解冻意向金 " + trade.getIntention());
+								addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,trade.getIntention(),logTradeType + " 已成功，解冻意向金 " + trade.getIntention().setScale(2, BigDecimal.ROUND_DOWN));
 							}
 
 							// 解冻对接方意向金
@@ -1050,7 +1050,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 										intention_docker.getFreeze().add(tradeDocking.getIntention().negate()));
 								intentionDao.update(intention_docker);
 								// 创建意向金日志
-								addIntentionJournal("04",intention_docker.getId(),intention_docker.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 已成功，解冻意向金 " + tradeDocking.getIntention());
+								addIntentionJournal("04",intention_docker.getId(),intention_docker.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 已成功，解冻意向金 " + tradeDocking.getIntention().setScale(2, BigDecimal.ROUND_DOWN));
 							}
 
 							// 生成今日头条数据

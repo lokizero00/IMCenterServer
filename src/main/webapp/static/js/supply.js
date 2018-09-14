@@ -13,7 +13,7 @@ $(document).ready(function(){
 	if(tradeId!=""){
 		$.ajax({
 			type : 'get',
-			url :"http://localhost:8080/IMCenterServer/api/common/showTrade?tradeId="+ tradeId,
+			url :"https://www.bestimade.com/api/common/showTrade?tradeId="+ tradeId,
 			dataType : "json",
 			jsonp:"callback", 
 			success : function(data) {
