@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>管理员修改</title>
+<title>修改个人信息</title>
 <link href="images/favicon.png" rel="icon" />
 <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=basePath%>static/summernote/css/summernote.css" rel="stylesheet">
@@ -19,42 +19,20 @@
 <body>
 <div class="container">
      <div class="row" style="padding: 20px 0">
-         <h3>管理员修改</h3>
+         <h3>修改个人信息</h3>
          <input type="hidden" id="contextPath" value="${contextPath}" />
      </div>
      <div class="row form-group">
           <label class="control-label col-lg-1" for="name">用户名</label>
           <div class="col-lg-5 col-md-6">
-              <input class="form-control" name="userName" id="userName" type="text">
+              <input class="form-control" name="userName" id="userName" type="text" disabled="true">
+              <input class="form-control" name="id" id="id" type="hidden">
           </div>
      </div>
       <div class="row form-group">
           <label class="control-label col-lg-1" for="name">密码</label>
           <div class="col-lg-5 col-md-6">
               <input class="form-control" name="password" id="password" type="text" placeholder="如需修改密码请填写新密码" />
-          </div>
-     </div>
-     <div class="row form-group">
-          <label class="control-label col-lg-1" for="name">角色</label>
-          <div class="col-lg-5 col-md-6">
-              <select id="roleName" class="form-control">
-					
-				</select>
-          </div>
-     </div>
-     <div class="row form-group">
-          <label class="control-label col-lg-1" for="name">状态</label>
-          <div class="col-lg-5 col-md-6">
-              <select id="status" class="form-control">
-					<option value="on">启用</option>
-					<option value="off">禁用</option>
-				</select>
-          </div>
-     </div>
-     <div class="row form-group">
-          <label class="control-label col-lg-1" for="name"></label>
-          <div class="col-lg-5 col-md-6">
-              <input name="superAdmin" id="superAdmin" type="checkbox"> 超级管理员
           </div>
      </div>
   	<div class="row">
@@ -74,6 +52,6 @@
 	<script type="text/javascript">
          toastr.options.positionClass = 'toast-center-center';
  	</script>
-	<script src="<%=basePath%>static/js/adminEdit.js"></script>
+	<script src="<%=basePath%>static/js/adminEditMyInfo.js"></script>
 </body>
 </html>

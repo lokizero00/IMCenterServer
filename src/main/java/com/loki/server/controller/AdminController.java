@@ -178,34 +178,4 @@ public class AdminController extends BaseController{
 			return responseFail(e.getMessage());
 		}
 	}
-	
-//	/**
-//     * 个人信息编辑
-//     * @return
-//     */
-//	@RequestMapping("/adminEditMyInfoPage")  
-//	public String adminEditMyInfoPage(int id){
-//		return "admin/adminEditMyInfo.jsp?id="+id;
-//	}
-	
-	/**
-     * 管理员修改个人信息
-     * @return
-     */
-	@RequestMapping(value="/adminEditMyInfo.do",method=RequestMethod.POST)
-	@ResponseBody
-	public String adminEditMyInfo(HttpServletRequest request, AdminVO adminVO) {
-		try {
-			int adminId=(int) request.getSession().getAttribute("adminId");
-			adminVO.setAdminUpdaterId(adminId);
-			boolean result=adminService.edit(adminVO);
-			if(result) {
-				return responseSuccess();
-			}else {
-				return responseFail(ResultCodeEnums.UPDATE_FAIL.getMessage());
-			}
-		}catch(Exception e) {
-			return responseFail(e.getMessage());
-		}
-	}
 }

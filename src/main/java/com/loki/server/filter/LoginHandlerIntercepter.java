@@ -51,7 +51,7 @@ public class LoginHandlerIntercepter implements HandlerInterceptor {
 				if (!isSuperAdmin) {
 					@SuppressWarnings("unchecked")
 					List<String> permissionList=(List<String>) session.getAttribute("permissionList");
-					if(requestURI.equals("s/admin/adminEditMyInfo.do") || permissionList.contains(requestURI)) {
+					if(requestURI.contains("adminChangePassword.do") || permissionList.contains(requestURI)) {
 						return true;
 					}else {
 						request.getRequestDispatcher("/error/no_permission.jsp").forward(request, response);

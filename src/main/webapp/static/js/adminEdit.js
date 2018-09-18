@@ -13,25 +13,23 @@ $(document).ready(function() {
 				opts += "<option value='" + item.id + "' >"+item.name+"</option>";
 			});
 			$("#roleName").append(opts);
+			
+			$.ajax({
+				type : 'get',
+				url : path + 's/admin/adminDetail.do?id='+ paramId,
+				dataType : "json",
+				success : function(data) {
+					$("#userName").val(data.userName);
+					$('#roleName').val(data.roleId);
+					$('#status').val(data.status);
+					if(data.superAdmin){
+						$("#superAdmin").attr("checked", "checked"); 
+					}
+				}
+			});
 		}
 	});
 	
-	
-	$.ajax({
-		type : 'get',
-		url : path + 's/admin/adminDetail.do?id='+ paramId,
-		dataType : "json",
-		success : function(data) {
-			$("#userName").val(data.userName);
-			$('#roleName').val(data.roleId);
-			$('#status').val(data.status);
-			$('#superAdmin').val(data.status)
-			if(data.superAdmin){
-				$("#superAdmin").attr("checked", "checked"); 
-			}
-		}
-	});
-
 	$("#btnSubmit").click(function() {
 		if(!$('#userName').val()){
 			toastr.warning('填写内容不正确！');
@@ -47,6 +45,7 @@ $(document).ready(function() {
 			param.roleId=parseInt($('#roleName').val());
 			param.status=$('#status').val();
 			param.superAdmin=$('#superAdmin').is(':checked');
+			param.password=$('#password').val();
 			$.ajax({
 				type : 'POST',
 				url : path + 's/admin/adminEdit.do',
