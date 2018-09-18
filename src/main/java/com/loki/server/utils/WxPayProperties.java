@@ -46,7 +46,7 @@ public class WxPayProperties {
      */
     private String keyPath="/Users/lokizero00/Documents/bestimade_wxpay_cert/apiclient_cert.p12";
     
-    private String appSecret="1880b57f05c8b604e63c70510f9e2d63";
+    private String appSecret="21ae1fe15e741e43d39e6a531d70eeea";
 
     public String getAppSecret() {
 		return appSecret;

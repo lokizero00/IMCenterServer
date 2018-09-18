@@ -79,7 +79,7 @@
 			<if test="superAdmin != null and superAdmin != ''">
 				and super_admin=#{superAdmin}
 			</if>
-			<if test="status != null">
+			<if test="status != null and status!=''">
 				and status=#{status}
 			</if>
 		</where>

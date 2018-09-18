@@ -461,4 +461,25 @@ public class TradeMobileController {
 			
 		return "mobileResultJson";
 	}
+	
+	//获取推荐贸易列表
+	@RequestMapping(value="/getSuccessedTradeList",method=RequestMethod.GET)
+	public String getSuccessedTradeList(HttpServletRequest request, String type,Integer pageNo,Integer pageSize,ModelMap mm) {
+		HashMap<String,Object> map=new HashMap<>();
+		map.put("type", type);
+		map.put("pageNo",pageNo);
+		map.put("pageSize",pageSize);
+		
+		ServiceResult<PagedResult<TradeComplex>> returnValue=tradeService.getSuccessedList(map);
+		if (returnValue!=null) {
+			mm.addAttribute("resultCode", returnValue.getResultCode().getCode());
+			mm.addAttribute("msg", returnValue.getResultCode().getMessage());
+			mm.addAttribute("resultObj", returnValue.getResultObj());
+		}else {
+			mm.addAttribute("resultCode", ResultCodeEnums.UNKNOW_ERROR.getCode());
+			mm.addAttribute("msg", ResultCodeEnums.UNKNOW_ERROR.getMessage());
+		}
+			
+		return "mobileResultJson";
+	}
 }

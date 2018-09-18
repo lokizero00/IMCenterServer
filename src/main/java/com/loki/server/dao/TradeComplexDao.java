@@ -12,4 +12,5 @@ public interface TradeComplexDao {
 	List<TradeComplex> findRecommendedList(Map<String,Object> map);
 	List<TradeComplex> findDockingTrade(Map<String,Object> map);
 	List<TradeComplex> findByOwnPublish(Map<String,Object> map);
+	List<TradeComplex> findSuccessTradeList(Map<String,Object> map);
 }

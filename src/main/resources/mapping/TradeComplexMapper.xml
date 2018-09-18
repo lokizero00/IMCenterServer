@@ -36,7 +36,7 @@
   </resultMap>
   
   <select id="findByParam" resultMap="tradeComplexDO">
-		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.preview_image_name,_user.nick_name as user_nick_name
+		select trade.*,_industry.industry_name,_invoice.invoice_name,_attachment.preview_image_name,_paycode.paycode_name,_user.nick_name as user_nick_name
 		from trade 
 		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
 		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
@@ -95,15 +95,15 @@
 		</where>
 		ORDER BY
 		 <choose>
-	        <when test="sortName!=null">
+	        <when test="sortName!=null and sortName!=''">
 	                trade.${sortName}
 	            <if test="sortOrder!=null">
 	                ${sortOrder}
 	            </if>
 	        </when>
 	        <otherwise>
-	            docking_count,id desc
-	        </otherwise>
+	        		trade.docking_count desc,trade.id desc
+         	</otherwise>
 	     </choose>
   </select>
   
@@ -139,7 +139,7 @@
 			</if>
 			<if test="status!=null and status!=''">
 				and trade.status=#{status}
-			</if>
+			</if> 
 			<if test="ignoreSuccessAndDown!=null and ignoreSuccessAndDown==true">
 				and trade.status not in ('trade_under_carriage','trade_success')
 			</if>
@@ -289,9 +289,9 @@
 			<if test="townName!=null and townName!=''">
 				and trade.town_name=#{townName}
 			</if>
-			<if test="status!=null and status!=''">
+			<!-- <if test="status!=null and status!=''">
 				and trade.status=#{status}
-			</if>
+			</if> -->
 			<if test="invoiceCode!=null and invoiceCode!=''">
 				and trade.id in(
 				select trade_id from trade_invoice where code=#{invoiceCode})
@@ -305,8 +305,27 @@
 				select trade_id from trade_paycode where code=#{payCode})
 			</if>
 			
-			and trade.status != 'trade_under_carriage'
+			and trade.status = 'trade_tendering'
 		</where>
 		ORDER BY intention ,collection_count ,read_count ,docking_count desc
+  </select>
+  
+  <select id="findSuccessTradeList" resultMap="tradeComplexDO">
+		select trade.*,_invoice.invoice_name,_industry.industry_name,_paycode.paycode_name,_attachment.preview_image_name,_user.nick_name as user_nick_name
+		from trade 
+		left join(select trade_id,group_concat(value) as invoice_name from trade_invoice group by trade_id) _invoice on _invoice.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as industry_name from trade_industry group by trade_id) _industry on _industry.trade_id=trade.id
+		left join(select trade_id,group_concat(value) as paycode_name from trade_paycode group by trade_id) _paycode on _paycode.trade_id=trade.id
+		left join(select trade_id,name as preview_image_name from trade_attachment where preview=1 group by trade_id,name) _attachment on _attachment.trade_id=trade.id
+		left join user as _user on _user.id=trade.user_id
+		left join (select id,status from identity_certification) _ic on trade.identity_id=_ic.id
+		left join (select id,status from enterprise_certification) _ec on trade.enterprise_id=_ec.id
+		<where>
+			<if test="type!=null and type!=''">
+				and trade.type=#{type}
+			</if>
+			and trade.status ='trade_success'
+		</where>
+		order by trade.update_time desc
   </select>
 </mapper>

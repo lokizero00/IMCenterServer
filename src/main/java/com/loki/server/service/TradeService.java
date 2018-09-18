@@ -52,4 +52,6 @@ public interface TradeService {
 	ServiceResult<List<TradeComplex>> getLastest10Trade();
 	//为您推荐
 	ServiceResult<PagedResult<TradeComplex>> getRecommendedList(Map<String, Object> map);
+	//成功案例
+	ServiceResult<PagedResult<TradeComplex>> getSuccessedList(Map<String, Object> map);
 }

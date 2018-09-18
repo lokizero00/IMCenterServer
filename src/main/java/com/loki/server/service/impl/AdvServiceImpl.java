@@ -137,7 +137,9 @@ public class AdvServiceImpl extends BaseService implements AdvService {
 				adv.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 				adv.setPosition(advVO.getPosition());
 				adv.setTitle(advVO.getTitle());
-				adv.setPreviewUrl(advVO.getPreviewUrl());
+				if(!advVO.getPreviewUrl().isEmpty()) {
+					adv.setPreviewUrl(advVO.getPreviewUrl());
+				}
 				adv.setContent(advVO.getContent());
 				adv.setLinkable(advVO.getLinkable());
 				adv.setLinkUrl(advVO.getLinkUrl());

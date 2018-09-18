@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loki.server.dao.AppVersionDao">
+  <cache eviction="LRU" type="com.loki.server.cache.RedisCache"/>
+  <resultMap id="appVersionDO" type="com.loki.server.entity.AppVersion">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="app_name" jdbcType="VARCHAR" property="appName" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="version_code" jdbcType="VARCHAR" property="versionCode" />
+    <result column="useragent" jdbcType="VARCHAR" property="useragent" />
+    <result column="useragent_name" jdbcType="VARCHAR" property="useragentName" />
+    <result column="download_url" jdbcType="VARCHAR" property="downloadUrl" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_update" jdbcType="INTEGER" property="isUpdate" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id,app_id,app_name,version,version_code,useragent,useragent_name,download_url,description,is_update
+  </sql>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.loki.server.entity.AppVersion">
+		insert into app_version(app_id,app_name,version,version_code,useragent,useragent_name,download_url,description,is_update) 
+		values(#{appId},#{appName},#{version},#{versionCode},#{useragent},#{useragentName},#{downloadUrl},#{description},#{isUpdate})
+	</insert>
+
+  <update id="update" parameterType="com.loki.server.entity.AppVersion">
+  	update app_version SET app_id=#{appId},app_name=#{appName},version=#{version},version_code=#{versionCode},useragent=#{useragent},useragent_name=#{useragentName},download_url=#{downloadUrl},description=#{description},is_update=#{isUpdate} where id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultMap="appVersionDO">
+		select <include refid="Base_Column_List" /> 
+		from app_version
+		where id=#{_parameter}
+  </select>
+  
+  <select id="findByAppId" parameterType="String" resultMap="appVersionDO">
+		select <include refid="Base_Column_List" /> 
+		from app_version
+		where app_id=#{_parameter} order by version_code desc limit 1
+  </select>
+  
+  <select id="findAll" resultMap="appVersionDO">
+		select <include refid="Base_Column_List" /> 
+		from app_version
+  </select>
+  
+  <delete id="delete" parameterType="int">
+		delete from app_version where id=#{_parameter}
+	</delete>
+</mapper>

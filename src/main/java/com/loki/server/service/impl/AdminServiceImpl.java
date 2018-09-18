@@ -89,6 +89,9 @@ public class AdminServiceImpl extends BaseService implements AdminService {
 				admin.setUserName(adminVO.getUserName());
 				admin.setSuperAdmin(adminVO.isSuperAdmin());
 				admin.setStatus(adminVO.getStatus());
+				if(!adminVO.getPassword().isEmpty()) {
+					admin.setPassword(MD5.getMD5Str(adminVO.getPassword()));
+				}
 				if (adminDao.update(admin)) {
 					setRole(adminVO.getId(), adminVO.getRoleId());
 					return true;

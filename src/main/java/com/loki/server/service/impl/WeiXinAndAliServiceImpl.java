@@ -689,7 +689,7 @@ public class WeiXinAndAliServiceImpl extends BaseService implements WeiXinAndAli
 		String responseDate = ForwardRequest.httpPostSsl(TRANSFER_URL, requestXml, "UTF-8",
 				wxPayService.getConfig().getKeyPath(), wxPayService.getConfig().getMchId());
 		Map<String, String> map = new HashMap<>();
-		if (StringUtils.isEmpty(responseDate)) {
+		if (!StringUtils.isEmpty(responseDate)) {
 			// 转换格式
 			map = XmlUtil.xmlStrToMap(responseDate);
 			if (map.size() > 0) {

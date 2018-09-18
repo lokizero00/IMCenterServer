@@ -68,7 +68,7 @@ $(document).ready(function() {
 				pmStr+="<div class='carousel-inner'>";
 				if(data.licensePicUrl!=""){
 					pmStr+="<div class='item active'>";
-					pmStr+="<img src="+path + "s/io/getImage?name="+data.licensePicUrl+" alt='First slide'>";
+					pmStr+="<img src="+data.licensePicUrl+" alt='First slide'>";
 					pmStr+="<div class='carousel-caption'>正面</div></div>";
 				}
 			}

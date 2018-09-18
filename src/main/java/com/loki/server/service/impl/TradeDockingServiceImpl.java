@@ -78,7 +78,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 									intention.setFreeze(intention.getFreeze().add(tradeDockingDTO.getIntention()));
 									intentionDao.update(intention);
 									// 创建意向金日志
-									addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeDockingDTO.getIntention().negate(),logTradeType + " 对接申请成功,冻结意向金 " + tradeDockingDTO.getIntention());
+									addIntentionJournal("03",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.FREEZE.getKey()),null,tradeDockingDTO.getIntention().negate(),logTradeType + " 对接申请成功,冻结意向金 " + tradeDockingDTO.getIntention().setScale(2, BigDecimal.ROUND_DOWN));
 								}
 								
 								TradeDocking tradeDocking = new TradeDocking();
@@ -146,7 +146,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 					intention.setFreeze(intention.getFreeze().add(tradeDocking.getIntention().negate()));
 					intentionDao.update(intention);
 					// 创建意向金日志
-					addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 对接申请已取消，解冻意向金 " + tradeDocking.getIntention());
+					addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 对接申请已取消，解冻意向金 " + tradeDocking.getIntention().setScale(2, BigDecimal.ROUND_DOWN));
 				}
 				
 				boolean result = intentionDao.delete(tradeDockingId);
@@ -196,7 +196,7 @@ public class TradeDockingServiceImpl extends BaseService implements TradeDocking
 								intention.setFreeze(intention.getFreeze().add(tradeDocking.getIntention().negate()));
 								intentionDao.update(intention);
 								// 创建意向金日志
-								addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 对接申请已作废，解冻意向金 " + tradeDocking.getIntention());
+								addIntentionJournal("04",intention.getId(),intention.getUserId(),OrderNoGenerator.getPayOrderNo(BillConst.BillOrder.UNFREEZE.getKey()),null,tradeDocking.getIntention(),logTradeType + " 对接申请已作废，解冻意向金 " + tradeDocking.getIntention().setScale(2, BigDecimal.ROUND_DOWN));
 							}
 							
 							List<Integer> userNoticeIds=new ArrayList<>();
