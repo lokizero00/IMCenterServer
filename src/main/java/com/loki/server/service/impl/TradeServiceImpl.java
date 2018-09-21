@@ -100,9 +100,11 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 				} else {
 					// 意向金为0，需审核
 					trade.setIntention(BigDecimal.ZERO);
-					// trade.setStatus("trade_verify");
-					// TODO 测试使用，暂时不需要审核
-					trade.setStatus("trade_tendering");
+					if(getSettingValue("tradePublishVerify").equals("on")) {
+						trade.setStatus("trade_verify");
+					}else {
+						trade.setStatus("trade_tendering");
+					}
 				}
 				String logTradeType = "供应";
 				if (trade.getType().equals("trade_demand")) {
