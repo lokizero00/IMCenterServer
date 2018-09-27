@@ -12,13 +12,15 @@ $(document).ready(function() {
         	
         	$.each(defaultData,function(index,value){
         		value["state"] = {};
+//        		value["selectable"] = false;
         		if(value.nodes.length==0 && value.selectable){
         			value["state"]["checked"] = true;
         			value["selectable"] = false;
         		}else{
         			var num1=0;
         			$.each(value.nodes,function(index,value1){
-            			value1["state"] = {};
+        				value1["state"] = {};
+//        				value1["selectable"] = false;
                 		if(value1.nodes.length==0 && value1.selectable){
                 			value1["state"]["checked"] = true;
                 			value1["selectable"] = false;
@@ -27,11 +29,14 @@ $(document).ready(function() {
                 			var num2=0;
                 			$.each(value1.nodes,function(index,value2){
                 				value2["state"] = {};
-                				value2["selectable"] = false;
+//                				value2["selectable"] = false;
                         		if(value2.selectable){
                         			value2["state"]["checked"] = true;
                         			num2++;
+                        		}else{
+                        			value2["state"] = {};
                         		}
+                        		value2["selectable"] = false;
                         	});
                 			if(num2>0){
                 				if(value1.nodes.length==num2){
@@ -198,13 +203,12 @@ $(document).ready(function() {
     });
     
     $("#btnSubmit").click(function() {
-    	
 		Ewin.confirm({ message: "确认授予该角色权限吗？" }).on(function (e) {
 			if(!e){
 				return;
 			}
 			var authJson ={};
-			authJson.resourcesId=getSelectedItem($('#tree').treeview("getSelected"));
+			authJson.resourcesId=getSelectedItem();
 			authJson.roleId=paramId;
 			
 			$.ajax({
@@ -231,35 +235,27 @@ $(document).ready(function() {
     
 })
 
-function getSelectedItem(data){
+function getSelectedItem(){
+	var data= $('#tree').treeview('getEnabled');
 	var resourceId="";
 	if(data.length>0){
 		$.each(data,function(index,value){
-			if(value.nodes.length==0 && value.state.checked){
+			if(value.state.checked){
 				resourceId+=value.id+",";
-			}else{
-				var num=0;
-				$.each(value.nodes,function(index1,value1){
-					if(value1.nodes.length==0 && value1.state.checked){
-						resourceId+=value1.id+",";
-						num++;
-					}else if(value1.state.checked){
-						var num2=0;
-						$.each(value1.nodes,function(index2,value2){
-							if(value2.state.checked){
-								resourceId+=value2.id+",";
-								num2++;
+				if(value.parentId){
+					var par=$('#tree').treeview('getNode',value.parentId);
+					if(par && resourceId.indexOf(par.id+",")<0){
+						resourceId+=par.id+",";
+						if(par.parentId){
+							var granPar=$('#tree').treeview('getNode',par.parentId);
+							if(granPar && resourceId.indexOf(granPar.id+",")<0){
+								resourceId+=granPar.id+",";
 							}
-						});
-						if(num2>0){
-							resourceId+=value1.id+",";
 						}
 					}
-				});
-				if(num>0){
-					resourceId+=value.id+",";
 				}
 			}
+			
 		});
 	}
 	return resourceId;
